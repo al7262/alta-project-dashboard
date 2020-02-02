@@ -3,14 +3,14 @@ import { withRouter, Link } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions } from "../stores/MainStore";
 import logo from "../images/logo-dark.svg";
-import "../styles/login.css";
+import "../styles/register.css";
 
-class LoginPage extends React.Component {
+class RegisterPage extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="container-login">
-          <div className="login-box">
+        <div className="container-register">
+          <div className="register-box">
             <div className="logo">
               <img src={logo} alt="application-logo" />
               <h1>EasyKachin'</h1>
@@ -30,11 +30,24 @@ class LoginPage extends React.Component {
                   </i>
                 </span>
               </div>
+              <div className="confirm-password">
+                <input
+                  type="password"
+                  name="confirm-password"
+                  id="confirm-password"
+                  placeholder="Confirm Password"
+                />
+                <span onClick={this.props.handleVisibilityConfirmPassword}>
+                  <i className="material-icons" id="visibilityConfirmPassword">
+                    visibility
+                  </i>
+                </span>
+              </div>
             </form>
-            <Link className="btn btn-login">Login</Link>
+            <Link className="btn btn-register">Daftar</Link>
             <h1>
-              Belum punya akun? Daftar{" "}
-              <Link className="regis-sentence" to="/register">
+              Sudah punya akun? Masuk{" "}
+              <Link className="regis-sentence" to="/login">
                 disini
               </Link>
             </h1>
@@ -44,4 +57,4 @@ class LoginPage extends React.Component {
     );
   }
 }
-export default connect("", actions)(withRouter(LoginPage));
+export default connect("", actions)(withRouter(RegisterPage));
