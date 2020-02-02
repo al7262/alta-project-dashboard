@@ -26,5 +26,18 @@ export const actions = store => ({
       password.type = "password";
       visibilityPassword.innerHTML = "visibility";
     }
+  },
+  handleVisibilityConfirmPassword: () => {
+    const confirmPassword = document.getElementById("confirm-password");
+    const visibilityConfirmPassword = document.getElementById(
+      "visibilityConfirmPassword"
+    );
+    if (visibilityConfirmPassword.innerHTML === "visibility") {
+      confirmPassword.type = "text";
+      visibilityConfirmPassword.innerHTML = "visibility_off";
+    } else {
+      confirmPassword.type = "password";
+      visibilityConfirmPassword.innerHTML = "visibility";
+    }
   }
 });

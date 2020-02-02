@@ -122,7 +122,7 @@ const Header = props => {
             </li>
             <li className="nav-item">
               <Link className="nav-link icon-profile" to="/">
-                <img src={iconProfile} />
+                <img src={iconProfile} alt="logo-profile" />
               </Link>
             </li>
           </ul>
