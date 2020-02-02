@@ -110,3 +110,14 @@
   background-color: #002943;
   color: #e9f2f6;
 }
+.login-box h1 {
+  font-family: 'Muli', sans-serif;
+  font-size: 10pt;
+  color: #2b3940;
+}
+.login-box h1 .regis-sentence {
+  color: #7498aa;
+}
+.login-box h1 .regis-sentence:hover {
+  color: #57727f;
+}
