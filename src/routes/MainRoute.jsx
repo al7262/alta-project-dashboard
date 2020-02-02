@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "unistore/react";
 import { store } from "../stores/MainStore";
 import Dashboard from "../pages/DashboardPage";
+import LoginPage from "../pages/LoginPage";
 
 const Mainroute = () => {
   return (
@@ -12,6 +13,7 @@ const Mainroute = () => {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Dashboard} />
+          <Route exact path="/login" component={LoginPage} />
         </Switch>
       </BrowserRouter>
     </Provider>
