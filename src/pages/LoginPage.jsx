@@ -31,7 +31,7 @@ class LoginPage extends React.Component {
                 </span>
               </div>
             </form>
-            <Link className="btn btn-login">Login</Link>
+            <Link className="btn btn-login">Masuk</Link>
             <h1>
               Belum punya akun? Daftar{" "}
               <Link className="regis-sentence" to="/register">

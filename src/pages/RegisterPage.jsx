@@ -16,7 +16,7 @@ class RegisterPage extends React.Component {
               <h1>EasyKachin'</h1>
             </div>
             <form action="" onSubmit={e => e.preventDefault()}>
-              <input type="text" name="username" placeholder="Username/Email" />
+              <input type="text" name="username" placeholder="Email" />
               <div className="password">
                 <input
                   type="password"
