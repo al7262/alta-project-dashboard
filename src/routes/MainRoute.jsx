@@ -8,6 +8,7 @@ import Dashboard from "../pages/DashboardPage";
 import LoginPage from "../pages/LoginPage";
 import NotMatchPage from "../pages/NotMatchPage";
 import RegisterPage from "../pages/RegisterPage";
+import PostRegisterPage from "../pages/PostRegisterPage";
 
 const Mainroute = () => {
   return (
@@ -17,6 +18,7 @@ const Mainroute = () => {
           <Route exact path="/" component={Dashboard} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/postregister" component={PostRegisterPage} />
           <Route component={NotMatchPage} />
         </Switch>
       </BrowserRouter>
