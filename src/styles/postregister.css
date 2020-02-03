@@ -6,6 +6,7 @@
   align-items: center;
 }
 .box-form {
+  width: 50vw;
   border: 0.5px solid #003354;
   border-radius: 25px;
   padding-top: 10px;
@@ -53,11 +54,11 @@
   align-items: center;
 }
 .box-form .logo img {
-  width: 50%;
+  width: 30%;
 }
 .box-form .logo h1 {
   font-family: 'Passion One', sans-serif;
-  font-size: 50px;
+  font-size: 30px;
   color: #003354;
   margin: 0;
   padding: 0;
