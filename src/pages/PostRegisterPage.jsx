@@ -46,11 +46,10 @@ class PostRegister extends React.Component {
                 </div>
               </div>
 
-              {/* Disini mau dikasih logo, tapi malah size boxnya jadi gede banget */}
-              {/* <div className="logo">
+              <div className="logo">
                 <img src={logo} alt="application-logo" />
                 <h1>EasyKachin'</h1>
-              </div> */}
+              </div>
             </div>
             <div className="col-md-6 col-12">
               <div className="box-inside">

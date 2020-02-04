@@ -62,7 +62,7 @@ const Header = props => {
                 "nav-item " + (props.pageLocation === "Produk" ? "active" : "")
               }
             >
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/product">
                 Produk
               </Link>
             </li>
@@ -115,13 +115,9 @@ const Header = props => {
             </li>
           </ul>
           <ul class="navbar-nav ml-lg-5">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Hi User
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link icon-profile" to="/">
+            <li className="nav-item row">
+              <h5 className="col-6">Hi, User</h5>
+              <Link className="nav-link icon-profile col-6" to="/">
                 <img src={iconProfile} alt="logo-profile" />
               </Link>
             </li>

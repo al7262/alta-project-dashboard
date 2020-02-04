@@ -1,0 +1,49 @@
+/* Color Theme Swatches in Hex */
+.container .btn-tambah {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #003354;
+  border: 3px solid #003354;
+  background-color: #e9f2f6;
+}
+.container .btn-tambah:hover {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.container .btn-tambah:active {
+  background-color: #335c76 !important;
+}
+.container .btn-tambah.disabled {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.container .box-filter {
+  border: 0.5px solid #003354;
+  border-radius: 5px;
+  margin-right: 0 !important;
+}
+.container .box-filter h1 {
+  font-size: 12pt;
+  color: #335c76;
+  font-weight: 600;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
+.container .box-content {
+  border: 0.5px solid #003354;
+  border-radius: 5px;
+  width: 100vw;
+  height: 55vh;
+  margin-top: 20px;
+}
+.container .box-content table {
+  margin-top: 15px;
+}
+.container .box-content table thead {
+  color: #335c76;
+  font-weight: 600;
+  font-family: 'Muli', sans-serif;
+}
