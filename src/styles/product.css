@@ -38,6 +38,7 @@
   width: 100vw;
   height: 55vh;
   margin-top: 20px;
+  overflow: auto;
 }
 .container .box-content table {
   margin-top: 15px;

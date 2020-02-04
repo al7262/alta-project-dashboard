@@ -10,7 +10,11 @@ class PostRegister extends React.Component {
     return (
       <React.Fragment>
         <div className="container-postregister">
-          <form className="form-row box-form">
+          <form
+            action=""
+            onSubmit={e => e.preventDefault()}
+            className="form-row box-form"
+          >
             <div className="col-md-6 col-12 ">
               <div className="box-inside">
                 <h1>INFORMASI AKUN</h1>
@@ -77,11 +81,11 @@ class PostRegister extends React.Component {
                 <div className="form-group">
                   <label for="kota">Kota</label>
                   <input
-                    list="browsers"
-                    name="browsers"
+                    list="kota"
+                    name="kota"
                     class="custom-select custom-select-md"
                   />
-                  <datalist id="browsers">
+                  <datalist id="kota">
                     <option value="Surabaya" />
                     <option value="Malang" />
                     <option value="Bandung" />

@@ -55,10 +55,11 @@
 }
 .box-form .logo img {
   width: 30%;
+  margin-bottom: 10px;
 }
 .box-form .logo h1 {
   font-family: 'Passion One', sans-serif;
-  font-size: 30px;
+  font-size: 25px;
   color: #003354;
   margin: 0;
   padding: 0;

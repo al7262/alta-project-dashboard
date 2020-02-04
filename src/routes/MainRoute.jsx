@@ -10,6 +10,7 @@ import NotMatchPage from "../pages/NotMatchPage";
 import RegisterPage from "../pages/RegisterPage";
 import PostRegisterPage from "../pages/PostRegisterPage";
 import ProductPage from "../pages/ProductPage";
+import AddProductPage from "../pages/AddProductPage";
 
 const Mainroute = () => {
   return (
@@ -21,6 +22,7 @@ const Mainroute = () => {
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/postregister" component={PostRegisterPage} />
           <Route exact path="/product" component={ProductPage} />
+          <Route exact path="/product/add" component={AddProductPage} />
           <Route component={NotMatchPage} />
         </Switch>
       </BrowserRouter>

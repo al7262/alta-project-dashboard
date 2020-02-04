@@ -5,11 +5,9 @@ import "../styles/product.css";
 const Button = props => {
   return (
     <React.Fragment>
-      <div className="col-12 text-right pt-4 pr-0">
-        <Link className="btn btn-tambah" to={props.direction}>
-          {props.buttoncontent}
-        </Link>
-      </div>
+      <Link className="btn btn-tambah" to={props.direction}>
+        {props.buttoncontent}
+      </Link>{" "}
     </React.Fragment>
   );
 };

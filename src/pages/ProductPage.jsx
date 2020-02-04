@@ -13,7 +13,9 @@ class ProductPage extends React.Component {
       <React.Fragment>
         <Header pageLocation="Produk" />
         <div className="container">
-          <Button buttoncontent={"Tambah"} direction={"/addproduct"} />
+          <div className="col-12 text-right pt-4 pr-0">
+            <Button buttoncontent={"Tambah"} direction={"/product/add"} />
+          </div>
           <form className="col-12 box-filter form-row">
             <div className="col-3 form-group">
               <h1>Outlet</h1>
@@ -62,7 +64,7 @@ class ProductPage extends React.Component {
               />
             </div>
           </form>
-          <div className="col-12 box-content overflow-auto">
+          <div className="col-12 box-content">
             <table class="table table-sm">
               <thead>
                 <tr>
