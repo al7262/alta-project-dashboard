@@ -1,10 +1,11 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions } from "../stores/MainStore";
 import "../styles/product.css";
 
 import Header from "../components/Header";
+import Button from "../components/Button";
 
 class ProductPage extends React.Component {
   render() {
@@ -12,9 +13,7 @@ class ProductPage extends React.Component {
       <React.Fragment>
         <Header pageLocation="Produk" />
         <div className="container">
-          <div className="col-12 text-right pt-4 pr-0">
-            <Link className="btn btn-tambah">Tambah</Link>
-          </div>
+          <Button buttoncontent={"Tambah"} direction={"/addproduct"} />
           <form className="col-12 box-filter form-row">
             <div className="col-3 form-group">
               <h1>Outlet</h1>

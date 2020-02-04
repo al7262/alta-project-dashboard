@@ -1,0 +1,22 @@
+@import "basic";
+
+.btn-tambah {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: @blue;
+  border: 3px solid @blue;
+  background-color: @skyblue-light3;
+  &:hover {
+    background-color: @blue-dark1;
+    color: @skyblue-light3;
+  }
+  &:active {
+    background-color: @blue-light1 !important;
+  }
+  &.disabled {
+    background-color: @blue-dark1;
+    color: @skyblue-light3;
+  }
+}
