@@ -1,14 +1,39 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "unistore/react";
-import { actions } from "../stores/MainStore";
+import { actions, store } from "../stores/MainStore";
 import "../styles/product.css";
 
 import Header from "../components/Header";
 import Button from "../components/Button";
 
 class ProductPage extends React.Component {
+  componentDidMount = () => {
+    this.props.getOutlet();
+    this.props.getCategory();
+    this.props.handleFilterProduct();
+  };
+  handleInput1 = e => {
+    store.setState({ [e.target.name]: e.target.value });
+    this.props.handleFilterProduct();
+  };
   render() {
+    const { listCategory, listProduct } = this.props;
+    const listAllCategory = listCategory.map(item => {
+      return <option value={item}>{item}</option>;
+    });
+    const listAllProduct = listProduct.map((item, key) => {
+      return (
+        <tr>
+          <th scope="row">{key + 1}</th>
+          <td>{item.name}</td>
+          <td>{item.category}</td>
+          {item.show ? <td>Ya</td> : <td>Tidak</td>}
+          <td>{item.price}</td>
+          <td></td>
+        </tr>
+      );
+    });
     return (
       <React.Fragment>
         <Header pageLocation="Produk" />
@@ -17,50 +42,40 @@ class ProductPage extends React.Component {
             <Button buttoncontent={"Tambah"} direction={"/product/add"} />
           </div>
           <form className="col-12 box-filter form-row">
-            <div className="col-3 form-group">
-              <h1>Outlet</h1>
-              <select
-                className="custom-select col-12 "
-                id="outlet"
-                name="outlet"
-              >
-                <option value="Semua Outlet">Semua Outlet</option>
-                <option value="Cabang Malang">Cabang Malang</option>
-                <option value="Cabang Surabaya">Cabang Surabaya</option>
-              </select>
-            </div>
-            <div className="col-3 form-group">
+            <div className="col-4 form-group">
               <h1>Kategori</h1>
               <select
                 className="custom-select col-12 "
-                id="kategori"
-                name="kategori"
+                id="category"
+                name="category"
+                onChange={e => this.handleInput1(e)}
               >
-                <option value="Semua Kategori">Semua Kategori</option>
-                <option value="Makanan">Makanan</option>
-                <option value="Minuman">Minuman</option>
+                <option value="">Semua Kategori</option>
+                {listAllCategory}
               </select>
             </div>
-            <div className="col-3 form-group">
+            <div className="col-4 form-group">
               <h1>Status Dijual</h1>
               <select
                 className="custom-select col-12 "
-                id="status-dijual"
-                name="status-dijual"
+                id="showProduct"
+                name="showProduct"
+                onChange={e => this.handleInput1(e)}
               >
-                <option value="Semua Status">Semua Status</option>
+                <option value="">Semua Status</option>
                 <option value="Ya">Ya</option>
                 <option value="Tidak">Tidak</option>
               </select>
             </div>
-            <div className="col-3 form-group">
+            <div className="col-4 form-group">
               <h1>Cari</h1>
               <input
                 type="text"
                 className="form-control"
-                id="cari-produk"
-                name="cari-produk"
+                id="nameProduct"
+                name="nameProduct"
                 placeholder="Cari Produk"
+                onChange={e => this.handleInput1(e)}
               />
             </div>
           </form>
@@ -76,7 +91,7 @@ class ProductPage extends React.Component {
                   <th></th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>{listAllProduct}</tbody>
             </table>
           </div>
         </div>
@@ -84,4 +99,7 @@ class ProductPage extends React.Component {
     );
   }
 }
-export default connect("", actions)(withRouter(ProductPage));
+export default connect(
+  "listOutlet, listCategory, listProduct, category, showProduct, nameProduct",
+  actions
+)(withRouter(ProductPage));

@@ -6,6 +6,7 @@ import "../styles/addproduct.css";
 
 import Header from "../components/Header";
 import Button from "../components/Button";
+import ModalAddBahan from "../components/ModalAddBahan";
 
 class AddProduct extends React.Component {
   render() {
@@ -38,6 +39,7 @@ class AddProduct extends React.Component {
                       list="kategori"
                       name="kategori"
                       className="custom-select custom-select-md"
+                      required
                     />
                     <datalist id="kategori">
                       <option value="Makanan" />
@@ -112,12 +114,19 @@ class AddProduct extends React.Component {
                       <tbody></tbody>
                     </table>
                   </div>
-                  <div className="col-12 text-center pt-2 pr-0">
-                    <Button buttoncontent={"Tambah Bahan"} />
+                  <div className="col-12 text-center pt-2">
+                    <Button
+                      buttoncontent={"Tambah Bahan"}
+                      ismodal={"ya"}
+                      modal={"#tambah-bahan"}
+                    />
+                    <ModalAddBahan />
                   </div>
-                  <div className="col-12 text-center  pr-0">
+                  <div className="col-12 text-center ">
                     <Button buttoncontent={"Batal"} direction={"/product"} />
-                    <Button buttoncontent={"Simpan"} />
+                    <button className="btn btn-simpan" type="submit">
+                      Simpan
+                    </button>
                   </div>
                 </div>
               </div>

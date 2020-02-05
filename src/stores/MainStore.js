@@ -1,6 +1,18 @@
 import createStore from "unistore";
+import axios from "axios";
+// import Swal from "sweetalert2";
 
-const initialState = {};
+const initialState = {
+  username: "",
+  password: "",
+  baseUrl: "https://api.easy.my.id",
+  listOutlet: [],
+  listCategory: [],
+  listProduct: [],
+  nameProduct: "",
+  category: "",
+  showProduct: ""
+};
 
 export const store = createStore(initialState);
 
@@ -39,5 +51,66 @@ export const actions = store => ({
       confirmPassword.type = "password";
       visibilityConfirmPassword.innerHTML = "visibility";
     }
+  },
+  getOutlet: async state => {
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/outlet`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listOutlet: response.data
+        });
+      })
+      .catch(error => {});
+  },
+  getCategory: async state => {
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/product/category`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listCategory: response.data
+        });
+      })
+      .catch(error => {});
+  },
+  handleFilterProduct: async state => {
+    getProduct(
+      state.baseUrl,
+      state.category,
+      state.nameProduct,
+      state.showProduct
+    );
   }
 });
+
+// GET PRODUCT
+const getProduct = async (baseUrl, category, nameProduct, showProduct) => {
+  const req = {
+    method: "get",
+    url: `${baseUrl}/product?category=${category}&name=${nameProduct}&show=${showProduct}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+  };
+  axios(req)
+    .then(response => {
+      store.setState({
+        listProduct: response.data
+      });
+    })
+    .catch(error => {});
+};

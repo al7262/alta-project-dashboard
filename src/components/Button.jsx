@@ -5,9 +5,19 @@ import "../styles/product.css";
 const Button = props => {
   return (
     <React.Fragment>
-      <Link className="btn btn-tambah" to={props.direction}>
-        {props.buttoncontent}
-      </Link>{" "}
+      {props.ismodal === "ya" ? (
+        <Link
+          className="btn btn-tambah"
+          data-toggle="modal"
+          data-target={props.modal}
+        >
+          {props.buttoncontent}
+        </Link>
+      ) : (
+        <Link className="btn btn-tambah" to={props.direction}>
+          {props.buttoncontent}
+        </Link>
+      )}
     </React.Fragment>
   );
 };
