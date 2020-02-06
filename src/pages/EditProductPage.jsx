@@ -8,7 +8,7 @@ import Header from "../components/Header";
 import Button from "../components/Button";
 import ModalAddInventory from "../components/ModalAddRecipe";
 
-class AddProduct extends React.Component {
+class EditProduct extends React.Component {
   componentDidMount = () => {
     this.props.getCategory();
     this.props.getRecipe();
@@ -31,7 +31,6 @@ class AddProduct extends React.Component {
         </tr>
       );
     });
-    console.log("list Resep", listRecipe);
     return (
       <React.Fragment>
         <Header pageLocation="Produk" />
@@ -53,6 +52,7 @@ class AddProduct extends React.Component {
                       id="nameProduct"
                       name="nameProduct"
                       onChange={e => this.handleInput(e)}
+                      value={this.props.nameProduct}
                       required
                     />
                   </div>
@@ -63,6 +63,7 @@ class AddProduct extends React.Component {
                       name="category"
                       className="custom-select custom-select-md"
                       onChange={e => this.handleInput(e)}
+                      value={this.props.category}
                       required
                     />
                     <datalist id="category">{listAllCategory}</datalist>
@@ -75,6 +76,7 @@ class AddProduct extends React.Component {
                       id="price"
                       name="price"
                       onChange={e => this.handleInput(e)}
+                      value={this.props.price}
                       required
                     />
                   </div>
@@ -86,17 +88,18 @@ class AddProduct extends React.Component {
                       id="imageProduct"
                       name="imageProduct"
                       onChange={e => this.handleInput(e)}
+                      value={this.props.imageProduct}
                       required
                     />
                   </div>
                   <div className="form-group">
-                    <legend for="showProduct">Status Dijual</legend>
+                    <legend for="showGetProduct">Status Dijual</legend>
                     <div className="form-check">
                       <input
                         className="form-check-input"
                         type="radio"
-                        name="showProduct"
-                        id="showProduct1"
+                        name="showGetProduct"
+                        id="showGetProduct1"
                         value="Ya"
                         onChange={e => this.handleInput(e)}
                         checked
@@ -109,12 +112,12 @@ class AddProduct extends React.Component {
                       <input
                         className="form-check-input"
                         type="radio"
-                        name="showProduct"
-                        id="showProduct2"
+                        name="showGetProduct"
+                        id="showGetProduct2"
                         onChange={e => this.handleInput(e)}
                         value="Tidak"
                       />
-                      <label className="form-check-label" for="showProduct2">
+                      <label className="form-check-label" for="showGetProduct2">
                         Tidak
                       </label>
                     </div>
@@ -137,7 +140,6 @@ class AddProduct extends React.Component {
                         </tr>
                       </thead>
                       <tbody>{listAllRecipe}</tbody>
-                      {/* <tbody></tbody> */}
                     </table>
                   </div>
                   <div className="col-12 text-center pt-2">
@@ -152,7 +154,7 @@ class AddProduct extends React.Component {
                     <Link
                       to="/product"
                       className="btn btn-simpan"
-                      onClick={this.props.deleteProduct}
+                      onClick={this.props.handleBack}
                     >
                       Batal
                     </Link>
@@ -176,4 +178,4 @@ class AddProduct extends React.Component {
 export default connect(
   "listRecipe, listCategory, nameProduct, category, showProduct, price, imageProduct",
   actions
-)(withRouter(AddProduct));
+)(withRouter(EditProduct));

@@ -11,6 +11,7 @@ import RegisterPage from "../pages/RegisterPage";
 import PostRegisterPage from "../pages/PostRegisterPage";
 import ProductPage from "../pages/ProductPage";
 import AddProductPage from "../pages/AddProductPage";
+import EditProductPage from "../pages/EditProductPage";
 import InventoryPage from "../pages/InventoryPage";
 
 const Mainroute = () => {
@@ -24,6 +25,7 @@ const Mainroute = () => {
           <Route exact path="/postregister" component={PostRegisterPage} />
           <Route exact path="/product" component={ProductPage} />
           <Route exact path="/product/add" component={AddProductPage} />
+          <Route exact path="/product/edit" component={EditProductPage} />
           <Route exact path="/inventory" component={InventoryPage} />
           <Route component={NotMatchPage} />
         </Switch>

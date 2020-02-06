@@ -68,11 +68,12 @@ const Header = props => {
             </li>
             <li
               className={
-                "nav-item " + (props.pageLocation === "Bahan" ? "active" : "")
+                "nav-item " +
+                (props.pageLocation === "Inventaris" ? "active" : "")
               }
             >
-              <Link className="nav-link" to="/">
-                Bahan
+              <Link className="nav-link" to="/inventory">
+                Inventaris
               </Link>
             </li>
             <li

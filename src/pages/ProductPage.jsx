@@ -1,21 +1,20 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/product.css";
+import icon from "../images/icon-edit.png";
 
 import Header from "../components/Header";
-import Button from "../components/Button";
 
 class ProductPage extends React.Component {
   componentDidMount = () => {
-    this.props.getOutlet();
     this.props.getCategory();
-    this.props.handleFilterProduct();
+    this.props.getProduct();
   };
-  handleInput1 = e => {
+  handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
-    this.props.handleFilterProduct();
+    this.props.getProduct();
   };
   render() {
     const { listCategory, listProduct } = this.props;
@@ -30,7 +29,38 @@ class ProductPage extends React.Component {
           <td>{item.category}</td>
           {item.show ? <td>Ya</td> : <td>Tidak</td>}
           <td>{item.price}</td>
-          <td></td>
+          <td>
+            <div className="dropright">
+              <img
+                className="dropdown-toggle"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                src={icon}
+                alt="icon-edit"
+              />
+
+              <div
+                className="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <Link
+                  className="dropdown-item"
+                  to="/product/edit"
+                  onClick={() => this.props.getProductById(item.id)}
+                >
+                  Edit
+                </Link>
+                <Link
+                  className="dropdown-item"
+                  onClick={() => this.props.deleteProductById(item.id)}
+                >
+                  Hapus
+                </Link>
+              </div>
+            </div>
+          </td>
         </tr>
       );
     });
@@ -39,7 +69,13 @@ class ProductPage extends React.Component {
         <Header pageLocation="Produk" />
         <div className="container">
           <div className="col-12 text-right pt-4 pr-0">
-            <Button buttoncontent={"Tambah"} direction={"/product/add"} />
+            <Link
+              to="/product/add"
+              className="btn btn-tambah"
+              onClick={this.props.addProduct}
+            >
+              Tambah
+            </Link>
           </div>
           <form className="col-12 box-filter form-row">
             <div className="col-4 form-group">
@@ -48,7 +84,7 @@ class ProductPage extends React.Component {
                 className="custom-select col-12 "
                 id="category"
                 name="category"
-                onChange={e => this.handleInput1(e)}
+                onChange={e => this.handleInputFilter(e)}
               >
                 <option value="">Semua Kategori</option>
                 {listAllCategory}
@@ -60,7 +96,7 @@ class ProductPage extends React.Component {
                 className="custom-select col-12 "
                 id="showProduct"
                 name="showProduct"
-                onChange={e => this.handleInput1(e)}
+                onChange={e => this.handleInputFilter(e)}
               >
                 <option value="">Semua Status</option>
                 <option value="Ya">Ya</option>
@@ -75,12 +111,12 @@ class ProductPage extends React.Component {
                 id="nameProduct"
                 name="nameProduct"
                 placeholder="Cari Produk"
-                onChange={e => this.handleInput1(e)}
+                onChange={e => this.handleInputFilter(e)}
               />
             </div>
           </form>
           <div className="col-12 box-content">
-            <table class="table table-sm">
+            <table className="table table-sm">
               <thead>
                 <tr>
                   <th scope="col">No</th>

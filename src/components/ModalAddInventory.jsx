@@ -1,15 +1,26 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "unistore/react";
-import { actions } from "../stores/MainStore";
+import { actions, store } from "../stores/MainStore";
+import "../styles/modal.css";
 
-class Dashboard extends React.Component {
+class ModalAddInventory extends React.Component {
+  componentDidMount = () => {
+    this.props.getInventory();
+  };
+  handleInput = e => {
+    store.setState({ [e.target.name]: e.target.value });
+  };
   render() {
+    const { listInventory } = this.props;
+    const listAllInventory = listInventory.map(item => {
+      return <option value={item.name} />;
+    });
     return (
       <React.Fragment>
         <div
           class="modal fade"
-          id="tambah-bahan"
+          id="addInventory"
           data-backdrop="static"
           tabindex="-1"
           role="dialog"
@@ -34,38 +45,40 @@ class Dashboard extends React.Component {
               <div class="modal-body">
                 <form action="" onSubmit={e => e.preventDefault()}>
                   <div className="form-group row text-left">
-                    <label className="col-sm-3 col-form-label" for="bahan">
+                    <label
+                      className="col-sm-4 col-form-label"
+                      for="nameInventory"
+                    >
                       Bahan
                     </label>
                     <div className="col-sm-8">
                       <input
-                        list="bahan"
-                        name="bahan"
+                        list="nameInventory"
+                        name="nameInventory"
                         className="custom-select custom-select-md"
+                        onChange={e => this.handleInput(e)}
                         required
                       />
-                      <datalist id="bahan">
-                        <option value="Gula" />
-                        <option value="Air" />
-                      </datalist>
+                      <datalist id="nameInventory">{listAllInventory}</datalist>
                     </div>
                   </div>
                   <div className="form-group row text-left">
-                    <label className="col-sm-3" for="foto">
-                      Kuantitas
+                    <label className="col-sm-4" for="stock">
+                      Stok
                     </label>
                     <div className="col-sm-8">
                       <input
                         type="text"
                         className="form-control"
-                        id="foto"
-                        name="foto"
+                        id="stock"
+                        name="stock"
+                        onChange={e => this.handleInput(e)}
                         required
                       />
                     </div>
                   </div>
                   <div className="form-group row text-left">
-                    <label className="col-sm-3 col-form-label" for="unit">
+                    <label className="col-sm-4 col-form-label" for="unit">
                       Unit
                     </label>
                     <div className="col-sm-8">
@@ -73,6 +86,7 @@ class Dashboard extends React.Component {
                         list="unit"
                         name="unit"
                         className="custom-select custom-select-md"
+                        onChange={e => this.handleInput(e)}
                         required
                       />
                       <datalist id="unit">
@@ -82,7 +96,41 @@ class Dashboard extends React.Component {
                       </datalist>
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-simpan">
+                  <div className="form-group row text-left">
+                    <label className="col-sm-4" for="price">
+                      Harga
+                    </label>
+                    <div className="col-sm-8">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="price"
+                        name="price"
+                        onChange={e => this.handleInput(e)}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row text-left">
+                    <label className="col-sm-4" for="alert">
+                      Pengingat Stok
+                    </label>
+                    <div className="col-sm-8">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="alert"
+                        name="alert"
+                        onChange={e => this.handleInput(e)}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    data-dismiss="modal"
+                    className="btn btn-simpan"
+                  >
                     Tambah{" "}
                   </button>
                 </form>
@@ -94,4 +142,4 @@ class Dashboard extends React.Component {
     );
   }
 }
-export default connect("", actions)(withRouter(Dashboard));
+export default connect("listInventory", actions)(withRouter(ModalAddInventory));
