@@ -5,22 +5,15 @@ import { actions, store } from "../stores/MainStore";
 import "../styles/modal.css";
 
 class ModalAddInventory extends React.Component {
-  componentDidMount = () => {
-    this.props.getInventory();
-  };
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
   render() {
-    const { listInventory } = this.props;
-    const listAllInventory = listInventory.map(item => {
-      return <option value={item.name} />;
-    });
     return (
       <React.Fragment>
         <div
           class="modal fade"
-          id="tambah-bahan"
+          id="editInventory"
           data-backdrop="static"
           tabindex="-1"
           role="dialog"
@@ -31,7 +24,7 @@ class ModalAddInventory extends React.Component {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">
-                  TAMBAH BAHAN
+                  UBAH BAHAN
                 </h5>
                 <button
                   type="button"
@@ -45,40 +38,39 @@ class ModalAddInventory extends React.Component {
               <div class="modal-body">
                 <form action="" onSubmit={e => e.preventDefault()}>
                   <div className="form-group row text-left">
-                    <label
-                      className="col-sm-3 col-form-label"
-                      for="nameInventory"
-                    >
+                    <label className="col-sm-4" for="nameInventoryInput">
                       Bahan
-                    </label>
-                    <div className="col-sm-8">
-                      <input
-                        list="nameInventory"
-                        name="nameInventory"
-                        className="custom-select custom-select-md"
-                        onChange={e => this.handleInput(e)}
-                        required
-                      />
-                      <datalist id="nameInventory">{listAllInventory}</datalist>
-                    </div>
-                  </div>
-                  <div className="form-group row text-left">
-                    <label className="col-sm-3" for="quantity">
-                      Kuantitas
                     </label>
                     <div className="col-sm-8">
                       <input
                         type="text"
                         className="form-control"
-                        id="quantity"
-                        name="quantity"
+                        id="nameInventoryInput"
+                        name="nameInventoryInput"
                         onChange={e => this.handleInput(e)}
                         required
+                        value={this.props.nameInventoryInput}
                       />
                     </div>
                   </div>
                   <div className="form-group row text-left">
-                    <label className="col-sm-3 col-form-label" for="unit">
+                    <label className="col-sm-4" for="stock">
+                      Stok
+                    </label>
+                    <div className="col-sm-8">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="stock"
+                        name="stock"
+                        onChange={e => this.handleInput(e)}
+                        required
+                        value={this.props.stock}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row text-left">
+                    <label className="col-sm-4 col-form-label" for="unit">
                       Unit
                     </label>
                     <div className="col-sm-8">
@@ -87,6 +79,7 @@ class ModalAddInventory extends React.Component {
                         name="unit"
                         className="custom-select custom-select-md"
                         onChange={e => this.handleInput(e)}
+                        value={this.props.unit}
                         required
                       />
                       <datalist id="unit">
@@ -96,14 +89,33 @@ class ModalAddInventory extends React.Component {
                       </datalist>
                     </div>
                   </div>
-                  <button
-                    type="submit"
-                    data-dismiss="modal"
-                    className="btn btn-simpan"
-                    onClick={this.props.addRecipe}
-                  >
-                    Tambah{" "}
-                  </button>
+
+                  <div className="form-group row text-left">
+                    <label className="col-sm-4" for="reminder">
+                      Pengingat Stok
+                    </label>
+                    <div className="col-sm-8">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="reminder"
+                        name="reminder"
+                        onChange={e => this.handleInput(e)}
+                        value={this.props.reminder}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="col-12 text-center">
+                    <button
+                      type="submit"
+                      data-dismiss="modal"
+                      className="btn btn-simpan"
+                      onClick={() => this.props.editInventory(this.props.id)}
+                    >
+                      Ubah{" "}
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -113,4 +125,7 @@ class ModalAddInventory extends React.Component {
     );
   }
 }
-export default connect("listInventory", actions)(withRouter(ModalAddInventory));
+export default connect(
+  "nameInventoryInput, stock, unit, unit_price, reminder",
+  actions
+)(withRouter(ModalAddInventory));

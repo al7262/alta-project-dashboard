@@ -8,11 +8,11 @@ import Header from "../components/Header";
 
 class CustomerPage extends React.Component {
   componentDidMount = () => {
-    this.props.handleFilterCustomer();
+    this.props.getCustomer();
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
-    this.props.handleFilterCustomer();
+    this.props.getCustomer();
   };
   render() {
     const { listCustomer } = this.props;
@@ -28,8 +28,22 @@ class CustomerPage extends React.Component {
     });
     return (
       <React.Fragment>
-        <Header pageLocation="Inventaris" />
-        <div className="container">
+        <Header pageLocation="Pelanggan" />
+        <div className="container mt-5">
+          <div className="col-12 box-customer row mb-3 ">
+            <div className="col-4 text-center">
+              <h1>TOTAL PELANGGAN</h1>
+              <h2>{this.props.customerTotal}</h2>
+            </div>
+            <div className="col-4 text-center">
+              <h1>PELANGGAN PALING LOYAL</h1>
+              <h2>{this.props.customerLoyal}</h2>
+            </div>
+            <div className="col-4 text-center">
+              <h1>PELANGGAN BARU BULAN INI</h1>
+              <h2>{this.props.customerNew}</h2>
+            </div>
+          </div>
           <form className="col-12 box-filter form-row">
             <div className="col-12 form-group">
               <h1>Cari</h1>
@@ -39,11 +53,11 @@ class CustomerPage extends React.Component {
                 id="nameCustomer"
                 name="nameCustomer"
                 onChange={e => this.handleInputFilter(e)}
-                placeholder="Cari Bahan"
+                placeholder="Nama/Email/Telepon"
               />
             </div>
           </form>
-          <div className="col-12 box-content">
+          <div className="col-12 box-content mb-5">
             <table className="table table-sm">
               <thead>
                 <tr>
@@ -61,4 +75,7 @@ class CustomerPage extends React.Component {
     );
   }
 }
-export default connect("listCustomer", actions)(withRouter(InventoryPage));
+export default connect(
+  "listCustomer, customerTotal, customerLoyal, customerNew",
+  actions
+)(withRouter(CustomerPage));

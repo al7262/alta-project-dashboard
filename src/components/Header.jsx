@@ -62,7 +62,11 @@ const Header = props => {
                 "nav-item " + (props.pageLocation === "Produk" ? "active" : "")
               }
             >
-              <Link className="nav-link" to="/product">
+              <Link
+                className="nav-link"
+                to="/product"
+                onClick={props.handleBack}
+              >
                 Produk
               </Link>
             </li>
@@ -81,7 +85,7 @@ const Header = props => {
                 "nav-item " + (props.pageLocation === "Outlet" ? "active" : "")
               }
             >
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/outlet">
                 Outlet
               </Link>
             </li>
@@ -91,7 +95,7 @@ const Header = props => {
                 (props.pageLocation === "Pelanggan" ? "active" : "")
               }
             >
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/customer">
                 Pelanggan
               </Link>
             </li>
@@ -101,7 +105,7 @@ const Header = props => {
                 (props.pageLocation === "Karyawan" ? "active" : "")
               }
             >
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/employee">
                 Karyawan
               </Link>
             </li>

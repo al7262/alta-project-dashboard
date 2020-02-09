@@ -6,8 +6,9 @@ import "../styles/product.css";
 import icon from "../images/icon-edit.png";
 
 import Header from "../components/Header";
-import Button from "../components/Button";
 import ModalAddInventory from "../components/ModalAddInventory";
+import ModalEditInventory from "../components/ModalEditInventory";
+import ModalAddStock from "../components/ModalAddStock";
 
 class InventoryPage extends React.Component {
   componentDidMount = () => {
@@ -30,28 +31,53 @@ class InventoryPage extends React.Component {
           <td>{item.name}</td>
           <td>{item.stock}</td>
           <td>{item.unit}</td>
-          <td>{item.unit_price}</td>
-          <td>{item.status}</td>
           <td>
-            <div class="dropdown">
-              <img
-                className="dropdown-toggle"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                src={icon}
-                alt="icon-edit"
-              />
-
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <Link class="dropdown-item" to="/product/edit">
-                  Edit
-                </Link>
-                <Link class="dropdown-item">Hapus</Link>
-              </div>
-            </div>
+            Rp. {item.unit_price}/{item.unit}
           </td>
+          <td>{item.status}</td>
+          {this.props.outlet !== "" ? (
+            <td>
+              <div class="dropdown">
+                <img
+                  className="dropdown-toggle"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  src={icon}
+                  alt="icon-edit"
+                />
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <Link
+                    class="dropdown-item"
+                    data-toggle="modal"
+                    data-target="#addStock"
+                  >
+                    Tambah Stok
+                  </Link>
+                  <Link
+                    class="dropdown-item"
+                    data-toggle="modal"
+                    data-target="#editInventory"
+                    onClick={() => this.props.getInventoryById(item.id)}
+                  >
+                    Ubah
+                  </Link>
+                  <Link
+                    class="dropdown-item"
+                    onClick={() => this.props.deleteInventoryById(item.id)}
+                  >
+                    Hapus
+                  </Link>
+                </div>
+                <ModalEditInventory id={item.id} />
+                <ModalAddStock id={item.id} />
+              </div>
+            </td>
+          ) : (
+            <td></td>
+          )}
         </tr>
       );
     });
@@ -60,14 +86,25 @@ class InventoryPage extends React.Component {
         <Header pageLocation="Inventaris" />
         <div className="container">
           <div className="col-12 text-right pt-4 pr-0">
-            <Link
-              to="/product/add"
-              className="btn btn-tambah"
-              data-toggle="modal"
-              data-target="#addInventory"
-            >
-              Tambah
-            </Link>
+            {this.props.outlet !== "" ? (
+              <Link
+                className="btn btn-tambah"
+                data-toggle="modal"
+                data-target="#addInventory"
+              >
+                Tambah
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-tambah"
+                data-toggle="modal"
+                data-target="#addInventory"
+                disabled
+              >
+                Tambah
+              </button>
+            )}
             <ModalAddInventory />
           </div>
           <form className="col-12 box-filter form-row">

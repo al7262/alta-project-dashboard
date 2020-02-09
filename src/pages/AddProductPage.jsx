@@ -11,13 +11,13 @@ import ModalAddInventory from "../components/ModalAddRecipe";
 class AddProduct extends React.Component {
   componentDidMount = () => {
     this.props.getCategory();
-    this.props.getRecipe();
   };
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
   render() {
-    const { listRecipe, listCategory } = this.props;
+    const { listCategory } = this.props;
+    const listRecipe = JSON.parse(localStorage.getItem("recipe"));
     const listAllCategory = listCategory.map(item => {
       return <option value={item} />;
     });
@@ -27,11 +27,10 @@ class AddProduct extends React.Component {
           <th scope="row">{key + 1}</th>
           <td>{item.name}</td>
           <td>{item.unit}</td>
-          <td>{item.amount}</td>
+          <td>{item.quantity}</td>
         </tr>
       );
     });
-    console.log("list Resep", listRecipe);
     return (
       <React.Fragment>
         <Header pageLocation="Produk" />
@@ -46,26 +45,26 @@ class AddProduct extends React.Component {
                 <div className="box-inside-add">
                   <h1>INFORMASI PRODUK</h1>
                   <div className="form-group">
-                    <label for="nameProduct">Nama Produk</label>
+                    <label for="nameProductInput">Nama Produk</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="nameProduct"
-                      name="nameProduct"
+                      id="nameProductInput"
+                      name="nameProductInput"
                       onChange={e => this.handleInput(e)}
                       required
                     />
                   </div>
                   <div className="form-group">
-                    <label for="category">Kategori</label>
+                    <label for="categoryInput">Kategori</label>
                     <input
-                      list="category"
-                      name="category"
+                      list="categoryInput"
+                      name="categoryInput"
                       className="custom-select custom-select-md"
                       onChange={e => this.handleInput(e)}
                       required
                     />
-                    <datalist id="category">{listAllCategory}</datalist>
+                    <datalist id="categoryInput">{listAllCategory}</datalist>
                   </div>
                   <div className="form-group">
                     <label for="price">Harga</label>
@@ -90,16 +89,15 @@ class AddProduct extends React.Component {
                     />
                   </div>
                   <div className="form-group">
-                    <legend for="showProduct">Status Dijual</legend>
+                    <legend for="showProductInput">Status Dijual</legend>
                     <div className="form-check">
                       <input
                         className="form-check-input"
                         type="radio"
-                        name="showProduct"
-                        id="showProduct1"
+                        name="showProductInput"
+                        id="showProductInput1"
                         value="Ya"
                         onChange={e => this.handleInput(e)}
-                        checked
                       />
                       <label className="form-check-label" for="status-dijual1">
                         Ya
@@ -109,12 +107,15 @@ class AddProduct extends React.Component {
                       <input
                         className="form-check-input"
                         type="radio"
-                        name="showProduct"
-                        id="showProduct2"
+                        name="showProductInput"
+                        id="showProductInput2"
                         onChange={e => this.handleInput(e)}
                         value="Tidak"
                       />
-                      <label className="form-check-label" for="showProduct2">
+                      <label
+                        className="form-check-label"
+                        for="showProductInput2"
+                      >
                         Tidak
                       </label>
                     </div>
@@ -137,7 +138,6 @@ class AddProduct extends React.Component {
                         </tr>
                       </thead>
                       <tbody>{listAllRecipe}</tbody>
-                      {/* <tbody></tbody> */}
                     </table>
                   </div>
                   <div className="col-12 text-center pt-2">
@@ -149,17 +149,13 @@ class AddProduct extends React.Component {
                     <ModalAddInventory />
                   </div>
                   <div className="col-12 text-center ">
-                    <Link
-                      to="/product"
-                      className="btn btn-simpan"
-                      onClick={this.props.deleteProduct}
-                    >
+                    <Link to="/product" className="btn btn-simpan">
                       Batal
                     </Link>
                     <Link
                       to="/product"
                       className="btn btn-simpan"
-                      onClick={this.props.editProduct}
+                      onClick={this.props.addProduct}
                     >
                       Simpan
                     </Link>
@@ -174,6 +170,6 @@ class AddProduct extends React.Component {
   }
 }
 export default connect(
-  "listRecipe, listCategory, nameProduct, category, showProduct, price, imageProduct",
+  "listRecipe, listCategory, nameProductInput, categoryInput showProductInput, price, imageProduct",
   actions
 )(withRouter(AddProduct));

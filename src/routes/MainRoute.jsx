@@ -13,6 +13,13 @@ import ProductPage from "../pages/ProductPage";
 import AddProductPage from "../pages/AddProductPage";
 import EditProductPage from "../pages/EditProductPage";
 import InventoryPage from "../pages/InventoryPage";
+import CustomerPage from "../pages/CustomerPage";
+import OutletPage from "../pages/OutletPage";
+import EmployeePage from "../pages/EmployeePage";
+import AddOutletPage from "../pages/AddOutletPage";
+import EditOutletPage from "../pages/EditOutletPage";
+import AddEmployeePage from "../pages/AddEmployeePage";
+import EditEmployeePage from "../pages/EditEmployeePage";
 
 const Mainroute = () => {
   return (
@@ -27,6 +34,13 @@ const Mainroute = () => {
           <Route exact path="/product/add" component={AddProductPage} />
           <Route exact path="/product/edit" component={EditProductPage} />
           <Route exact path="/inventory" component={InventoryPage} />
+          <Route exact path="/customer" component={CustomerPage} />
+          <Route exact path="/outlet" component={OutletPage} />
+          <Route exact path="/outlet/add" component={AddOutletPage} />
+          <Route exact path="/outlet/edit" component={EditOutletPage} />
+          <Route exact path="/employee" component={EmployeePage} />
+          <Route exact path="/employee/add" component={AddEmployeePage} />
+          <Route exact path="/employee/edit" component={EditEmployeePage} />
           <Route component={NotMatchPage} />
         </Switch>
       </BrowserRouter>

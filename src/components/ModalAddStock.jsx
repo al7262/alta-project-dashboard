@@ -4,23 +4,16 @@ import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/modal.css";
 
-class ModalAddInventory extends React.Component {
-  componentDidMount = () => {
-    this.props.getInventory();
-  };
+class ModalAddStock extends React.Component {
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
   render() {
-    const { listInventory } = this.props;
-    const listAllInventory = listInventory.map(item => {
-      return <option value={item.name} />;
-    });
     return (
       <React.Fragment>
         <div
           class="modal fade"
-          id="tambah-bahan"
+          id="addStock"
           data-backdrop="static"
           tabindex="-1"
           role="dialog"
@@ -31,7 +24,7 @@ class ModalAddInventory extends React.Component {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">
-                  TAMBAH BAHAN
+                  TAMBAH STOK
                 </h5>
                 <button
                   type="button"
@@ -45,65 +38,46 @@ class ModalAddInventory extends React.Component {
               <div class="modal-body">
                 <form action="" onSubmit={e => e.preventDefault()}>
                   <div className="form-group row text-left">
-                    <label
-                      className="col-sm-3 col-form-label"
-                      for="nameInventory"
-                    >
-                      Bahan
-                    </label>
-                    <div className="col-sm-8">
-                      <input
-                        list="nameInventory"
-                        name="nameInventory"
-                        className="custom-select custom-select-md"
-                        onChange={e => this.handleInput(e)}
-                        required
-                      />
-                      <datalist id="nameInventory">{listAllInventory}</datalist>
-                    </div>
-                  </div>
-                  <div className="form-group row text-left">
-                    <label className="col-sm-3" for="quantity">
-                      Kuantitas
+                    <label className="col-sm-4" for="stock">
+                      Stok
                     </label>
                     <div className="col-sm-8">
                       <input
                         type="text"
                         className="form-control"
-                        id="quantity"
-                        name="quantity"
+                        id="stock"
+                        name="stock"
                         onChange={e => this.handleInput(e)}
                         required
                       />
                     </div>
                   </div>
+
                   <div className="form-group row text-left">
-                    <label className="col-sm-3 col-form-label" for="unit">
-                      Unit
+                    <label className="col-sm-4" for="unit_price">
+                      Harga
                     </label>
                     <div className="col-sm-8">
                       <input
-                        list="unit"
-                        name="unit"
-                        className="custom-select custom-select-md"
+                        type="text"
+                        className="form-control"
+                        id="unit_price"
+                        name="unit_price"
                         onChange={e => this.handleInput(e)}
                         required
                       />
-                      <datalist id="unit">
-                        <option value="gram" />
-                        <option value="ml" />
-                        <option value="pcs" />
-                      </datalist>
                     </div>
                   </div>
-                  <button
-                    type="submit"
-                    data-dismiss="modal"
-                    className="btn btn-simpan"
-                    onClick={this.props.addRecipe}
-                  >
-                    Tambah{" "}
-                  </button>
+                  <div className="col-12 text-center">
+                    <button
+                      type="submit"
+                      data-dismiss="modal"
+                      className="btn btn-simpan"
+                      onClick={() => this.props.addStock(this.props.id)}
+                    >
+                      Tambah{" "}
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -113,4 +87,7 @@ class ModalAddInventory extends React.Component {
     );
   }
 }
-export default connect("listInventory", actions)(withRouter(ModalAddInventory));
+export default connect(
+  "nameInventoryInput, stock, unit, unit_price, reminder",
+  actions
+)(withRouter(ModalAddStock));

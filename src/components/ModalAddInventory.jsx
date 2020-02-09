@@ -5,17 +5,10 @@ import { actions, store } from "../stores/MainStore";
 import "../styles/modal.css";
 
 class ModalAddInventory extends React.Component {
-  componentDidMount = () => {
-    this.props.getInventory();
-  };
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
   render() {
-    const { listInventory } = this.props;
-    const listAllInventory = listInventory.map(item => {
-      return <option value={item.name} />;
-    });
     return (
       <React.Fragment>
         <div
@@ -45,21 +38,18 @@ class ModalAddInventory extends React.Component {
               <div class="modal-body">
                 <form action="" onSubmit={e => e.preventDefault()}>
                   <div className="form-group row text-left">
-                    <label
-                      className="col-sm-4 col-form-label"
-                      for="nameInventory"
-                    >
+                    <label className="col-sm-4" for="nameInventoryInput">
                       Bahan
                     </label>
                     <div className="col-sm-8">
                       <input
-                        list="nameInventory"
-                        name="nameInventory"
-                        className="custom-select custom-select-md"
+                        type="text"
+                        className="form-control"
+                        id="nameInventoryInput"
+                        name="nameInventoryInput"
                         onChange={e => this.handleInput(e)}
                         required
                       />
-                      <datalist id="nameInventory">{listAllInventory}</datalist>
                     </div>
                   </div>
                   <div className="form-group row text-left">
@@ -97,42 +87,45 @@ class ModalAddInventory extends React.Component {
                     </div>
                   </div>
                   <div className="form-group row text-left">
-                    <label className="col-sm-4" for="price">
+                    <label className="col-sm-4" for="unit_price">
                       Harga
                     </label>
                     <div className="col-sm-8">
                       <input
                         type="text"
                         className="form-control"
-                        id="price"
-                        name="price"
+                        id="unit_price"
+                        name="unit_price"
                         onChange={e => this.handleInput(e)}
                         required
                       />
                     </div>
                   </div>
                   <div className="form-group row text-left">
-                    <label className="col-sm-4" for="alert">
+                    <label className="col-sm-4" for="reminder">
                       Pengingat Stok
                     </label>
                     <div className="col-sm-8">
                       <input
                         type="text"
                         className="form-control"
-                        id="alert"
-                        name="alert"
+                        id="reminder"
+                        name="reminder"
                         onChange={e => this.handleInput(e)}
                         required
                       />
                     </div>
                   </div>
-                  <button
-                    type="submit"
-                    data-dismiss="modal"
-                    className="btn btn-simpan"
-                  >
-                    Tambah{" "}
-                  </button>
+                  <div className="col-12 text-center">
+                    <button
+                      type="submit"
+                      data-dismiss="modal"
+                      className="btn btn-simpan"
+                      onClick={this.props.addInventory}
+                    >
+                      Tambah{" "}
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -142,4 +135,7 @@ class ModalAddInventory extends React.Component {
     );
   }
 }
-export default connect("listInventory", actions)(withRouter(ModalAddInventory));
+export default connect(
+  "nameInventoryInput, stock, unit, unit_price, reminder",
+  actions
+)(withRouter(ModalAddInventory));
