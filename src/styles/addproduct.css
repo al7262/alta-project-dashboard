@@ -1,0 +1,65 @@
+/* Color Theme Swatches in Hex */
+.box-addproduct {
+  width: 75vw;
+  padding-top: 10px;
+  margin-top: 3%;
+}
+.box-addproduct .box-content-add {
+  border: 0.5px solid #003354;
+  border-radius: 10px;
+  height: 75vh;
+}
+.box-addproduct .box-content-add h1 {
+  font-size: 18pt;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #002943;
+}
+.box-addproduct .box-content-add .box-inside-add {
+  padding-left: 8%;
+  padding-right: 8%;
+}
+.box-addproduct .box-content-add .box-inside-add label {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #335c76;
+}
+.box-addproduct .box-content-add .box-inside-add .modal-header h5 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #002943;
+}
+.box-addproduct .box-content-add .box-inside-add legend {
+  font-weight: 600;
+  font-size: 12pt;
+  color: #335c76;
+}
+.box-addproduct .box-content-add .box-inside-add legend label {
+  font-weight: 400;
+}
+.box-addproduct .box-content-add .box-inside-add .box-table {
+  overflow: auto;
+  height: 50vh;
+  border: 0.5px solid #dee2e6;
+  border-radius: 10px;
+}
+.box-addproduct .box-content-add .box-inside-add .btn-simpan {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #003354;
+  border: 3px solid #003354;
+  background-color: #e9f2f6;
+}
+.box-addproduct .box-content-add .box-inside-add .btn-simpan:hover {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.box-addproduct .box-content-add .box-inside-add .btn-simpan:active {
+  background-color: #335c76 !important;
+}
+.box-addproduct .box-content-add .box-inside-add .btn-simpan.disabled {
+  background-color: #002943;
+  color: #e9f2f6;
+}

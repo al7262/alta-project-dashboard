@@ -2,34 +2,32 @@ import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
-import { formatMoney } from "accounting";
 import "../styles/product.css";
 import icon from "../images/icon-edit.png";
 
 import Header from "../components/Header";
 
-class ProductPage extends React.Component {
+class EmployeePage extends React.Component {
   componentDidMount = () => {
-    this.props.getCategory();
-    this.props.getProduct();
+    this.props.getEmployee();
+    this.props.getOutlet();
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
-    this.props.getProduct();
+    this.props.getEmployee();
   };
   render() {
-    const { listCategory, listProduct } = this.props;
-    const listAllCategory = listCategory.map(item => {
-      return <option value={item}>{item}</option>;
+    const { listEmployee, listOutlet } = this.props;
+    const listAllOutlet = listOutlet.map(item => {
+      return <option value={item.name}>{item.name}</option>;
     });
-    const listAllProduct = listProduct.map((item, key) => {
+    const listAllEmployee = listEmployee.map((item, key) => {
       return (
         <tr>
           <th scope="row">{key + 1}</th>
-          <td>{item.name}</td>
-          <td>{item.category}</td>
-          {item.show ? <td>Ya</td> : <td>Tidak</td>}
-          <td>{formatMoney(item.price, "Rp", 2, ".", ",")}</td>
+          <td>{item.full_name}</td>
+          <td>{item.position}</td>
+          <td>{item.name_outlet}</td>
           <td>
             <div className="dropright">
               <img
@@ -48,10 +46,10 @@ class ProductPage extends React.Component {
               >
                 <Link
                   className="dropdown-item"
-                  to="/product/edit"
-                  onClick={() => this.props.getProductById(item.id)}
+                  to="/employee/edit"
+                  onClick={() => this.props.getEmployeeById(item.id)}
                 >
-                  Ubah
+                  Edit
                 </Link>
                 <Link
                   className="dropdown-item"
@@ -67,37 +65,37 @@ class ProductPage extends React.Component {
     });
     return (
       <React.Fragment>
-        <Header pageLocation="Produk" />
+        <Header pageLocation="Karyawan" />
         <div className="container">
           <div className="col-12 text-right pt-4 pr-0">
-            <Link to="/product/add" className="btn btn-tambah">
+            <Link to="/employee/add" className="btn btn-tambah">
               Tambah
             </Link>
           </div>
           <form className="col-12 box-filter form-row">
             <div className="col-4 form-group">
-              <h1>Kategori</h1>
+              <h1>Outlet</h1>
               <select
                 className="custom-select col-12 "
-                id="category"
-                name="category"
+                id="outlet"
+                name="outlet"
                 onChange={e => this.handleInputFilter(e)}
               >
-                <option value="">Semua Kategori</option>
-                {listAllCategory}
+                <option value="">Semua Outlet</option>
+                {listAllOutlet}
               </select>
             </div>
             <div className="col-4 form-group">
-              <h1>Status Dijual</h1>
+              <h1>Tipe Karyawan</h1>
               <select
                 className="custom-select col-12 "
-                id="showProduct"
-                name="showProduct"
+                id="position"
+                name="position"
                 onChange={e => this.handleInputFilter(e)}
               >
-                <option value="">Semua Status</option>
-                <option value="Ya">Ya</option>
-                <option value="Tidak">Tidak</option>
+                <option value="">Semua Tipe</option>
+                <option value="Admin">Admin</option>
+                <option value="Kasir">Kasir</option>
               </select>
             </div>
             <div className="col-4 form-group">
@@ -105,9 +103,9 @@ class ProductPage extends React.Component {
               <input
                 type="text"
                 className="form-control"
-                id="nameProduct"
-                name="nameProduct"
-                placeholder="Cari Produk"
+                id="nameEmployee"
+                name="nameEmployee"
+                placeholder="Nama"
                 onChange={e => this.handleInputFilter(e)}
               />
             </div>
@@ -117,14 +115,13 @@ class ProductPage extends React.Component {
               <thead>
                 <tr>
                   <th scope="col">No</th>
-                  <th scope="col">Produk</th>
-                  <th scope="col">Kategori</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Harga</th>
+                  <th scope="col">Nama</th>
+                  <th scope="col">Tipe</th>
+                  <th scope="col">Outlet</th>
                   <th></th>
                 </tr>
               </thead>
-              <tbody>{listAllProduct}</tbody>
+              <tbody>{listAllEmployee}</tbody>
             </table>
           </div>
         </div>
@@ -133,6 +130,6 @@ class ProductPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listProduct, category, showProduct, nameProduct",
+  "listEmployee, listOutlet",
   actions
-)(withRouter(ProductPage));
+)(withRouter(EmployeePage));

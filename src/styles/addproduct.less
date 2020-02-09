@@ -1,0 +1,68 @@
+@import "basic";
+
+.box-addproduct {
+  width: 75vw;
+  padding-top: 10px;
+  margin-top: 3%;
+  .box-content-add {
+    border: 0.5px solid @blue;
+    border-radius: 10px;
+    height: 75vh;
+    h1 {
+      font-size: 18pt;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: @blue-dark1;
+    }
+    .box-inside-add {
+      padding-left: 8%;
+      padding-right: 8%;
+      label {
+        font-size: 12pt;
+        font-weight: 600;
+        color: @blue-light1;
+      }
+      .modal-header {
+        h5 {
+          font-size: 12pt;
+          font-weight: 600;
+          color: @blue-dark1;
+        }
+      }
+      legend {
+        font-weight: 600;
+        font-size: 12pt;
+        color: @blue-light1;
+        label {
+          font-weight: 400;
+        }
+      }
+      .box-table {
+        overflow: auto;
+        height: 50vh;
+        border: 0.5px solid #dee2e6;
+        border-radius: 10px;
+      }
+      .btn-simpan {
+        border-radius: 10px;
+        padding: 5px 30px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        color: @blue;
+        border: 3px solid @blue;
+        background-color: @skyblue-light3;
+        &:hover {
+          background-color: @blue-dark1;
+          color: @skyblue-light3;
+        }
+        &:active {
+          background-color: @blue-light1 !important;
+        }
+        &.disabled {
+          background-color: @blue-dark1;
+          color: @skyblue-light3;
+        }
+      }
+    }
+  }
+}

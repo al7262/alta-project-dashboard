@@ -1,4 +1,28 @@
 /* Color Theme Swatches in Hex */
+.container .form-row {
+  margin-left: 0;
+}
+.container .box-customer {
+  border: 0.5px solid #003354;
+  border-radius: 5px;
+  margin-left: 0;
+}
+.container .box-customer h1 {
+  font-size: 12pt;
+  color: #002943;
+  font-weight: 700;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
+.container .box-customer h2 {
+  font-size: 12pt;
+  color: black;
+  font-weight: 600;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
 .container .btn-tambah {
   border-radius: 10px;
   padding: 5px 30px;
@@ -38,6 +62,7 @@
   width: 100vw;
   height: 55vh;
   margin-top: 20px;
+  overflow: auto;
 }
 .container .box-content table {
   margin-top: 15px;
@@ -46,4 +71,7 @@
   color: #335c76;
   font-weight: 600;
   font-family: 'Muli', sans-serif;
+}
+.container .box-content table img {
+  height: 20px;
 }
