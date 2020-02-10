@@ -5,6 +5,7 @@ import { actions, store } from "../stores/MainStore";
 import "../styles/product.css";
 
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 
 class CustomerPage extends React.Component {
   componentDidMount = () => {
@@ -15,7 +16,7 @@ class CustomerPage extends React.Component {
     this.props.getCustomer();
   };
   render() {
-    const { listCustomer } = this.props;
+    const { listCustomer, isLoadingCustomer } = this.props;
     const listAllCustomer = listCustomer.map((item, key) => {
       return (
         <tr>
@@ -58,17 +59,21 @@ class CustomerPage extends React.Component {
             </div>
           </form>
           <div className="col-12 box-content mb-5">
-            <table className="table table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">Nama</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">No. Telepon</th>
-                </tr>
-              </thead>
-              <tbody>{listAllCustomer}</tbody>
-            </table>
+            {isLoadingCustomer ? (
+              <Loader height={"100%"} loading={"hidden"} />
+            ) : (
+              <table className="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">No. Telepon</th>
+                  </tr>
+                </thead>
+                <tbody>{listAllCustomer}</tbody>
+              </table>
+            )}
           </div>
         </div>
       </React.Fragment>
@@ -76,6 +81,6 @@ class CustomerPage extends React.Component {
   }
 }
 export default connect(
-  "listCustomer, customerTotal, customerLoyal, customerNew",
+  "listCustomer, customerTotal, customerLoyal, customerNew, isLoadingCustomer",
   actions
 )(withRouter(CustomerPage));

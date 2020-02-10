@@ -5,6 +5,12 @@ import axios from "axios";
 const initialState = {
   username: "",
   password: "",
+  isLoadingProduct: true,
+  isLoadingInventory: true,
+  isLoadingOutlet: true,
+  isLoadingCustomer: true,
+  isLoadingEmployee: true,
+
   baseUrl: "https://api.easy.my.id",
   listOutlet: [],
   listCategory: [],
@@ -108,7 +114,8 @@ export const actions = store => ({
     axios(req)
       .then(response => {
         store.setState({
-          listOutlet: response.data
+          listOutlet: response.data,
+          isLoadingOutlet: false
         });
       })
       .catch(error => {});
@@ -231,7 +238,8 @@ export const actions = store => ({
     axios(req)
       .then(response => {
         store.setState({
-          listProduct: response.data
+          listProduct: response.data,
+          isLoadingProduct: false
         });
         localStorage.setItem("recipe", JSON.stringify([]));
       })
@@ -412,7 +420,8 @@ export const actions = store => ({
       axios(req)
         .then(response => {
           store.setState({
-            listInventory: response.data
+            listInventory: response.data,
+            isLoadingInventory: false
           });
         })
         .catch(error => {});
@@ -578,7 +587,8 @@ export const actions = store => ({
           listCustomer: response.data.list_all_customer,
           customerTotal: response.data.total_costumer,
           customerLoyal: response.data.costumer_loyal.fullname,
-          customerNew: response.data.new_customer
+          customerNew: response.data.new_customer,
+          isLoadingCustomer: false
         });
       })
       .catch(error => {});
@@ -636,7 +646,8 @@ export const actions = store => ({
     axios(req)
       .then(response => {
         store.setState({
-          listEmployee: response.data
+          listEmployee: response.data,
+          isLoadingEmployee: false
         });
       })
       .catch(error => {});
@@ -752,7 +763,8 @@ const getProduct = (baseUrl, category, nameProduct, showProduct) => {
   axios(req)
     .then(response => {
       store.setState({
-        listProduct: response.data
+        listProduct: response.data,
+        isLoadingProduct: false
       });
     })
     .catch(error => {});
@@ -787,7 +799,8 @@ const getInventory = (baseUrl, outlet, statusInventory, nameInventory) => {
     axios(req)
       .then(response => {
         store.setState({
-          listInventory: response.data
+          listInventory: response.data,
+          isLoadingInventory: false
         });
       })
       .catch(error => {});
@@ -821,7 +834,8 @@ const getOutlet = (baseUrl, nameOutlet) => {
   axios(req)
     .then(response => {
       store.setState({
-        listOutlet: response.data
+        listOutlet: response.data,
+        isLoadingOutlet: false
       });
     })
     .catch(error => {});
@@ -838,7 +852,8 @@ const getEmployee = (baseUrl, nameEmployee, outlet, position) => {
   axios(req)
     .then(response => {
       store.setState({
-        listEmployee: response.data
+        listEmployee: response.data,
+        isLoadingEmployee: false
       });
     })
     .catch(error => {});

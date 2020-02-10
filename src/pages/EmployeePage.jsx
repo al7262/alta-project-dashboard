@@ -6,7 +6,7 @@ import "../styles/product.css";
 import icon from "../images/icon-edit.png";
 
 import Header from "../components/Header";
-
+import Loader from "../components/Loader";
 class EmployeePage extends React.Component {
   componentDidMount = () => {
     this.props.getEmployee();
@@ -17,7 +17,7 @@ class EmployeePage extends React.Component {
     this.props.getEmployee();
   };
   render() {
-    const { listEmployee, listOutlet } = this.props;
+    const { listEmployee, listOutlet, isLoadingEmployee } = this.props;
     const listAllOutlet = listOutlet.map(item => {
       return <option value={item.name}>{item.name}</option>;
     });
@@ -53,7 +53,7 @@ class EmployeePage extends React.Component {
                 </Link>
                 <Link
                   className="dropdown-item"
-                  onClick={() => this.props.deleteProductById(item.id)}
+                  onClick={() => this.props.deleteEmployeeById(item.id)}
                 >
                   Hapus
                 </Link>
@@ -111,18 +111,22 @@ class EmployeePage extends React.Component {
             </div>
           </form>
           <div className="col-12 box-content">
-            <table className="table table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">Nama</th>
-                  <th scope="col">Tipe</th>
-                  <th scope="col">Outlet</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>{listAllEmployee}</tbody>
-            </table>
+            {isLoadingEmployee ? (
+              <Loader height={"100%"} loading={"hidden"} />
+            ) : (
+              <table className="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Tipe</th>
+                    <th scope="col">Outlet</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>{listAllEmployee}</tbody>
+              </table>
+            )}
           </div>
         </div>
       </React.Fragment>
@@ -130,6 +134,6 @@ class EmployeePage extends React.Component {
   }
 }
 export default connect(
-  "listEmployee, listOutlet",
+  "listEmployee, listOutlet, isLoadingEmployee",
   actions
 )(withRouter(EmployeePage));

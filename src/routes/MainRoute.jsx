@@ -20,6 +20,7 @@ import AddOutletPage from "../pages/AddOutletPage";
 import EditOutletPage from "../pages/EditOutletPage";
 import AddEmployeePage from "../pages/AddEmployeePage";
 import EditEmployeePage from "../pages/EditEmployeePage";
+import DatePage from "../pages/Date";
 
 const Mainroute = () => {
   return (
@@ -41,6 +42,7 @@ const Mainroute = () => {
           <Route exact path="/employee" component={EmployeePage} />
           <Route exact path="/employee/add" component={AddEmployeePage} />
           <Route exact path="/employee/edit" component={EditEmployeePage} />
+          <Route exact path="/date" component={DatePage} />
           <Route component={NotMatchPage} />
         </Switch>
       </BrowserRouter>
