@@ -6,6 +6,7 @@ import "../styles/product.css";
 
 import Header from "../components/Header";
 import icon from "../images/icon-edit.png";
+import Loader from "../components/Loader";
 
 class OutletPage extends React.Component {
   componentDidMount = () => {
@@ -16,7 +17,7 @@ class OutletPage extends React.Component {
     this.props.getOutlet();
   };
   render() {
-    const { listOutlet } = this.props;
+    const { listOutlet, isLoadingOutlet } = this.props;
     const listAllOutlet = listOutlet.map((item, key) => {
       return (
         <tr>
@@ -82,22 +83,29 @@ class OutletPage extends React.Component {
             </div>
           </form>
           <div className="col-12 box-content">
-            <table className="table table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">Nama</th>
-                  <th scope="col">Kota</th>
-                  <th scope="col">Pajak</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>{listAllOutlet}</tbody>
-            </table>
+            {isLoadingOutlet ? (
+              <Loader height={"100%"} loading={"hidden"} />
+            ) : (
+              <table className="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Kota</th>
+                    <th scope="col">Pajak</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>{listAllOutlet}</tbody>
+              </table>
+            )}
           </div>
         </div>
       </React.Fragment>
     );
   }
 }
-export default connect("listOutlet", actions)(withRouter(OutletPage));
+export default connect(
+  "listOutlet, isLoadingOutlet, nameOutlet",
+  actions
+)(withRouter(OutletPage));

@@ -7,6 +7,7 @@ import "../styles/product.css";
 import icon from "../images/icon-edit.png";
 
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 
 class ProductPage extends React.Component {
   componentDidMount = () => {
@@ -18,7 +19,7 @@ class ProductPage extends React.Component {
     this.props.getProduct();
   };
   render() {
-    const { listCategory, listProduct } = this.props;
+    const { listCategory, listProduct, isLoadingProduct } = this.props;
     const listAllCategory = listCategory.map(item => {
       return <option value={item}>{item}</option>;
     });
@@ -113,19 +114,23 @@ class ProductPage extends React.Component {
             </div>
           </form>
           <div className="col-12 box-content">
-            <table className="table table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">Produk</th>
-                  <th scope="col">Kategori</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Harga</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>{listAllProduct}</tbody>
-            </table>
+            {isLoadingProduct ? (
+              <Loader height={"100%"} loading={"hidden"} />
+            ) : (
+              <table className="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Produk</th>
+                    <th scope="col">Kategori</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Harga</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>{listAllProduct}</tbody>
+              </table>
+            )}
           </div>
         </div>
       </React.Fragment>
@@ -133,6 +138,6 @@ class ProductPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listProduct, category, showProduct, nameProduct",
+  "listOutlet, listCategory, listProduct, category, showProduct, nameProduct, isLoadingProduct",
   actions
 )(withRouter(ProductPage));

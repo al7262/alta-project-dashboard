@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import ModalAddInventory from "../components/ModalAddInventory";
 import ModalEditInventory from "../components/ModalEditInventory";
 import ModalAddStock from "../components/ModalAddStock";
+import Loader from "../components/Loader";
 
 class InventoryPage extends React.Component {
   componentDidMount = () => {
@@ -20,7 +21,7 @@ class InventoryPage extends React.Component {
     this.props.getInventory();
   };
   render() {
-    const { listOutlet, listInventory } = this.props;
+    const { listOutlet, listInventory, isLoadingInventory } = this.props;
     const listAllOutlet = listOutlet.map(item => {
       return <option value={item.id}>{item.name}</option>;
     });
@@ -146,20 +147,24 @@ class InventoryPage extends React.Component {
             </div>
           </form>
           <div className="col-12 box-content">
-            <table className="table table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">Bahan</th>
-                  <th scope="col">Stok</th>
-                  <th scope="col">Unit</th>
-                  <th scope="col">Harga/Unit</th>
-                  <th scope="col">Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>{listAllInventory}</tbody>
-            </table>
+            {isLoadingInventory ? (
+              <Loader height={"100%"} loading={"hidden"} />
+            ) : (
+              <table className="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Bahan</th>
+                    <th scope="col">Stok</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Harga/Unit</th>
+                    <th scope="col">Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>{listAllInventory}</tbody>
+              </table>
+            )}
           </div>
         </div>
       </React.Fragment>
@@ -167,6 +172,6 @@ class InventoryPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, statusInventory, nameInventory, outlet, listInventory, outlet",
+  "listOutlet, statusInventory, nameInventory, outlet, listInventory, outlet, isLoadingInventory",
   actions
 )(withRouter(InventoryPage));
