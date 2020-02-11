@@ -10,6 +10,7 @@ const initialState = {
   isLoadingOutlet: true,
   isLoadingCustomer: true,
   isLoadingEmployee: true,
+  isLoadingDashboard: true,
 
   baseUrl: "https://api.easy.my.id",
   listOutlet: [],
@@ -22,6 +23,10 @@ const initialState = {
   listCity: [],
   listDistrict: [],
   listEmployee: [],
+  listChart: {},
+  listTopProduct: [],
+  listTopCategory: [],
+  listReminder: [],
 
   nameEmployee: "",
   nameCustomer: "",
@@ -61,7 +66,12 @@ const initialState = {
   district: "",
   position: "",
   positionInput: "",
-  idEmployee: ""
+  idEmployee: "",
+  start_time: "",
+  end_time: "",
+  salesAmount: 0,
+  numberTransaction: 0,
+  belowReminder: 0
 };
 
 export const store = createStore(initialState);
@@ -103,6 +113,7 @@ export const actions = store => ({
     }
   },
   getOutlet: state => {
+    store.setState({ isLoadingOutlet: true });
     const req = {
       method: "get",
       url: `${state.baseUrl}/outlet?keyword=${state.nameOutlet}`,
@@ -227,6 +238,7 @@ export const actions = store => ({
       .catch(error => {});
   },
   getProduct: state => {
+    store.setState({ isLoadingProduct: true });
     const req = {
       method: "get",
       url: `${state.baseUrl}/product?category=${state.category}&name=${state.nameProduct}&show=${state.showProduct}`,
@@ -408,6 +420,7 @@ export const actions = store => ({
   },
 
   getInventory: state => {
+    store.setState({ isLoadingInventory: true });
     if (state.outlet === "") {
       const req = {
         method: "get",
@@ -573,6 +586,8 @@ export const actions = store => ({
     });
   },
   getCustomer: state => {
+    store.setState({ isLoadingCustomer: true });
+
     const req = {
       method: "get",
       url: `${state.baseUrl}/customer?&keyword=${state.nameCustomer}`,
@@ -635,6 +650,8 @@ export const actions = store => ({
       .catch(error => {});
   },
   getEmployee: state => {
+    store.setState({ isLoadingEmployee: true });
+
     const req = {
       method: "get",
       url: `${state.baseUrl}/employee?&keyword=${state.nameEmployee}&name_outlet=${state.outlet}&position=${state.position}`,
@@ -747,11 +764,39 @@ export const actions = store => ({
         );
       })
       .catch(error => {});
+  },
+  getDashboard: state => {
+    store.setState({ isLoadingDashboard: true });
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/dashboard?name_outlet=${state.outlet}&start_time=${state.start_time}&end_time=${state.end_time}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          salesAmount: response.data.sales_amount,
+          numberTransaction: response.data.number_transaction,
+          listChart: response.data.chart,
+          listTopProduct: response.data.top_product,
+          listTopCategory: response.data.top_category,
+          customerNew: response.data.new_customer,
+          customerTotal: response.data.total_costumer,
+          belowReminder: response.data.below_reminder,
+          listReminder: response.data.reminder,
+          isLoadingDashboard: false
+        });
+      })
+      .catch(error => {});
   }
 });
 
 // GET PRODUCT
 const getProduct = (baseUrl, category, nameProduct, showProduct) => {
+  store.setState({ isLoadingProduct: true });
   const req = {
     method: "get",
     url: `${baseUrl}/product?category=${category}&name=${nameProduct}&show=${showProduct}`,
@@ -787,6 +832,7 @@ const getCategory = baseUrl => {
     .catch(error => {});
 };
 const getInventory = (baseUrl, outlet, statusInventory, nameInventory) => {
+  store.setState({ isLoadingInventory: true });
   if (outlet === "") {
     const req = {
       method: "get",
@@ -823,6 +869,7 @@ const getInventory = (baseUrl, outlet, statusInventory, nameInventory) => {
   }
 };
 const getOutlet = (baseUrl, nameOutlet) => {
+  store.setState({ isLoadingOutlet: true });
   const req = {
     method: "get",
     url: `${baseUrl}/outlet?keyword=${nameOutlet}`,
@@ -841,6 +888,8 @@ const getOutlet = (baseUrl, nameOutlet) => {
     .catch(error => {});
 };
 const getEmployee = (baseUrl, nameEmployee, outlet, position) => {
+  store.setState({ isLoadingEmployee: true });
+
   const req = {
     method: "get",
     url: `${baseUrl}/employee?&keyword=${nameEmployee}&name_outlet=${outlet}&position=${position}`,

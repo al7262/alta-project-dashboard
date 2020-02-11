@@ -2,13 +2,17 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
-// import { DateRangePicker } from "rsuite";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { format } from "date-fns";
+import "../styles/dashboard.css";
+import { LineChart, ColumnChart, PieChart } from "react-chartkick";
+import "chart.js";
+import { formatMoney } from "accounting";
 
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 
 function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
@@ -17,19 +21,29 @@ function formatDateDisplay(date, defaultText) {
 class Dashboard extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
+    this.props.getDashboard();
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
+    this.props.getDashboard();
+    console.log("cek tanggal", this.props.start_time, this.props.end_time);
   };
-  handleRangeChange(which, payload) {
+  handleRangeChange = async (which, payload) => {
     console.log(which, payload);
-    this.setState({
+    await this.setState({
       [which]: {
         ...this.state[which],
         ...payload
       }
     });
-  }
+    store.setState({
+      start_time: formatDateDisplay(
+        this.state.dateRangePicker.selection.startDate
+      ),
+      end_time: formatDateDisplay(this.state.dateRangePicker.selection.endDate)
+    });
+    this.props.getDashboard();
+  };
   constructor(props, context) {
     super(props, context);
 
@@ -37,7 +51,7 @@ class Dashboard extends React.Component {
       dateRangePicker: {
         selection: {
           startDate: new Date(),
-          endDate: null,
+          endDate: new Date(),
           key: "selection"
         }
       }
@@ -45,27 +59,39 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { listOutlet } = this.props;
+    const { listOutlet, isLoadingDashboard, listReminder } = this.props;
     const listAllOutlet = listOutlet.map(item => {
       return <option value={item.name}>{item.name}</option>;
+    });
+    const listAllReminder = listReminder.map((item, key) => {
+      return (
+        <tr>
+          <th scope="row">{key + 1}</th>
+          <td>{item.name}</td>
+          <td>{item.stock}</td>
+          <td>{item.outlet}</td>
+        </tr>
+      );
     });
 
     return (
       <React.Fragment>
         <Header pageLocation="Dashboard" />
-        <div className="container">
+        <div className="container mb-5">
           <form className="col-12 box-filter form-row mt-5">
             <div className="col-6 form-group">
-              <h1>Outlet</h1>
-              <select
-                className="custom-select col-12 "
-                id="outlet"
-                name="outlet"
-                onChange={e => this.handleInputFilter(e)}
-              >
-                <option value="">Semua Outlet</option>
-                {listAllOutlet}
-              </select>
+              <div>
+                <h1>Outlet</h1>
+                <select
+                  className="custom-select col-12 "
+                  id="outlet"
+                  name="outlet"
+                  onChange={e => this.handleInputFilter(e)}
+                >
+                  <option value="">Semua Outlet</option>
+                  {listAllOutlet}
+                </select>
+              </div>
             </div>
             <div className="col-6 form-group">
               <h1>Tanggal</h1>
@@ -77,22 +103,30 @@ class Dashboard extends React.Component {
                 onToggle="rootClose"
                 className="row"
               >
-                <input
-                  type="text"
-                  className="form-control col-6"
-                  readOnly
-                  value={formatDateDisplay(
-                    this.state.dateRangePicker.selection.startDate
-                  )}
-                />
-                <input
-                  type="text"
-                  class="form-control col-6"
-                  readOnly
-                  value={formatDateDisplay(
-                    this.state.dateRangePicker.selection.endDate
-                  )}
-                />
+                <div className="col-6 pr-0">
+                  <input
+                    type="text"
+                    className="form-control "
+                    name="start_time"
+                    // readOnly
+                    value={formatDateDisplay(
+                      this.state.dateRangePicker.selection.startDate
+                    )}
+                    onChange={e => this.handleInputFilter(e)}
+                  />
+                </div>
+                <div className="col-6 pl-0">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="end_time"
+                    // readOnly
+                    value={formatDateDisplay(
+                      this.state.dateRangePicker.selection.endDate
+                    )}
+                    onChange={e => this.handleInputFilter(e)}
+                  />
+                </div>
               </div>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <DateRangePicker
@@ -111,9 +145,130 @@ class Dashboard extends React.Component {
               </div>
             </div>
           </form>
+          <div className="col-12 row mt-3 ml-0 p-0">
+            <div className="col-6 pl-0">
+              <div className="box-dashboard">
+                <h1>TOTAL PENJUALAN</h1>
+                {isLoadingDashboard ? (
+                  <Loader height={"100%"} loading={"hidden"} />
+                ) : (
+                  <React.Fragment>
+                    <h2>
+                      {formatMoney(this.props.salesAmount, "Rp", 2, ".", ",")}
+                    </h2>
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+            <div className="col-6 pr-0">
+              <div className="box-dashboard">
+                <h1>TOTAL TRANSAKSI</h1>
+                {isLoadingDashboard ? (
+                  <Loader height={"100%"} loading={"hidden"} />
+                ) : (
+                  <React.Fragment>
+                    <h2>{this.props.numberTransaction}</h2>
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="col-12 box-dashboard mt-3">
+            <h1>GRAFIK PENJUALAN</h1>
+            {isLoadingDashboard ? (
+              <Loader height={"100%"} loading={"hidden"} />
+            ) : (
+              <React.Fragment>
+                <LineChart
+                  data={this.props.listChart}
+                  xtitle="Waktu (Hari)"
+                  ytitle="Penjualan (Rp)"
+                />
+              </React.Fragment>
+            )}
+          </div>
+          <div className="col-12 row mt-3 ml-0 p-0">
+            <div className="col-6 pl-0  ">
+              <div className="box-dashboard pb-2">
+                <h1>PENJUALAN PRODUK TERTINGGI</h1>
+                {isLoadingDashboard ? (
+                  <Loader height={"100%"} loading={"hidden"} />
+                ) : (
+                  <React.Fragment>
+                    <ColumnChart
+                      data={this.props.listTopProduct}
+                      xtitle="Produk"
+                      ytitle="Jumlah Transaksi"
+                    />
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+            <div className="col-6 pr-0 ">
+              <div className="box-dashboard pb-2">
+                <h1>PENJUALAN KATEGORI TERTINGGI</h1>
+                {isLoadingDashboard ? (
+                  <Loader height={"100%"} loading={"hidden"} />
+                ) : (
+                  <React.Fragment>
+                    <PieChart data={this.props.listTopCategory} />
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="col-12 row mt-3 ml-0 p-0">
+            <div className="col-6 pl-0">
+              <div className="box-totalCustomer">
+                <div className="col-12">
+                  <h1>PELANGGAN</h1>
+                </div>
+                {isLoadingDashboard ? (
+                  <Loader height={"100%"} loading={"hidden"} />
+                ) : (
+                  <React.Fragment>
+                    <div className="col-6">
+                      <h2>Pelanggan Baru {this.props.customerNew}</h2>
+                      {/* <h2>{this.props.customerNew}</h2> */}
+                    </div>
+                    <div className="col-6">
+                      <h2>Total Pelanggan {this.props.customerTotal}</h2>
+                      {/* <h2>{this.props.customerTotal}</h2> */}
+                    </div>
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+            <div className="col-6 pr-0">
+              <div className="box-stock">
+                <h1>PENGINGAT STOK</h1>
+                {isLoadingDashboard ? (
+                  <Loader height={"100%"} loading={"hidden"} />
+                ) : (
+                  <React.Fragment>
+                    <table className="table table-sm">
+                      <thead>
+                        <tr>
+                          <th scope="col">No</th>
+                          <th scope="col">Produk</th>
+                          <th scope="col">Stok</th>
+                          <th scope="col">Outlet</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>{listAllReminder}</tbody>
+                    </table>{" "}
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     );
   }
 }
-export default connect("listOutlet, outlet", actions)(withRouter(Dashboard));
+export default connect(
+  "listOutlet, outlet, start_time, end_time, salesAmount, numberTransaction, belowReminder, listChart,listTopProduct,listTopCategory,listReminder, isLoadingDashboard, customerNew, customerTotal",
+  actions
+)(withRouter(Dashboard));

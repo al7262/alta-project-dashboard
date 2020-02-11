@@ -1,0 +1,67 @@
+/* Color Theme Swatches in Hex */
+.container .box-dashboard {
+  border: 0.5px solid #003354;
+  border-radius: 5px;
+  text-align: center;
+}
+.container .box-dashboard h1 {
+  font-size: 12pt;
+  color: #335c76;
+  font-weight: 700;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
+.container .box-dashboard h2 {
+  font-size: 12pt;
+  color: black;
+  font-weight: 700;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
+.container .box-stock {
+  border: 0.5px solid #003354;
+  border-radius: 5px;
+  text-align: center;
+  height: 40vh;
+  overflow: auto;
+}
+.container .box-stock h1 {
+  font-size: 12pt;
+  color: #335c76;
+  font-weight: 700;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
+.container .box-stock h2 {
+  font-size: 12pt;
+  color: black;
+  font-weight: 700;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
+.container .box-totalCustomer {
+  border: 0.5px solid #003354;
+  border-radius: 5px;
+  text-align: center;
+  height: 40vh;
+}
+.container .box-totalCustomer h1 {
+  font-size: 12pt;
+  color: #335c76;
+  font-weight: 700;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
+.container .box-totalCustomer h2 {
+  font-size: 12pt;
+  color: black;
+  font-weight: 700;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}

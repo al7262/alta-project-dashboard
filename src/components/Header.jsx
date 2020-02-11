@@ -53,7 +53,7 @@ const Header = props => {
                 "nav-item " + (props.pageLocation === "Laporan" ? "active" : "")
               }
             >
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/report/product">
                 Laporan
               </Link>
             </li>
