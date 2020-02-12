@@ -11,6 +11,7 @@ const initialState = {
   isLoadingCustomer: true,
   isLoadingEmployee: true,
   isLoadingDashboard: true,
+  isLoadingReport: true,
 
   baseUrl: "https://api.easy.my.id",
   listOutlet: [],
@@ -27,6 +28,7 @@ const initialState = {
   listTopProduct: [],
   listTopCategory: [],
   listReminder: [],
+  listReport: [],
 
   nameEmployee: "",
   nameCustomer: "",
@@ -71,7 +73,9 @@ const initialState = {
   end_time: "",
   salesAmount: 0,
   numberTransaction: 0,
-  belowReminder: 0
+  belowReminder: 0,
+  totalSalesL: 0,
+  totalSold: 0
 };
 
 export const store = createStore(initialState);
@@ -788,6 +792,27 @@ export const actions = store => ({
           belowReminder: response.data.below_reminder,
           listReminder: response.data.reminder,
           isLoadingDashboard: false
+        });
+      })
+      .catch(error => {});
+  },
+  getReportProduct: state => {
+    store.setState({ isLoadingReport: true });
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/report/product-sales?name=${state.nameProduct}&category=${state.category}&id_outlet=${state.idOutlet}&start_time=${state.start_time}&end_time=${state.end_time}&total_sales_sort&total_sold_sort`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listReport: response.data.detail,
+          totalSales: response.data.total_sales,
+          totalSold: response.data.total_sold,
+          isLoadingReport: false
         });
       })
       .catch(error => {});
