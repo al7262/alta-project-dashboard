@@ -10,6 +10,7 @@ import Loader from "../components/Loader";
 class CustomerPage extends React.Component {
   componentDidMount = () => {
     this.props.getCustomer();
+    store.setState({ nameCustomer: "" });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });

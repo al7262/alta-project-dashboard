@@ -22,7 +22,9 @@ class Dashboard extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
     this.props.getDashboard();
+    store.setState({ outlet: "" });
   };
+
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
     this.props.getDashboard();
@@ -180,6 +182,7 @@ class Dashboard extends React.Component {
                   data={this.props.listChart}
                   xtitle="Waktu (Hari)"
                   ytitle="Penjualan (Rp)"
+                  // discrete={true}
                 />
               </React.Fragment>
             )}

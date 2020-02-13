@@ -17,16 +17,16 @@ function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
   return format(date, "DD/MM/YYYY");
 }
-class ReportProductPage extends React.Component {
+class ReportProfitPage extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
     this.props.getCategory();
-    this.props.getReportProduct();
+    this.props.getReportProfit();
     store.setState({ idOutlet: "", category: "", nameProduct: "" });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
-    this.props.getReportProduct();
+    this.props.getReportProfit();
   };
   handleRangeChange = async (which, payload) => {
     console.log(which, payload);
@@ -42,7 +42,7 @@ class ReportProductPage extends React.Component {
       ),
       end_time: formatDateDisplay(this.state.dateRangePicker.selection.endDate)
     });
-    this.props.getReportProduct();
+    this.props.getReportProfit();
   };
   constructor(props, context) {
     super(props, context);
@@ -59,26 +59,17 @@ class ReportProductPage extends React.Component {
   }
 
   render() {
-    const {
-      isLoadingReport,
-      listCategory,
-      listOutlet,
-      listReportProduct
-    } = this.props;
-    const listAllCategory = listCategory.map(item => {
-      return <option value={item}>{item}</option>;
-    });
-    const listAllOutlet = listOutlet.map(item => {
-      return <option value={item.id}>{item.name}</option>;
-    });
-    const listAllReport = listReportProduct.map((item, key) => {
+    const { isLoadingReport, listReportProfit } = this.props;
+
+    const listAllReport = listReportProfit.map((item, key) => {
       return (
         <tr className={item.deleted ? "table-danger" : ""}>
           <th scope="row">{key + 1}</th>
-          <td>{item.name}</td>
-          <td>{item.category}</td>
-          <td>{item.total_sold}</td>
-          <td>{formatMoney(item.total_sales, "Rp", 2, ".", ",")}</td>
+          <td>{item.time}</td>
+          <td>{item.name_outlet}</td>
+          <td>{formatMoney(item.total_price_sale, "Rp", 2, ".", ",")}</td>
+          <td>{formatMoney(item.total_price_inventory, "Rp", 2, ".", ",")}</td>
+          <td>{formatMoney(item.profit, "Rp", 2, ".", ",")}</td>
         </tr>
       );
     });
@@ -87,31 +78,7 @@ class ReportProductPage extends React.Component {
         <Header pageLocation="Laporan" />
         <div className="container">
           <form className="col-12 box-filter form-row mt-5 mb-3">
-            <div className="col-3 form-group">
-              <h1>Outlet</h1>
-              <select
-                className="custom-select col-12 "
-                id="idOutlet"
-                name="idOutlet"
-                onChange={e => this.handleInputFilter(e)}
-              >
-                <option value="">Semua Outlet</option>
-                {listAllOutlet}
-              </select>
-            </div>
-            <div className="col-3 form-group">
-              <h1>Kategori</h1>
-              <select
-                className="custom-select col-12 "
-                id="category"
-                name="category"
-                onChange={e => this.handleInputFilter(e)}
-              >
-                <option value="">Semua Kategori</option>
-                {listAllCategory}
-              </select>
-            </div>
-            <div className="col-3 form-group">
+            <div className="col-12 form-group">
               <h1>Tanggal</h1>
               <div
                 id="dropdownMenuButton"
@@ -160,17 +127,6 @@ class ReportProductPage extends React.Component {
                 />
               </div>
             </div>
-            <div className="col-3 form-group">
-              <h1>Cari</h1>
-              <input
-                type="text"
-                className="form-control"
-                id="nameProduct"
-                name="nameProduct"
-                placeholder="Cari Produk"
-                onChange={e => this.handleInputFilter(e)}
-              />
-            </div>
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
@@ -196,21 +152,36 @@ class ReportProductPage extends React.Component {
                   <Loader height={"100%"} loading={"hidden"} />
                 ) : (
                   <React.Fragment>
-                    <div className="col-6 text-center">
-                      <h1>TOTAL TERJUAL</h1>
-                      <h2>{this.props.totalSoldProduct}</h2>
-                    </div>
-                    <div className="col-6 text-center">
-                      <h1>TOTAL PENDAPATAN</h1>
+                    <div className="col-4 text-center">
+                      <h1>TOTAL PENJUALAN</h1>
                       <h2>
-                        {" "}
                         {formatMoney(
-                          this.props.totalSalesProduct,
+                          this.props.totalSalesProfit,
                           "Rp",
                           2,
                           ".",
                           ","
                         )}
+                      </h2>
+                    </div>
+                    <div className="col-4 text-center">
+                      <h1>TOTAL BIAYA</h1>
+                      <h2>
+                        {" "}
+                        {formatMoney(
+                          this.props.totalCostProfit,
+                          "Rp",
+                          2,
+                          ".",
+                          ","
+                        )}
+                      </h2>
+                    </div>
+                    <div className="col-4 text-center">
+                      <h1>TOTAL KEUNTUNGAN</h1>
+                      <h2>
+                        {" "}
+                        {formatMoney(this.props.totalProfit, "Rp", 2, ".", ",")}
                       </h2>
                     </div>
                   </React.Fragment>
@@ -224,22 +195,42 @@ class ReportProductPage extends React.Component {
                     <thead>
                       <tr>
                         <th scope="col">No</th>
-                        <th scope="col">Produk</th>
-                        <th scope="col">Kategori</th>
-                        <th scope="col">Terjual</th>
-                        <th scope="col">Total</th>
+                        <th scope="col">Waktu</th>
+                        <th scope="col">Outlet</th>
+                        <th scope="col">Penjualan</th>
+                        <th scope="col">Biaya</th>
+                        <th scope="col">Keuntungan</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {listAllReport}
                       <tr>
                         <th scope="row"></th>
                         <th scope="row">Grand Total</th>
                         <th scope="row"></th>
-                        <th scope="row">{this.props.totalSoldProduct}</th>
+
                         <th scope="row">
                           {formatMoney(
-                            this.props.totalSalesProduct,
+                            this.props.totalSalesProfit,
+                            "Rp",
+                            2,
+                            ".",
+                            ","
+                          )}
+                        </th>
+                        <th scope="row">
+                          {formatMoney(
+                            this.props.totalCostProfit,
+                            "Rp",
+                            2,
+                            ".",
+                            ","
+                          )}
+                        </th>
+                        <th scope="row">
+                          {formatMoney(
+                            this.props.totalProfit,
                             "Rp",
                             2,
                             ".",
@@ -259,6 +250,6 @@ class ReportProductPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listReportProduct, totalSalesProduct, totalSoldProduct, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time",
+  "listOutlet, listCategory, listReportProfit, totalSalesProfit, totalProfit, totalCostProfit, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time",
   actions
-)(withRouter(ReportProductPage));
+)(withRouter(ReportProfitPage));

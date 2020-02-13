@@ -17,16 +17,16 @@ function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
   return format(date, "DD/MM/YYYY");
 }
-class ReportProductPage extends React.Component {
+class ReportHistoryPage extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
     this.props.getCategory();
-    this.props.getReportProduct();
+    this.props.getReportHistory();
     store.setState({ idOutlet: "", category: "", nameProduct: "" });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
-    this.props.getReportProduct();
+    this.props.getReportHistory();
   };
   handleRangeChange = async (which, payload) => {
     console.log(which, payload);
@@ -42,7 +42,7 @@ class ReportProductPage extends React.Component {
       ),
       end_time: formatDateDisplay(this.state.dateRangePicker.selection.endDate)
     });
-    this.props.getReportProduct();
+    this.props.getReportHistory();
   };
   constructor(props, context) {
     super(props, context);
@@ -59,25 +59,20 @@ class ReportProductPage extends React.Component {
   }
 
   render() {
-    const {
-      isLoadingReport,
-      listCategory,
-      listOutlet,
-      listReportProduct
-    } = this.props;
-    const listAllCategory = listCategory.map(item => {
-      return <option value={item}>{item}</option>;
-    });
+    const { isLoadingReport, listOutlet, listReportHistory } = this.props;
+
     const listAllOutlet = listOutlet.map(item => {
       return <option value={item.id}>{item.name}</option>;
     });
-    const listAllReport = listReportProduct.map((item, key) => {
+    const listAllReport = listReportHistory.map((item, key) => {
       return (
-        <tr className={item.deleted ? "table-danger" : ""}>
+        <tr>
           <th scope="row">{key + 1}</th>
-          <td>{item.name}</td>
-          <td>{item.category}</td>
-          <td>{item.total_sold}</td>
+          <td>{item.date_time}</td>
+          <td>{item.outlet}</td>
+          <td>{item.cashier_name}</td>
+          <td>{item.product_name}</td>
+          <td>{item.total_items}</td>
           <td>{formatMoney(item.total_sales, "Rp", 2, ".", ",")}</td>
         </tr>
       );
@@ -87,7 +82,7 @@ class ReportProductPage extends React.Component {
         <Header pageLocation="Laporan" />
         <div className="container">
           <form className="col-12 box-filter form-row mt-5 mb-3">
-            <div className="col-3 form-group">
+            <div className="col-4 form-group">
               <h1>Outlet</h1>
               <select
                 className="custom-select col-12 "
@@ -99,19 +94,8 @@ class ReportProductPage extends React.Component {
                 {listAllOutlet}
               </select>
             </div>
-            <div className="col-3 form-group">
-              <h1>Kategori</h1>
-              <select
-                className="custom-select col-12 "
-                id="category"
-                name="category"
-                onChange={e => this.handleInputFilter(e)}
-              >
-                <option value="">Semua Kategori</option>
-                {listAllCategory}
-              </select>
-            </div>
-            <div className="col-3 form-group">
+
+            <div className="col-4 form-group">
               <h1>Tanggal</h1>
               <div
                 id="dropdownMenuButton"
@@ -160,7 +144,7 @@ class ReportProductPage extends React.Component {
                 />
               </div>
             </div>
-            <div className="col-3 form-group">
+            <div className="col-4 form-group">
               <h1>Cari</h1>
               <input
                 type="text"
@@ -196,16 +180,29 @@ class ReportProductPage extends React.Component {
                   <Loader height={"100%"} loading={"hidden"} />
                 ) : (
                   <React.Fragment>
-                    <div className="col-6 text-center">
+                    <div className="col-4 text-center">
                       <h1>TOTAL TERJUAL</h1>
-                      <h2>{this.props.totalSoldProduct}</h2>
+                      <h2>{this.props.totalSoldHistory}</h2>
                     </div>
-                    <div className="col-6 text-center">
+                    <div className="col-4 text-center">
                       <h1>TOTAL PENDAPATAN</h1>
                       <h2>
                         {" "}
                         {formatMoney(
-                          this.props.totalSalesProduct,
+                          this.props.totalSalesHistory,
+                          "Rp",
+                          2,
+                          ".",
+                          ","
+                        )}
+                      </h2>
+                    </div>
+                    <div className="col-4 text-center">
+                      <h1>TOTAL PAJAK</h1>
+                      <h2>
+                        {" "}
+                        {formatMoney(
+                          this.props.totalTaxHistory,
                           "Rp",
                           2,
                           ".",
@@ -224,10 +221,12 @@ class ReportProductPage extends React.Component {
                     <thead>
                       <tr>
                         <th scope="col">No</th>
+                        <th scope="col">Waktu</th>
+                        <th scope="col">Outlet</th>
+                        <th scope="col">Kasir</th>
                         <th scope="col">Produk</th>
-                        <th scope="col">Kategori</th>
-                        <th scope="col">Terjual</th>
-                        <th scope="col">Total</th>
+                        <th scope="col">Total Item</th>
+                        <th scope="col">Total Harga</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -236,10 +235,12 @@ class ReportProductPage extends React.Component {
                         <th scope="row"></th>
                         <th scope="row">Grand Total</th>
                         <th scope="row"></th>
-                        <th scope="row">{this.props.totalSoldProduct}</th>
+                        <th scope="row"></th>
+                        <th scope="row"></th>
+                        <th scope="row">{this.props.totalSoldHistory}</th>
                         <th scope="row">
                           {formatMoney(
-                            this.props.totalSalesProduct,
+                            this.props.totalSalesHistory,
                             "Rp",
                             2,
                             ".",
@@ -259,6 +260,6 @@ class ReportProductPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listReportProduct, totalSalesProduct, totalSoldProduct, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time",
+  "listOutlet, listCategory, listReportHistory, totalSalesHistory, totalSoldHistory, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time, totalTaxHistory",
   actions
-)(withRouter(ReportProductPage));
+)(withRouter(ReportHistoryPage));

@@ -11,6 +11,11 @@ class EmployeePage extends React.Component {
   componentDidMount = () => {
     this.props.getEmployee();
     this.props.getOutlet();
+    store.setState({
+      outlet: "",
+      position: "",
+      nameEmployee: ""
+    });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
