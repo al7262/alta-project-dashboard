@@ -1,0 +1,150 @@
+/* Color Theme Swatches in Hex */
+.container-register {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.register-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90vw;
+  max-width: 300px;
+  padding: 20px;
+  margin: auto;
+}
+@media (min-width: 768px) {
+  .register-box {
+    border: 0.5px solid #003354;
+    border-radius: 25px;
+  }
+}
+.register-box .logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.register-box .logo img {
+  width: 50%;
+}
+.register-box .logo h1 {
+  font-family: "Passion One", sans-serif;
+  font-size: 50px;
+  color: #003354;
+  margin: 0;
+  padding: 0;
+  margin-top: -30px;
+}
+.register-box form {
+  width: 80%;
+  margin: 20px;
+}
+.register-box form input {
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+  font-family: "Muli", sans-serif;
+  height: 40px;
+  border: 1px solid #8099aa;
+  background: white;
+  transition: 0.2s ease-in-out;
+}
+.register-box form input:hover {
+  background-color: #c8dfea;
+}
+.register-box form input:focus {
+  background: #e9f2f6;
+}
+.register-box form input[type="text"] {
+  border-radius: 10px 10px 0 0;
+}
+.register-box form .password {
+  display: flex;
+  align-items: center;
+}
+.register-box form .password input {
+  width: 80%;
+  border-top: 0;
+  border-right: 0;
+}
+.register-box form .password span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  border: 1px solid #8099aa;
+  color: #b3c2cc;
+  text-decoration: none;
+  border-top: 0;
+  border-left: 0;
+  height: 40px;
+}
+.register-box form .password span:hover {
+  color: #8099aa;
+}
+.register-box form .password span:active {
+  color: #b3c2cc;
+}
+.register-box form .confirm-password {
+  display: flex;
+  align-items: center;
+}
+.register-box form .confirm-password input {
+  width: 80%;
+  border-top: 0;
+  border-right: 0;
+  border-radius: 0 0 0 10px;
+}
+.register-box form .confirm-password span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  border: 1px solid #8099aa;
+  color: #b3c2cc;
+  text-decoration: none;
+  border-top: 0;
+  border-left: 0;
+  height: 40px;
+  border-radius: 0 0 10px 0;
+}
+.register-box form .confirm-password span:hover {
+  color: #8099aa;
+}
+.register-box form .confirm-password span:active {
+  color: #b3c2cc;
+}
+.register-box .btn-register {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #003354;
+  border: 3px solid #003354;
+  background-color: #e9f2f6;
+}
+.register-box .btn-register:hover {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.register-box .btn-register:active {
+  background-color: #335c76 !important;
+}
+.register-box .btn-register.disabled {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.register-box h1 {
+  font-family: "Muli", sans-serif;
+  font-size: 10pt;
+  color: #2b3940;
+}
+.register-box h1 .regis-sentence {
+  color: #7498aa;
+}
+.register-box h1 .regis-sentence:hover {
+  color: #57727f;
+}

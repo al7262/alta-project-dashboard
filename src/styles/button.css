@@ -1,0 +1,21 @@
+/* Color Theme Swatches in Hex */
+.btn-tambah {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #003354;
+  border: 3px solid #003354;
+  background-color: #e9f2f6;
+}
+.btn-tambah:hover {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.btn-tambah:active {
+  background-color: #335c76 !important;
+}
+.btn-tambah.disabled {
+  background-color: #002943;
+  color: #e9f2f6;
+}

@@ -1,0 +1,59 @@
+/* Color Theme Swatches in Hex */
+.modal-header h5 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #002943;
+}
+.modal-content .form {
+  justify-content: center;
+}
+.modal-content .form .btn-simpan {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #003354;
+  border: 3px solid #003354;
+  background-color: #e9f2f6;
+}
+.modal-content .form .btn-simpan:hover {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.modal-content .form .btn-simpan:active {
+  background-color: #335c76 !important;
+}
+.modal-content .form .btn-simpan.disabled {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.modal-content .form label {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #335c76;
+}
+.modal-content .btn-simpan {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #003354;
+  border: 3px solid #003354;
+  background-color: #e9f2f6;
+}
+.modal-content .btn-simpan:hover {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.modal-content .btn-simpan:active {
+  background-color: #335c76 !important;
+}
+.modal-content .btn-simpan.disabled {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.modal-content label {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #335c76;
+}
