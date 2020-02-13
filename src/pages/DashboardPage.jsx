@@ -182,7 +182,6 @@ class Dashboard extends React.Component {
                   data={this.props.listChart}
                   xtitle="Waktu (Hari)"
                   ytitle="Penjualan (Rp)"
-                  // discrete={true}
                 />
               </React.Fragment>
             )}
