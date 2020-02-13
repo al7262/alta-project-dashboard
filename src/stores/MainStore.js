@@ -791,7 +791,7 @@ export const actions = store => ({
     store.setState({ isLoadingDashboard: true });
     const req = {
       method: "get",
-      url: `${state.baseUrl}/dashboard1?name_outlet=${state.outlet}&start_time=${state.start_time}&end_time=${state.end_time}`,
+      url: `${state.baseUrl}/dashboard?name_outlet=${state.outlet}&start_time=${state.start_time}&end_time=${state.end_time}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`
