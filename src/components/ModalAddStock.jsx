@@ -73,7 +73,7 @@ class ModalAddStock extends React.Component {
                       type="submit"
                       data-dismiss="modal"
                       className="btn btn-simpan"
-                      onClick={() => this.props.addStock(this.props.id)}
+                      onClick={this.props.addStock}
                     >
                       Tambah{" "}
                     </button>

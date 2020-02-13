@@ -3,8 +3,8 @@ import { withRouter } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { DateRangePicker } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css file
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import "../styles/dashboard.css";
 import { LineChart, ColumnChart, PieChart } from "react-chartkick";
@@ -22,11 +22,12 @@ class Dashboard extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
     this.props.getDashboard();
+    store.setState({ outlet: "" });
   };
+
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
     this.props.getDashboard();
-    console.log("cek tanggal", this.props.start_time, this.props.end_time);
   };
   handleRangeChange = async (which, payload) => {
     console.log(which, payload);
@@ -112,7 +113,6 @@ class Dashboard extends React.Component {
                     value={formatDateDisplay(
                       this.state.dateRangePicker.selection.startDate
                     )}
-                    onChange={e => this.handleInputFilter(e)}
                   />
                 </div>
                 <div className="col-6 pl-0">
@@ -124,7 +124,6 @@ class Dashboard extends React.Component {
                     value={formatDateDisplay(
                       this.state.dateRangePicker.selection.endDate
                     )}
-                    onChange={e => this.handleInputFilter(e)}
                   />
                 </div>
               </div>
@@ -183,6 +182,7 @@ class Dashboard extends React.Component {
                   data={this.props.listChart}
                   xtitle="Waktu (Hari)"
                   ytitle="Penjualan (Rp)"
+                  // discrete={true}
                 />
               </React.Fragment>
             )}

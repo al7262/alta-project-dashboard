@@ -111,7 +111,7 @@ class ModalAddInventory extends React.Component {
                       type="submit"
                       data-dismiss="modal"
                       className="btn btn-simpan"
-                      onClick={() => this.props.editInventory(this.props.id)}
+                      onClick={this.props.editInventory}
                     >
                       Ubah{" "}
                     </button>

@@ -13,6 +13,11 @@ class ProductPage extends React.Component {
   componentDidMount = () => {
     this.props.getCategory();
     this.props.getProduct();
+    store.setState({
+      category: "",
+      showProduct: "",
+      nameProduct: ""
+    });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });

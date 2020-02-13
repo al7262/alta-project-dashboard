@@ -21,6 +21,11 @@ import EditOutletPage from "../pages/EditOutletPage";
 import AddEmployeePage from "../pages/AddEmployeePage";
 import EditEmployeePage from "../pages/EditEmployeePage";
 import ReportProductPage from "../pages/ReportProductPage";
+import ReportProfitPage from "../pages/ReportProfitPage";
+import ReportCategoryPage from "../pages/ReportCategoryPage";
+import ReportHistoryTransactionPage from "../pages/ReportHistoryPage";
+import ReportInventoryPage from "../pages/ReportInventoryPage";
+import ReportOutletPage from "../pages/ReportOutletPage";
 
 const Mainroute = () => {
   return (
@@ -43,6 +48,19 @@ const Mainroute = () => {
           <Route exact path="/employee/add" component={AddEmployeePage} />
           <Route exact path="/employee/edit" component={EditEmployeePage} />
           <Route exact path="/report/product" component={ReportProductPage} />
+          <Route exact path="/report/profit" component={ReportProfitPage} />
+          <Route exact path="/report/category" component={ReportCategoryPage} />
+          <Route exact path="/report/outlet" component={ReportOutletPage} />
+          <Route
+            exact
+            path="/report/inventory-log"
+            component={ReportInventoryPage}
+          />
+          <Route
+            exact
+            path="/report/transaction"
+            component={ReportHistoryTransactionPage}
+          />
 
           <Route component={NotMatchPage} />
         </Switch>

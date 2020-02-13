@@ -23,6 +23,25 @@
   align-items: center;
   font-family: 'Muli', sans-serif;
 }
+.container .box-total {
+  margin-left: 0;
+}
+.container .box-total h1 {
+  font-size: 12pt;
+  color: #002943;
+  font-weight: 700;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
+.container .box-total h2 {
+  font-size: 12pt;
+  color: black;
+  font-weight: 600;
+  margin-top: 10px;
+  align-items: center;
+  font-family: 'Muli', sans-serif;
+}
 .container .btn-tambah {
   border-radius: 10px;
   padding: 5px 30px;
@@ -56,10 +75,12 @@
   align-items: center;
   font-family: 'Muli', sans-serif;
 }
+.container .box-button {
+  margin-top: 20px;
+}
 .container .box-content {
   border: 0.5px solid #003354;
   border-radius: 5px;
-  width: 100vw;
   height: 55vh;
   margin-top: 20px;
   overflow: auto;

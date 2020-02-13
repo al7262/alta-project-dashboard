@@ -11,6 +11,9 @@ import Loader from "../components/Loader";
 class OutletPage extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
+    store.setState({
+      nameOutlet: ""
+    });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });

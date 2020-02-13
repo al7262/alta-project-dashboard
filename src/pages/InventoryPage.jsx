@@ -15,10 +15,14 @@ class InventoryPage extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
     this.props.getInventory();
+    store.setState({ outlet: "", statusInventory: "", nameInventory: "" });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
     this.props.getInventory();
+  };
+  getId = id => {
+    store.setState({ idInventory: id });
   };
   render() {
     const { listOutlet, listInventory, isLoadingInventory } = this.props;
@@ -31,7 +35,7 @@ class InventoryPage extends React.Component {
           <th scope="row">{key + 1}</th>
           <td>{item.name}</td>
           <td>{item.stock}</td>
-          <td>{item.unit}</td>
+          <td>{item.id}</td>
           <td>
             Rp. {item.unit_price}/{item.unit}
           </td>
@@ -47,6 +51,7 @@ class InventoryPage extends React.Component {
                   aria-expanded="false"
                   src={icon}
                   alt="icon-edit"
+                  onClick={() => this.getId(item.id)}
                 />
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -72,7 +77,7 @@ class InventoryPage extends React.Component {
                     Hapus
                   </Link>
                 </div>
-                <ModalEditInventory id={item.id} />
+                <ModalEditInventory />
                 <ModalAddStock id={item.id} />
               </div>
             </td>

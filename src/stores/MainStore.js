@@ -11,6 +11,7 @@ const initialState = {
   isLoadingCustomer: true,
   isLoadingEmployee: true,
   isLoadingDashboard: true,
+  isLoadingReport: true,
 
   baseUrl: "https://api.easy.my.id",
   listOutlet: [],
@@ -27,6 +28,12 @@ const initialState = {
   listTopProduct: [],
   listTopCategory: [],
   listReminder: [],
+  listReportProduct: [],
+  listReportHistory: [],
+  listReportCategory: [],
+  listReportProfit: [],
+  listReportOutlet: [],
+  listReportInventory: [],
 
   nameEmployee: "",
   nameCustomer: "",
@@ -48,6 +55,7 @@ const initialState = {
   imageProduct: "",
   price: "",
   outlet: "",
+  idInventory: "",
   nameInventory: "",
   nameInventoryInput: "",
   statusInventory: "",
@@ -71,7 +79,21 @@ const initialState = {
   end_time: "",
   salesAmount: 0,
   numberTransaction: 0,
-  belowReminder: 0
+  belowReminder: 0,
+  totalSalesProduct: 0,
+  totalSoldProduct: 0,
+  totalSalesCategory: 0,
+  totalSoldCategory: 0,
+  totalSalesHistory: 0,
+  totalSoldHistory: 0,
+  totalTaxHistory: 0,
+  totalSalesOutlet: 0,
+  totalSoldOutlet: 0,
+  totalSalesProfit: 0,
+  totalCostProfit: 0,
+  totalProfit: 0,
+  type: "",
+  sort: "desc"
 };
 
 export const store = createStore(initialState);
@@ -407,7 +429,6 @@ export const actions = store => ({
       })
       .catch(error => {});
   },
-
   addRecipe: state => {
     const ingridient = JSON.parse(localStorage.getItem("recipe"));
     ingridient.push({
@@ -418,7 +439,6 @@ export const actions = store => ({
     localStorage.setItem("recipe", JSON.stringify(ingridient));
     store.setState({ listRecipe: JSON.parse(localStorage.getItem("recipe")) });
   },
-
   getInventory: state => {
     store.setState({ isLoadingInventory: true });
     if (state.outlet === "") {
@@ -450,7 +470,8 @@ export const actions = store => ({
       axios(req)
         .then(response => {
           store.setState({
-            listInventory: response.data.inventories
+            listInventory: response.data.inventories,
+            isLoadingInventory: false
           });
         })
         .catch(error => {});
@@ -484,10 +505,10 @@ export const actions = store => ({
       })
       .catch(error => {});
   },
-  editInventory: async (state, id) => {
+  editInventory: async state => {
     const req = {
       method: "put",
-      url: `${state.baseUrl}/inventory/detail/${id}`,
+      url: `${state.baseUrl}/inventory/detail/${state.idInventory}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -523,6 +544,7 @@ export const actions = store => ({
     await axios(req)
       .then(response => {
         store.setState({
+          idInventory: response.data.id,
           nameInventoryInput: response.data.name,
           stock: response.data.stock,
           unit: response.data.unit,
@@ -551,10 +573,10 @@ export const actions = store => ({
       })
       .catch(error => {});
   },
-  addStock: async (state, id) => {
+  addStock: async state => {
     const req = {
       method: "put",
-      url: `${state.baseUrl}/inventory/add-stock/${id}`,
+      url: `${state.baseUrl}/inventory/add-stock/${state.idInventory}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -769,7 +791,7 @@ export const actions = store => ({
     store.setState({ isLoadingDashboard: true });
     const req = {
       method: "get",
-      url: `${state.baseUrl}/dashboard?name_outlet=${state.outlet}&start_time=${state.start_time}&end_time=${state.end_time}`,
+      url: `${state.baseUrl}/dashboard1?name_outlet=${state.outlet}&start_time=${state.start_time}&end_time=${state.end_time}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -788,6 +810,133 @@ export const actions = store => ({
           belowReminder: response.data.below_reminder,
           listReminder: response.data.reminder,
           isLoadingDashboard: false
+        });
+      })
+      .catch(error => {});
+  },
+  getReportProduct: state => {
+    store.setState({ isLoadingReport: true });
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/report/product-sales?name=${state.nameProduct}&category=${state.category}&id_outlet=${state.idOutlet}&start_time=${state.start_time}&end_time=${state.end_time}&total_sales_sort=${state.sort}&total_sold_sort=`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listReportProduct: response.data.detail,
+          totalSalesProduct: response.data.total_sales,
+          totalSoldProduct: response.data.total_sold,
+          isLoadingReport: false
+        });
+      })
+      .catch(error => {});
+  },
+  getReportCategory: state => {
+    store.setState({ isLoadingReport: true });
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/report/category?start_time=${state.start_time}&end_time=${state.end_time}&total_sales_sort=${state.sort}&total_sold_sort`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listReportCategory: response.data.category_list,
+          totalSalesCategory: response.data.total_sales,
+          totalSoldCategory: response.data.total_items_sold,
+          isLoadingReport: false
+        });
+      })
+      .catch(error => {});
+  },
+  getReportHistory: state => {
+    store.setState({ isLoadingReport: true });
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/report/history?name=${state.nameProduct}&id_outlet=${state.idOutlet}&start_time=${state.start_time}&end_time=${state.end_time}&total_sales_sort&total_sold_sort`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listReportHistory: response.data.detail,
+          totalSalesHistory: response.data.total_sales,
+          totalSoldHistory: response.data.total_items_sold,
+          totalTaxHistory: response.data.tax_summary,
+          isLoadingReport: false
+        });
+      })
+      .catch(error => {});
+  },
+  getReportInventory: state => {
+    store.setState({ isLoadingReport: true });
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/report/inventory-log?name=${state.nameInventory}&id_outlet=${state.idOutlet}&type=${state.type}&start_time=${state.start_time}&end_time=${state.end_time}&amount_sort`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listReportInventory: response.data,
+
+          isLoadingReport: false
+        });
+      })
+      .catch(error => {});
+  },
+  getReportProfit: state => {
+    store.setState({ isLoadingReport: true });
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/report/profit?start_time=${state.start_time}&end_time=${state.end_time}&profit_sort=desc`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listReportProfit: response.data.result,
+          totalSalesProfit: response.data.grand_price_sale,
+          totalCostProfit: response.data.grand_price_inventory,
+          totalProfit: response.data.grand_price_profit,
+          isLoadingReport: false
+        });
+      })
+      .catch(error => {});
+  },
+  getReportOutlet: state => {
+    store.setState({ isLoadingReport: true });
+    const req = {
+      method: "get",
+      url: `${state.baseUrl}/report/outlet-sales?name_outlet=${state.outlet}&start_time=${state.start_time}&end_time=${state.end_time}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        store.setState({
+          listReportOutlet: response.data.outlet_list,
+          totalSalesOutlet: response.data.total_sales,
+          totalSoldOutlet: response.data.total_transaction,
+          isLoadingReport: false
         });
       })
       .catch(error => {});
@@ -862,7 +1011,8 @@ const getInventory = (baseUrl, outlet, statusInventory, nameInventory) => {
     axios(req)
       .then(response => {
         store.setState({
-          listInventory: response.data.inventories
+          listInventory: response.data.inventories,
+          isLoadingInventory: false
         });
       })
       .catch(error => {});

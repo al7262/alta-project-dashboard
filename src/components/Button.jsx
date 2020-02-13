@@ -14,7 +14,7 @@ const Button = props => {
           {props.buttoncontent}
         </Link>
       ) : (
-        <Link className="btn btn-tambah" to={props.direction}>
+        <Link className={`btn btn-tambah btn-block`} to={props.direction}>
           {props.buttoncontent}
         </Link>
       )}

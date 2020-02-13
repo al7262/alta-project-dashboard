@@ -7,7 +7,6 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import "../styles/product.css";
-import { formatMoney } from "accounting";
 
 import Header from "../components/Header";
 import Loader from "../components/Loader";
@@ -17,16 +16,15 @@ function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
   return format(date, "DD/MM/YYYY");
 }
-class ReportProductPage extends React.Component {
+class ReportInventoryPage extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
-    this.props.getCategory();
-    this.props.getReportProduct();
-    store.setState({ idOutlet: "", category: "", nameProduct: "" });
+    this.props.getReportInventory();
+    store.setState({ idOutlet: "", category: "", nameInventory: "" });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
-    this.props.getReportProduct();
+    this.props.getReportInventory();
   };
   handleRangeChange = async (which, payload) => {
     console.log(which, payload);
@@ -42,7 +40,7 @@ class ReportProductPage extends React.Component {
       ),
       end_time: formatDateDisplay(this.state.dateRangePicker.selection.endDate)
     });
-    this.props.getReportProduct();
+    this.props.getReportInventory();
   };
   constructor(props, context) {
     super(props, context);
@@ -59,26 +57,21 @@ class ReportProductPage extends React.Component {
   }
 
   render() {
-    const {
-      isLoadingReport,
-      listCategory,
-      listOutlet,
-      listReportProduct
-    } = this.props;
-    const listAllCategory = listCategory.map(item => {
-      return <option value={item}>{item}</option>;
-    });
+    const { isLoadingReport, listOutlet, listReportInventory } = this.props;
     const listAllOutlet = listOutlet.map(item => {
       return <option value={item.id}>{item.name}</option>;
     });
-    const listAllReport = listReportProduct.map((item, key) => {
+    const listAllReport = listReportInventory.map((item, key) => {
       return (
-        <tr className={item.deleted ? "table-danger" : ""}>
+        <tr>
           <th scope="row">{key + 1}</th>
+          <td>{item.date + " " + item.time}</td>
+          <td>{item.outlet}</td>
           <td>{item.name}</td>
-          <td>{item.category}</td>
-          <td>{item.total_sold}</td>
-          <td>{formatMoney(item.total_sales, "Rp", 2, ".", ",")}</td>
+          <td>{item.type}</td>
+          <td>{item.unit}</td>
+          <td>{item.amount}</td>
+          <td>{item.last_stock}</td>
         </tr>
       );
     });
@@ -100,15 +93,16 @@ class ReportProductPage extends React.Component {
               </select>
             </div>
             <div className="col-3 form-group">
-              <h1>Kategori</h1>
+              <h1>Tipe</h1>
               <select
                 className="custom-select col-12 "
-                id="category"
-                name="category"
+                id="type"
+                name="type"
                 onChange={e => this.handleInputFilter(e)}
               >
-                <option value="">Semua Kategori</option>
-                {listAllCategory}
+                <option value="">Semua Tipe</option>
+                <option value="Masuk">Masuk</option>
+                <option value="Keluar">Keluar</option>
               </select>
             </div>
             <div className="col-3 form-group">
@@ -165,8 +159,8 @@ class ReportProductPage extends React.Component {
               <input
                 type="text"
                 className="form-control"
-                id="nameProduct"
-                name="nameProduct"
+                id="nameInventory"
+                name="nameInventory"
                 placeholder="Cari Produk"
                 onChange={e => this.handleInputFilter(e)}
               />
@@ -191,31 +185,6 @@ class ReportProductPage extends React.Component {
               />
             </div>
             <div className="col-10 mb-5 p-0">
-              <div className="col-12 box-customer row mb-3 mt-3 ">
-                {isLoadingReport ? (
-                  <Loader height={"100%"} loading={"hidden"} />
-                ) : (
-                  <React.Fragment>
-                    <div className="col-6 text-center">
-                      <h1>TOTAL TERJUAL</h1>
-                      <h2>{this.props.totalSoldProduct}</h2>
-                    </div>
-                    <div className="col-6 text-center">
-                      <h1>TOTAL PENDAPATAN</h1>
-                      <h2>
-                        {" "}
-                        {formatMoney(
-                          this.props.totalSalesProduct,
-                          "Rp",
-                          2,
-                          ".",
-                          ","
-                        )}
-                      </h2>
-                    </div>
-                  </React.Fragment>
-                )}
-              </div>
               <div className="box-content p-2">
                 {isLoadingReport ? (
                   <Loader height={"100%"} loading={"hidden"} />
@@ -224,30 +193,16 @@ class ReportProductPage extends React.Component {
                     <thead>
                       <tr>
                         <th scope="col">No</th>
-                        <th scope="col">Produk</th>
-                        <th scope="col">Kategori</th>
-                        <th scope="col">Terjual</th>
-                        <th scope="col">Total</th>
+                        <th scope="col">Waktu</th>
+                        <th scope="col">Outlet</th>
+                        <th scope="col">Bahan</th>
+                        <th scope="col">Tipe</th>
+                        <th scope="col">Unit</th>
+                        <th scope="col">Jumlah</th>
+                        <th scope="col">Stok Akhir</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {listAllReport}
-                      <tr>
-                        <th scope="row"></th>
-                        <th scope="row">Grand Total</th>
-                        <th scope="row"></th>
-                        <th scope="row">{this.props.totalSoldProduct}</th>
-                        <th scope="row">
-                          {formatMoney(
-                            this.props.totalSalesProduct,
-                            "Rp",
-                            2,
-                            ".",
-                            ","
-                          )}
-                        </th>
-                      </tr>
-                    </tbody>
+                    <tbody>{listAllReport}</tbody>
                   </table>
                 )}
               </div>
@@ -259,6 +214,6 @@ class ReportProductPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listReportProduct, totalSalesProduct, totalSoldProduct, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time",
+  "listOutlet,  listReportInventory,  isLoadingReport, idOutlet,  nameInventory, start_time, end_time, type",
   actions
-)(withRouter(ReportProductPage));
+)(withRouter(ReportInventoryPage));
