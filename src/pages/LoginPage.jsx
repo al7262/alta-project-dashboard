@@ -1,10 +1,9 @@
 import React from "react";
-import axios from "axios";
 import swal from "sweetalert2";
 
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "unistore/react";
-import { actions, store } from "../stores/MainStore";
+import { actions } from "../stores/MainStore";
 import logo from "../images/logo-dark.svg";
 import "../styles/login.css";
 
