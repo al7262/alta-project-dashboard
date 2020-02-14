@@ -183,7 +183,7 @@ class Dashboard extends React.Component {
               <React.Fragment>
                 <LineChart
                   data={this.props.listChart}
-                  xtitle="Waktu (Hari)"
+                  xtitle="Waktu"
                   ytitle="Penjualan (Rp)"
                 />
               </React.Fragment>
