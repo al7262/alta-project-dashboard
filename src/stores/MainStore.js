@@ -1,6 +1,6 @@
 import createStore from "unistore";
 import axios from "axios";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 const initialState = {
   username: "",
@@ -14,6 +14,10 @@ const initialState = {
   isLoadingReport: true,
 
   baseUrl: "https://api.easy.my.id",
+  isLogin: false,
+  isOwner: false,
+  data: undefined,
+  error: undefined,
   listOutlet: [],
   listCategory: [],
   listProduct: [],
@@ -940,7 +944,100 @@ export const actions = store => ({
         });
       })
       .catch(error => {});
-  }
+    },
+
+  /**
+   * Handling API to post, put, get, and delete action through AXIOS.
+   * @param {dict} input the object containing detail of axios input.
+  */
+  handleApi: async (state, input) => {
+    await axios(input)
+    .then(async (response) => {
+        if (response.status === 200) {
+        await store.setState({ data: response.data });
+        } else {
+        await store.setState({ error: response });
+        }
+    })
+    .catch((error) => {
+        console.warn(error);
+    });
+  },
+
+  /**
+   * Checking login status of the user everytime page was mounted
+  */
+  checkLoginStatus: async (state) => {
+    const input = {
+        method: 'get',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        url: state.baseUrl+'login/apps',
+    };
+    await axios(input)
+    .then(async (response) => {
+        if(response.data!==''||response.data!==undefined){
+            if (response.data.hasOwnProperty('claims')) {
+                await store.setState({ claims: response.data.claims });
+                if (response.data.claims.email) {
+                    await store.setState({ isOwner: true });
+                }
+                if (response.data.claims.id_outlet){
+                    await store.setState({outlet: response.data.claims.id_outlet})
+                }
+                await store.setState({ isLogin: true });
+                console.log(store.getState().claims)
+            } else {
+                await store.setState({ isLogin: false });
+            }
+        }
+    })
+    .catch((error) => {
+        console.warn(error);
+    });
+  },
+
+  /**
+   * Handling logout when user click log out butten
+   */
+  handleLogout: async (state) => {
+    await localStorage.removeItem('token');
+    await localStorage.removeItem('cart');
+    await store.setState(initialState);
+    Swal.fire({
+        title: 'Good bye!',
+        text: 'Kamu sudah berhasil keluar!',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'understood',
+    });
+  },
+
+  /**
+   * Handle reset data and error in global state everytime page will unmount
+   */
+  handleReset: async () => {
+    await store.setState({data:undefined, error:undefined})
+  },
+
+  handleError: async (state) => {
+    if(state.error!==undefined){
+      await Swal.fire({
+        title: 'Error!',
+        text: state.error.data.message,
+        icon: 'error',
+        timer: 1500,
+        confirmButtonText: 'Okay!',
+        confirmButtonColor: '#b36232',
+      });
+      await store.setState({error: undefined})
+    }
+  },
+
+  handleInput: (state, key, value) => {
+    store.setState({[key]: value})
+  },
 });
 
 // GET PRODUCT

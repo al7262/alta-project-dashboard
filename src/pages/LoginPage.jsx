@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "unistore/react";
@@ -9,45 +9,68 @@ import logo from "../images/logo-dark.svg";
 import "../styles/login.css";
 
 class LoginPage extends React.Component {
-  // HANDLE INPUT SEMENTARA
-  handleInput = e => {
-    store.setState({ [e.target.name]: e.target.value });
-  };
-  handleLogin = () => {
-    const self = this;
-    const req = {
+  state = {
+    username: undefined,
+    password: undefined,
+  }
+
+  handleOnChange = async (event)=>{
+    const name = event.target.name, warning = document.getElementById('warning')
+    let value = event.target.value
+    if(name==='username'){
+      if(value===''){
+        warning.innerHTML='Tolong masukkan username/email'
+      } 
+    } else if(name==='password'){
+        if(value===''){
+          warning.innerHTML='Tolong masukkan password'
+        }
+    }
+    await this.setState({[name]:value})
+    if(this.state.username===''){
+        warning.innerHTML='Tolong masukkan username/email'
+    } else if(this.state.password===''){
+        warning.innerHTML='Tolong masukkan password'
+    } else{
+        warning.innerHTML=''
+    }
+  }
+
+  handleLogin = async () => {
+    const input = {
       method: "post",
-      url: `${self.props.baseUrl}/login/dashboard`,
+      url: await this.props.baseUrl+"/login/dashboard",
       headers: {
         "Content-Type": "application/json"
       },
       data: {
-        username: self.props.username,
-        password: self.props.password
+        username: await this.state.username.toLowerCase(),
+        password: await this.state.password
+      },
+      validateStatus: (status) => {
+        return status<500
       }
     };
-    axios(req)
-      .then(function(response) {
-        if (response.data.hasOwnProperty("token")) {
-          localStorage.setItem("username", self.props.username);
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("status_login", true);
-          self.props.history.push("/");
-        }
-        Swal.fire(
-          "Login Sukses!",
-          `Selamat Datang ${self.props.username}`,
-          "success"
-        );
-      })
-      .catch(function(error) {
-        Swal.fire({
-          icon: "error",
-          title: "Login Gagal",
-          text: "username atau password tidak sesuai"
-        });
-      });
-  };
+    swal.showLoading()
+    await this.props.handleApi(input)
+    this.props.handleError()
+    const data = await this.props.data
+    if(data!==undefined){
+      if(data.hasOwnProperty('token')){
+        localStorage.setItem('token', this.props.data.token)
+        await this.props.handleInput('isLogin', true)
+        this.props.history.push('/')
+        swal.fire({
+          title: 'Welcome!',
+          text: 'Kamu sudah berhasil masuk!',
+          icon: 'success',
+          timer: 3000,
+          confirmButtonText: 'okay'
+        })
+      }
+    }
+  }
+  
   render() {
     return (
       <React.Fragment>
@@ -58,11 +81,12 @@ class LoginPage extends React.Component {
               <h1>EasyKachin'</h1>
             </div>
             <form action="" onSubmit={e => e.preventDefault(e)}>
+              <label id="warning"></label>
               <input
                 type="text"
                 name="username"
                 placeholder="Username/Email"
-                onChange={e => this.handleInput(e)}
+                onChange={e => this.handleOnChange(e)}
               />
               <div className="password">
                 <input
@@ -70,7 +94,7 @@ class LoginPage extends React.Component {
                   name="password"
                   id="password"
                   placeholder="Password"
-                  onChange={e => this.handleInput(e)}
+                  onChange={e => this.handleOnChange(e)}
                 />
                 <span onClick={this.props.handleVisibilityPassword}>
                   <i className="material-icons" id="visibilityPassword">
@@ -95,6 +119,6 @@ class LoginPage extends React.Component {
   }
 }
 export default connect(
-  "username, password, baseUrl",
+  "username, password, baseUrl, data",
   actions
 )(withRouter(LoginPage));
