@@ -12,6 +12,9 @@ class AddProduct extends React.Component {
   componentDidMount = () => {
     this.props.getCategory();
   };
+  handleInputImages = e => {
+    store.setState({ nameFile: e.target.files[0] });
+  };
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
@@ -77,15 +80,13 @@ class AddProduct extends React.Component {
                       required
                     />
                   </div>
-                  <div className="form-group">
-                    <label for="imageProduct">Foto</label>
+                  <div class="form-group">
+                    <label for="exampleFormControlFile1">Foto</label>
                     <input
-                      type="text"
-                      className="form-control"
-                      id="imageProduct"
-                      name="imageProduct"
-                      onChange={e => this.handleInput(e)}
-                      required
+                      type="file"
+                      class="form-control-file"
+                      name="fileName"
+                      onChange={this.handleInputImages}
                     />
                   </div>
                   <div className="form-group">
@@ -170,6 +171,6 @@ class AddProduct extends React.Component {
   }
 }
 export default connect(
-  "listRecipe, listCategory, nameProductInput, categoryInput showProductInput, price, imageProduct",
+  "listRecipe, listCategory, nameProductInput, categoryInput showProductInput, price, imageProduct, fileName",
   actions
 )(withRouter(AddProduct));

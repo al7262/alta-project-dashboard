@@ -1,5 +1,6 @@
 import createStore from "unistore";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 // import Swal from "sweetalert2";
 // Firebase App (the core Firebase SDK) is always required and
@@ -8,9 +9,7 @@ var firebase = require("firebase/app");
 
 // Add the Firebase products that you want to use
 require("firebase/auth");
-require("firebase/storage")
-import Swal from "sweetalert2";
-
+require("firebase/storage");
 
 const initialState = {
   username: "",
@@ -368,89 +367,190 @@ export const actions = store => ({
       .catch(error => {});
   },
   addProduct: async state => {
-    const req = {
-      method: "post",
-      url: `${state.baseUrl}/product`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-      data: {
-        name: state.nameProductInput,
-        category: state.categoryInput,
-        price: state.price * 1,
-        show: state.showProductInput,
-        image: state.imageProduct,
-        recipe: state.listRecipe
-      }
+    // Set the configuration for your app
+    // TODO: Replace with your app's config object
+    var firebaseConfig = {
+      apiKey: "AIzaSyDUH0ELlUeLq38fCmxltF6ZgqcOh5SznPg",
+      authDomain: "serbabuku-e46a3.firebaseapp.com",
+      databaseURL: "https://serbabuku-e46a3.firebaseio.com",
+      storageBucket: "gs://serbabuku-e46a3.appspot.com"
     };
-    console.log("cek input", req.data);
-    await axios(req)
-      .then(response => {
-        store.setState({
-          listRecipe: [],
-          category: "",
-          nameProduct: "",
-          show: ""
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    // Get a reference to the storage service, which is used to create references in your storage bucket
+    var storage = firebase.storage();
+
+    // Create a storage reference from our storage service
+    var storageRef = storage.ref();
+
+    // Create a child reference
+    var imagesRef = storageRef.child(`logo/logo-${new Date()}.jpg`);
+    // imagesRef now points to 'images'
+
+    imagesRef.put(state.nameFile).then(function(snapshot) {
+      imagesRef
+        .getDownloadURL()
+        .then(function(url) {
+          // Insert url into an <img> tag to "download"
+
+          const req = {
+            method: "post",
+            url: `${state.baseUrl}/product`,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+            data: {
+              name: state.nameProductInput,
+              category: state.categoryInput,
+              price: state.price * 1,
+              show: state.showProductInput,
+              image: url,
+              recipe: state.listRecipe
+            }
+          };
+          axios(req)
+            .then(response => {
+              store.setState({
+                listRecipe: [],
+                category: "",
+                nameProduct: "",
+                show: ""
+              });
+              getProduct(
+                state.baseUrl,
+                state.category,
+                state.nameProduct,
+                state.showProduct
+              );
+              getCategory(state.baseUrl);
+            })
+            .catch(error => {
+              store.setState({
+                listRecipe: [],
+                category: "",
+                nameProduct: "",
+                show: ""
+              });
+            });
+        })
+        .catch(function(error) {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case "storage/object-not-found":
+              // File doesn't exist
+              break;
+
+            case "storage/unauthorized":
+              // User doesn't have permission to access the object
+              break;
+
+            case "storage/canceled":
+              // User canceled the upload
+              break;
+            case "storage/unknown":
+              // Unknown error occurred, inspect the server response
+              break;
+          }
         });
-        getProduct(
-          state.baseUrl,
-          state.category,
-          state.nameProduct,
-          state.showProduct
-        );
-        getCategory(state.baseUrl);
-      })
-      .catch(error => {
-        store.setState({
-          listRecipe: [],
-          category: "",
-          nameProduct: "",
-          show: ""
-        });
-      });
+    });
   },
   editProduct: async state => {
-    const req = {
-      method: "put",
-      url: `${state.baseUrl}/product/${localStorage.getItem("idProduct")}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-      data: {
-        name: state.nameProductInput,
-        category: state.categoryInput,
-        price: state.price * 1,
-        show: state.showProductInput,
-        image: state.imageProduct,
-        recipe: state.listRecipe
-      }
+    // Set the configuration for your app
+    // TODO: Replace with your app's config object
+    var firebaseConfig = {
+      apiKey: "AIzaSyDUH0ELlUeLq38fCmxltF6ZgqcOh5SznPg",
+      authDomain: "serbabuku-e46a3.firebaseapp.com",
+      databaseURL: "https://serbabuku-e46a3.firebaseio.com",
+      storageBucket: "gs://serbabuku-e46a3.appspot.com"
     };
-    await axios(req)
-      .then(response => {
-        store.setState({
-          listRecipe: [],
-          category: "",
-          nameProduct: "",
-          show: ""
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    // Get a reference to the storage service, which is used to create references in your storage bucket
+    var storage = firebase.storage();
+
+    // Create a storage reference from our storage service
+    var storageRef = storage.ref();
+
+    // Create a child reference
+    var imagesRef = storageRef.child(`logo/logo-${new Date()}.jpg`);
+    // imagesRef now points to 'images'
+
+    imagesRef.put(state.nameFile).then(function(snapshot) {
+      imagesRef
+        .getDownloadURL()
+        .then(function(url) {
+          // Insert url into an <img> tag to "download"
+
+          const req = {
+            method: "put",
+            url: `${state.baseUrl}/product/${localStorage.getItem(
+              "idProduct"
+            )}`,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+            data: {
+              name: state.nameProductInput,
+              category: state.categoryInput,
+              price: state.price * 1,
+              show: state.showProductInput,
+              image: url,
+              recipe: state.listRecipe
+            }
+          };
+          axios(req)
+            .then(response => {
+              store.setState({
+                listRecipe: [],
+                category: "",
+                nameProduct: "",
+                show: ""
+              });
+              getProduct(
+                state.baseUrl,
+                state.category,
+                state.nameProduct,
+                state.showProduct
+              );
+              getCategory(state.baseUrl);
+            })
+            .catch(error => {
+              store.setState({
+                listRecipe: [],
+                category: "",
+                nameProduct: "",
+                show: ""
+              });
+            });
+        })
+        .catch(function(error) {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case "storage/object-not-found":
+              // File doesn't exist
+              break;
+
+            case "storage/unauthorized":
+              // User doesn't have permission to access the object
+              break;
+
+            case "storage/canceled":
+              // User canceled the upload
+              break;
+            case "storage/unknown":
+              // Unknown error occurred, inspect the server response
+              break;
+          }
         });
-        getProduct(
-          state.baseUrl,
-          state.category,
-          state.nameProduct,
-          state.showProduct
-        );
-        getCategory(state.baseUrl);
-      })
-      .catch(error => {
-        store.setState({
-          listRecipe: [],
-          category: "",
-          nameProduct: "",
-          show: ""
-        });
-      });
+    });
   },
   deleteProduct: state => {
     const req = {
@@ -1045,73 +1145,73 @@ export const actions = store => ({
         });
       })
       .catch(error => {});
-    },
+  },
 
   /**
    * Handling API to post, put, get, and delete action through AXIOS.
    * @param {dict} input the object containing detail of axios input.
-  */
+   */
   handleApi: async (state, input) => {
     await axios(input)
-    .then(async (response) => {
+      .then(async response => {
         if (response.status === 200) {
-        await store.setState({ data: response.data });
+          await store.setState({ data: response.data });
         } else {
-        await store.setState({ error: response });
+          await store.setState({ error: response });
         }
-    })
-    .catch((error) => {
+      })
+      .catch(error => {
         console.warn(error);
-    });
+      });
   },
 
   /**
    * Checking login status of the user everytime page was mounted
-  */
-  checkLoginStatus: async (state) => {
+   */
+  checkLoginStatus: async state => {
     const input = {
-        method: 'get',
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        url: state.baseUrl+'login/apps',
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      url: state.baseUrl + "login/apps"
     };
     await axios(input)
-    .then(async (response) => {
-        if(response.data!==''||response.data!==undefined){
-            if (response.data.hasOwnProperty('claims')) {
-                await store.setState({ claims: response.data.claims });
-                if (response.data.claims.email) {
-                    await store.setState({ isOwner: true });
-                }
-                if (response.data.claims.id_outlet){
-                    await store.setState({outlet: response.data.claims.id_outlet})
-                }
-                await store.setState({ isLogin: true });
-                console.log(store.getState().claims)
-            } else {
-                await store.setState({ isLogin: false });
+      .then(async response => {
+        if (response.data !== "" || response.data !== undefined) {
+          if (response.data.hasOwnProperty("claims")) {
+            await store.setState({ claims: response.data.claims });
+            if (response.data.claims.email) {
+              await store.setState({ isOwner: true });
             }
+            if (response.data.claims.id_outlet) {
+              await store.setState({ outlet: response.data.claims.id_outlet });
+            }
+            await store.setState({ isLogin: true });
+            console.log(store.getState().claims);
+          } else {
+            await store.setState({ isLogin: false });
+          }
         }
-    })
-    .catch((error) => {
+      })
+      .catch(error => {
         console.warn(error);
-    });
+      });
   },
 
   /**
    * Handling logout when user click log out butten
    */
-  handleLogout: async (state) => {
-    await localStorage.removeItem('token');
-    await localStorage.removeItem('cart');
+  handleLogout: async state => {
+    await localStorage.removeItem("token");
+    await localStorage.removeItem("cart");
     await store.setState(initialState);
     Swal.fire({
-        title: 'Good bye!',
-        text: 'Kamu sudah berhasil keluar!',
-        icon: 'success',
-        timer: 2000,
-        confirmButtonText: 'understood',
+      title: "Good bye!",
+      text: "Kamu sudah berhasil keluar!",
+      icon: "success",
+      timer: 2000,
+      confirmButtonText: "understood"
     });
   },
 
@@ -1119,26 +1219,26 @@ export const actions = store => ({
    * Handle reset data and error in global state everytime page will unmount
    */
   handleReset: async () => {
-    await store.setState({data:undefined, error:undefined})
+    await store.setState({ data: undefined, error: undefined });
   },
 
-  handleError: async (state) => {
-    if(state.error!==undefined){
+  handleError: async state => {
+    if (state.error !== undefined) {
       await Swal.fire({
-        title: 'Error!',
+        title: "Error!",
         text: state.error.data.message,
-        icon: 'error',
+        icon: "error",
         timer: 1500,
-        confirmButtonText: 'Okay!',
-        confirmButtonColor: '#b36232',
+        confirmButtonText: "Okay!",
+        confirmButtonColor: "#b36232"
       });
-      await store.setState({error: undefined})
+      await store.setState({ error: undefined });
     }
   },
 
   handleInput: (state, key, value) => {
-    store.setState({[key]: value})
-  },
+    store.setState({ [key]: value });
+  }
 });
 
 // GET PRODUCT
