@@ -13,6 +13,7 @@
     "moment": "^2.24.0",
     "react": "^16.12.0",
     "react-chartkick": "^0.4.0",
+    "react-csv": "^1.1.2",
     "react-date-range": "^1.0.0-beta2",
     "react-dates": "^21.8.0",
     "react-dom": "^16.12.0",
