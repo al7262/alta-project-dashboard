@@ -25,6 +25,16 @@ class CustomerPage extends React.Component {
           <td>{item.fullname}</td>
           <td>{item.phone_number}</td>
           <td>{item.email}</td>
+          <td>
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              onClick={() => this.props.deleteCustomerById(item.id)}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </td>
         </tr>
       );
     });
@@ -70,6 +80,7 @@ class CustomerPage extends React.Component {
                     <th scope="col">Nama</th>
                     <th scope="col">Email</th>
                     <th scope="col">No. Telepon</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>{listAllCustomer}</tbody>

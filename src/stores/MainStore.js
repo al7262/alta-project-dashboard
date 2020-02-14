@@ -1,10 +1,22 @@
 import createStore from "unistore";
 import axios from "axios";
 // import Swal from "sweetalert2";
+// Firebase App (the core Firebase SDK) is always required and
+// must be listed before other Firebase SDKs
+var firebase = require("firebase/app");
+
+// Add the Firebase products that you want to use
+require("firebase/auth");
+require("firebase/storage");
 
 const initialState = {
   username: "",
   password: "",
+  fullName: "",
+  personalPhone: "",
+  nameBusiness: "",
+  nameFile: null,
+
   isLoadingProduct: true,
   isLoadingInventory: true,
   isLoadingOutlet: true,
@@ -152,6 +164,75 @@ export const actions = store => ({
         });
       })
       .catch(error => {});
+  },
+  postRegister: state => {
+    // Set the configuration for your app
+    // TODO: Replace with your app's config object
+    var firebaseConfig = {
+      apiKey: "AIzaSyDUH0ELlUeLq38fCmxltF6ZgqcOh5SznPg",
+      authDomain: "serbabuku-e46a3.firebaseapp.com",
+      databaseURL: "https://serbabuku-e46a3.firebaseio.com",
+      storageBucket: "gs://serbabuku-e46a3.appspot.com"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    // Get a reference to the storage service, which is used to create references in your storage bucket
+    var storage = firebase.storage();
+
+    // Create a storage reference from our storage service
+    var storageRef = storage.ref();
+
+    // Create a child reference
+    var imagesRef = storageRef.child(`logo/logo-${new Date()}.jpg`);
+    // imagesRef now points to 'images'
+
+    imagesRef.put(state.nameFile).then(function(snapshot) {
+      imagesRef
+        .getDownloadURL()
+        .then(function(url) {
+          // Insert url into an <img> tag to "download"
+          console.warn("--------- INI LINK ----------", url);
+          const req = {
+            method: "put",
+            url: `${state.baseUrl}/user/profile`,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+            data: {
+              fullname: state.fullName,
+              phone_number: state.personalPhone,
+              business_name: state.nameBusiness,
+              image: url
+            }
+          };
+          axios(req)
+            .then(response => {})
+            .catch(error => {});
+        })
+        .catch(function(error) {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case "storage/object-not-found":
+              // File doesn't exist
+              break;
+
+            case "storage/unauthorized":
+              // User doesn't have permission to access the object
+              break;
+
+            case "storage/canceled":
+              // User canceled the upload
+              break;
+            case "storage/unknown":
+              // Unknown error occurred, inspect the server response
+              break;
+          }
+        });
+    });
   },
   addOutlet: state => {
     const req = {
@@ -630,6 +711,23 @@ export const actions = store => ({
       })
       .catch(error => {});
   },
+  deleteCustomerById: (state, id) => {
+    store.setState({ isLoadingCustomer: true });
+
+    const req = {
+      method: "delete",
+      url: `${state.baseUrl}/customer/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+    axios(req)
+      .then(response => {
+        getCustomer(state.baseUrl, state.nameCustomer);
+      })
+      .catch(error => {});
+  },
   getProvince: state => {
     const req = {
       method: "get",
@@ -1053,6 +1151,29 @@ const getEmployee = (baseUrl, nameEmployee, outlet, position) => {
       store.setState({
         listEmployee: response.data,
         isLoadingEmployee: false
+      });
+    })
+    .catch(error => {});
+};
+const getCustomer = (baseUrl, nameCustomer) => {
+  store.setState({ isLoadingCustomer: true });
+
+  const req = {
+    method: "get",
+    url: `${baseUrl}/customer?&keyword=${nameCustomer}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+  };
+  axios(req)
+    .then(response => {
+      store.setState({
+        listCustomer: response.data.list_all_customer,
+        customerTotal: response.data.total_costumer,
+        customerLoyal: response.data.costumer_loyal.fullname,
+        customerNew: response.data.new_customer,
+        isLoadingCustomer: false
       });
     })
     .catch(error => {});
