@@ -42,6 +42,14 @@
   width: 80%;
   margin: 20px;
 }
+.register-box form label#warning {
+  width: 100%;
+  text-align: center;
+  color: #da5701;
+  margin: 0;
+  font-family: 'Muli', sans-serif;
+  font-size: 12px;
+}
 .register-box form input {
   width: 100%;
   padding: 5px;

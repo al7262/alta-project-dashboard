@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { DateRangePicker } from "react-date-range";
@@ -75,6 +75,9 @@ class Dashboard extends React.Component {
       );
     });
 
+    if(this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Dashboard" />
@@ -268,6 +271,6 @@ class Dashboard extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, outlet, start_time, end_time, salesAmount, numberTransaction, belowReminder, listChart,listTopProduct,listTopCategory,listReminder, isLoadingDashboard, customerNew, customerTotal",
+  "listOutlet, outlet, start_time, end_time, salesAmount, numberTransaction, belowReminder, listChart,listTopProduct,listTopCategory,listReminder, isLoadingDashboard, customerNew, customerTotal, isLogin",
   actions
 )(withRouter(Dashboard));
