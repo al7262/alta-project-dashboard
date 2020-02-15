@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { DateRangePicker } from "react-date-range";
@@ -8,21 +8,29 @@ import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import "../styles/product.css";
 import { formatMoney } from "accounting";
+import { CSVLink, CSVDownload } from "react-csv";
 
 import Header from "../components/Header";
 import Loader from "../components/Loader";
 import Button from "../components/Button";
+import ActiveButton from "../components/ActiveButton";
 
 function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
   return format(date, "DD/MM/YYYY");
 }
 class ReportOutletPage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
     this.props.getCategory();
     this.props.getReportOutlet();
-    store.setState({ outlet: "" });
+    store.setState({ outlet: "", start_time: "", end_time: "" });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
@@ -74,6 +82,22 @@ class ReportOutletPage extends React.Component {
         </tr>
       );
     });
+
+    let startDate = this.state.dateRangePicker.selection.startDate
+    let endDate = this.state.dateRangePicker.selection.endDate
+    let csvData = [[], ['', 'Laporan Outlet'], ['', 'Tanggal: ' + startDate.getUTCDate() + '/' + (startDate.getUTCMonth() + 1) + '/' + (startDate.getUTCFullYear()) + ' - ' + endDate.getUTCDate() + '/' + (endDate.getUTCMonth() + 1) + '/' + (endDate.getUTCFullYear())], [], ['', 'No', 'Waktu', 'Outlet', 'Jumlah Transaksi', 'Hasil Penjualan']]
+    for (let index = 1; index <= listReportOutlet.length; index++){
+      csvData.push(['', index, listReportOutlet[index - 1].time, listReportOutlet[index - 1].name_outlet, listReportOutlet[index - 1].total_transaction, listReportOutlet[index - 1].total_price])
+    }
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Laporan" />
@@ -143,19 +167,20 @@ class ReportOutletPage extends React.Component {
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
+              <CSVLink data={csvData} filename={"Laporan_Outlet.csv"} className="btn btn-download btn-block">Download</CSVLink>
               <Button buttoncontent={"Produk"} direction={"/report/product"} />
               <Button buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button
-                buttoncontent={"Data Transaksi"}
+                buttoncontent={"Transaksi"}
                 direction={"/report/transaction"}
               />
-              <Button buttoncontent={"Outlet"} direction={"/report/outlet"} />
+              <ActiveButton buttoncontent={"Outlet"} direction={"/report/outlet"} />
               <Button
                 buttoncontent={"Kategori"}
                 direction={"/report/category"}
               />
               <Button
-                buttoncontent={"Log Inventaris"}
+                buttoncontent={"Log Bahan"}
                 direction={"/report/inventory-log"}
               />
             </div>
@@ -228,6 +253,6 @@ class ReportOutletPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listReportOutlet, isLoadingReport,totalSalesOutlet,totalSoldOutlet ,outlet, start_time, end_time",
+  "isLogin, isOwner, listOutlet, listReportOutlet, isLoadingReport,totalSalesOutlet,totalSoldOutlet ,outlet, start_time, end_time",
   actions
 )(withRouter(ReportOutletPage));

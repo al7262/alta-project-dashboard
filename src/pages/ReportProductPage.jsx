@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { DateRangePicker } from "react-date-range";
@@ -13,17 +13,30 @@ import { CSVLink, CSVDownload } from "react-csv";
 import Header from "../components/Header";
 import Loader from "../components/Loader";
 import Button from "../components/Button";
+import ActiveButton from "../components/ActiveButton";
 
 function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
   return format(date, "DD/MM/YYYY");
 }
 class ReportProductPage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
     this.props.getCategory();
     this.props.getReportProduct();
-    store.setState({ idOutlet: "", category: "", nameProduct: "" });
+    store.setState({
+      idOutlet: "",
+      category: "",
+      nameProduct: "",
+      start_time: "",
+      end_time: ""
+    });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
@@ -83,13 +96,48 @@ class ReportProductPage extends React.Component {
         </tr>
       );
     });
-    let startDate = this.state.dateRangePicker.selection.startDate
-    let endDate = this.state.dateRangePicker.selection.endDate
-    let csvData = [[], ['', 'Laporan Penjualan Produk'], ['', 'Tanggal: ' + startDate.getUTCDate() + '/' + (startDate.getUTCMonth() + 1) + '/' + (startDate.getUTCFullYear()) + ' - ' + endDate.getUTCDate() + '/' + (endDate.getUTCMonth() + 1) + '/' + (endDate.getUTCFullYear())], [], ['', 'No', 'Produk', 'Kategori', 'Terjual', 'Total']]
-    for (let index = 1; index <= listReportProduct.length; index++){
-      csvData.push(['', index, listReportProduct[index - 1].name, listReportProduct[index - 1].category, listReportProduct[index - 1].total_sold, listReportProduct[index - 1].total_sales])
+    let startDate = this.state.dateRangePicker.selection.startDate;
+    let endDate = this.state.dateRangePicker.selection.endDate;
+    let csvData = [
+      [],
+      ["", "Laporan Penjualan Produk"],
+      [
+        "",
+        "Tanggal: " +
+          startDate.getUTCDate() +
+          "/" +
+          (startDate.getUTCMonth() + 1) +
+          "/" +
+          startDate.getUTCFullYear() +
+          " - " +
+          endDate.getUTCDate() +
+          "/" +
+          (endDate.getUTCMonth() + 1) +
+          "/" +
+          endDate.getUTCFullYear()
+      ],
+      [],
+      ["", "No", "Produk", "Kategori", "Terjual", "Total"]
+    ];
+    for (let index = 1; index <= listReportProduct.length; index++) {
+      csvData.push([
+        "",
+        index,
+        listReportProduct[index - 1].name,
+        listReportProduct[index - 1].category,
+        listReportProduct[index - 1].total_sold,
+        listReportProduct[index - 1].total_sales
+      ]);
     }
 
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Laporan" />
@@ -182,11 +230,17 @@ class ReportProductPage extends React.Component {
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
-              <CSVLink data={csvData} filename={"Laporan_Produk.csv"} className="btn btn-success btn-block mb-5">Download</CSVLink>
-              <Button buttoncontent={"Produk"} direction={"/report/product"} />
+              <CSVLink
+                data={csvData}
+                filename={"Laporan_Produk.csv"}
+                className="btn btn-download btn-block mb-5"
+              >
+                Download
+              </CSVLink>
+              <ActiveButton buttoncontent={"Produk"} direction={"/report/product"} />
               <Button buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button
-                buttoncontent={"Data Transaksi"}
+                buttoncontent={"Transaksi"}
                 direction={"/report/transaction"}
               />
               <Button buttoncontent={"Outlet"} direction={"/report/outlet"} />
@@ -195,7 +249,7 @@ class ReportProductPage extends React.Component {
                 direction={"/report/category"}
               />
               <Button
-                buttoncontent={"Log Inventaris"}
+                buttoncontent={"Log Bahan"}
                 direction={"/report/inventory-log"}
               />
             </div>
@@ -268,6 +322,6 @@ class ReportProductPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listReportProduct, totalSalesProduct, totalSoldProduct, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time",
+  "isLogin, isOwner, listOutlet, listCategory, listReportProduct, totalSalesProduct, totalSoldProduct, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time",
   actions
 )(withRouter(ReportProductPage));

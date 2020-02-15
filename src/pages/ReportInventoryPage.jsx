@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { DateRangePicker } from "react-date-range";
@@ -7,20 +7,34 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import "../styles/product.css";
+import { CSVLink } from "react-csv";
 
 import Header from "../components/Header";
 import Loader from "../components/Loader";
 import Button from "../components/Button";
+import ActiveButton from "../components/ActiveButton";
 
 function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
   return format(date, "DD/MM/YYYY");
 }
 class ReportInventoryPage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
     this.props.getReportInventory();
-    store.setState({ idOutlet: "", category: "", nameInventory: "" });
+    store.setState({
+      idOutlet: "",
+      type: "",
+      nameInventory: "",
+      start_time: "",
+      end_time: ""
+    });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
@@ -75,6 +89,22 @@ class ReportInventoryPage extends React.Component {
         </tr>
       );
     });
+
+    let startDate = this.state.dateRangePicker.selection.startDate
+    let endDate = this.state.dateRangePicker.selection.endDate
+    let csvData = [[], ['', 'Laporan Inventaris'], ['', 'Tanggal: ' + startDate.getUTCDate() + '/' + (startDate.getUTCMonth() + 1) + '/' + (startDate.getUTCFullYear()) + ' - ' + endDate.getUTCDate() + '/' + (endDate.getUTCMonth() + 1) + '/' + (endDate.getUTCFullYear())], [], ['', 'No', 'Waktu', 'Outlet', 'Bahan', 'Tipe', 'Unit', 'Jumlah', 'Stok Akhir']]
+    for (let index = 1; index <= listReportInventory.length; index++){
+      csvData.push(['', index, listReportInventory[index - 1].datetime, listReportInventory[index - 1].outlet, listReportInventory[index - 1].name, listReportInventory[index - 1].type, listReportInventory[index - 1].unit, listReportInventory[index - 1].amount, listReportInventory[index - 1].last_stock])
+    }
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Laporan" />
@@ -168,10 +198,11 @@ class ReportInventoryPage extends React.Component {
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
+            <CSVLink data={csvData} filename={"Laporan_Inventaris.csv"} className="btn btn-download btn-block">Download</CSVLink>
               <Button buttoncontent={"Produk"} direction={"/report/product"} />
               <Button buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button
-                buttoncontent={"Data Transaksi"}
+                buttoncontent={"Transaksi"}
                 direction={"/report/transaction"}
               />
               <Button buttoncontent={"Outlet"} direction={"/report/outlet"} />
@@ -179,8 +210,8 @@ class ReportInventoryPage extends React.Component {
                 buttoncontent={"Kategori"}
                 direction={"/report/category"}
               />
-              <Button
-                buttoncontent={"Log Inventaris"}
+              <ActiveButton
+                buttoncontent={"Log Bahan"}
                 direction={"/report/inventory-log"}
               />
             </div>
@@ -214,6 +245,6 @@ class ReportInventoryPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet,  listReportInventory,  isLoadingReport, idOutlet,  nameInventory, start_time, end_time, type",
+  "isLogin, isOwner, listOutlet,  listReportInventory,  isLoadingReport, idOutlet,  nameInventory, start_time, end_time, type",
   actions
 )(withRouter(ReportInventoryPage));
