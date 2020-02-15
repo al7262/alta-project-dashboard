@@ -102,7 +102,7 @@ class AddEmployee extends React.Component {
             </div>
 
             <div className="col-12 text-center">
-              <Link to="/employee" className="btn btn-register">
+              <Link to="/employee" className="btn btn-register mr-2">
                 Batal
               </Link>
               <Link

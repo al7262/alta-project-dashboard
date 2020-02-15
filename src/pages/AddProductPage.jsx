@@ -31,6 +31,16 @@ class AddProduct extends React.Component {
           <td>{item.name}</td>
           <td>{item.unit}</td>
           <td>{item.quantity}</td>
+          <td>
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              onClick={() => this.props.deleteRecipe(key)}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </td>
         </tr>
       );
     });
@@ -44,9 +54,9 @@ class AddProduct extends React.Component {
             className="form-row box-addproduct mx-auto"
           >
             <div className="col-md-6">
-              <div className="col-12 box-content-add ">
+              <div className="col-12 box-content-add">
                 <div className="box-inside-add">
-                  <h1>INFORMASI PRODUK</h1>
+                  <h1 className="mb-1 mt-3">INFORMASI PRODUK</h1>
                   <div className="form-group">
                     <label for="nameProductInput">Nama Produk</label>
                     <input
@@ -127,7 +137,7 @@ class AddProduct extends React.Component {
             <div className="col-md-6">
               <div className="col-12 box-content-add ">
                 <div className="box-inside-add">
-                  <h1>RESEP</h1>
+                  <h1 className="mb-1 mt-3">RESEP</h1>
                   <div className="col-12 box-table">
                     <table class="table table-sm">
                       <thead>
@@ -136,6 +146,7 @@ class AddProduct extends React.Component {
                           <th scope="col">Bahan</th>
                           <th scope="col">Kuantitas</th>
                           <th scope="col">Unit</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>{listAllRecipe}</tbody>
@@ -150,7 +161,7 @@ class AddProduct extends React.Component {
                     <ModalAddInventory />
                   </div>
                   <div className="col-12 text-center ">
-                    <Link to="/product" className="btn btn-simpan">
+                    <Link to="/product" className="btn btn-simpan mr-2">
                       Batal
                     </Link>
                     <Link
