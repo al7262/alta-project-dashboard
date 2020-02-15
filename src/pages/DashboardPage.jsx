@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
   componentDidMount = () => {
     this.props.getOutlet();
     this.props.getDashboard();
-    store.setState({ outlet: "" });
+    store.setState({ outlet: "", start_time: "", end_time: "" });
   };
 
   handleInputFilter = e => {
@@ -75,8 +75,8 @@ class Dashboard extends React.Component {
       );
     });
 
-    if(this.props.isLogin){
-      return <Redirect to="/login"/>
+    if (this.props.isLogin) {
+      return <Redirect to="/login" />;
     }
     return (
       <React.Fragment>

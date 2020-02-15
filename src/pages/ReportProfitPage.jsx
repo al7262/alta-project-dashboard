@@ -23,7 +23,7 @@ class ReportProfitPage extends React.Component {
     this.props.getOutlet();
     this.props.getCategory();
     this.props.getReportProfit();
-    store.setState({ idOutlet: "", category: "", nameProduct: "" });
+    store.setState({ start_time: "", end_time: "" });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
@@ -75,11 +75,39 @@ class ReportProfitPage extends React.Component {
       );
     });
 
-    let startDate = this.state.dateRangePicker.selection.startDate
-    let endDate = this.state.dateRangePicker.selection.endDate
-    let csvData = [[], ['', 'Laporan Laba'], ['', 'Tanggal: ' + startDate.getUTCDate() + '/' + (startDate.getUTCMonth() + 1) + '/' + (startDate.getUTCFullYear()) + ' - ' + endDate.getUTCDate() + '/' + (endDate.getUTCMonth() + 1) + '/' + (endDate.getUTCFullYear())], [], ['', 'No', 'Waktu', 'Outlet', 'Penjualan', 'Biaya', 'Keuntungan']]
-    for (let index = 1; index <= listReportProfit.length; index++){
-      csvData.push(['', index, listReportProfit[index - 1].name_outlet, listReportProfit[index - 1].time, listReportProfit[index - 1].total_price_sale, listReportProfit[index - 1].total_price_inventory, listReportProfit[index -1].profit])
+    let startDate = this.state.dateRangePicker.selection.startDate;
+    let endDate = this.state.dateRangePicker.selection.endDate;
+    let csvData = [
+      [],
+      ["", "Laporan Laba"],
+      [
+        "",
+        "Tanggal: " +
+          startDate.getUTCDate() +
+          "/" +
+          (startDate.getUTCMonth() + 1) +
+          "/" +
+          startDate.getUTCFullYear() +
+          " - " +
+          endDate.getUTCDate() +
+          "/" +
+          (endDate.getUTCMonth() + 1) +
+          "/" +
+          endDate.getUTCFullYear()
+      ],
+      [],
+      ["", "No", "Waktu", "Outlet", "Penjualan", "Biaya", "Keuntungan"]
+    ];
+    for (let index = 1; index <= listReportProfit.length; index++) {
+      csvData.push([
+        "",
+        index,
+        listReportProfit[index - 1].name_outlet,
+        listReportProfit[index - 1].time,
+        listReportProfit[index - 1].total_price_sale,
+        listReportProfit[index - 1].total_price_inventory,
+        listReportProfit[index - 1].profit
+      ]);
     }
 
     return (
@@ -87,7 +115,9 @@ class ReportProfitPage extends React.Component {
         <Header pageLocation="Laporan" />
         <div className="container">
           <form className="col-12 box-filter form-row mt-5 mb-3">
-            <div className="col-12 form-group">
+            <div className="col-6 form-group"></div>
+
+            <div className="col-6 form-group">
               <h1>Tanggal</h1>
               <div
                 id="dropdownMenuButton"
@@ -139,7 +169,13 @@ class ReportProfitPage extends React.Component {
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
-              <CSVLink data={csvData} filename={"Laporan_Produk.csv"} className="btn btn-success btn-block mb-5">Download</CSVLink>
+              <CSVLink
+                data={csvData}
+                filename={"Laporan_Produk.csv"}
+                className="btn btn-success btn-block mb-5"
+              >
+                Download
+              </CSVLink>
               <Button buttoncontent={"Produk"} direction={"/report/product"} />
               <Button buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button
