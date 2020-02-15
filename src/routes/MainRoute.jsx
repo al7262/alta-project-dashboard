@@ -26,6 +26,7 @@ import ReportCategoryPage from "../pages/ReportCategoryPage";
 import ReportHistoryTransactionPage from "../pages/ReportHistoryPage";
 import ReportInventoryPage from "../pages/ReportInventoryPage";
 import ReportOutletPage from "../pages/ReportOutletPage";
+import ProfilePage from "../pages/ProfilePage";
 
 const Mainroute = () => {
   return (
@@ -51,6 +52,8 @@ const Mainroute = () => {
           <Route exact path="/report/profit" component={ReportProfitPage} />
           <Route exact path="/report/category" component={ReportCategoryPage} />
           <Route exact path="/report/outlet" component={ReportOutletPage} />
+          <Route exact path="/profile" component={ProfilePage} />
+
           <Route
             exact
             path="/report/inventory-log"

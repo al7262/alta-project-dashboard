@@ -35,7 +35,7 @@ class InventoryPage extends React.Component {
           <th scope="row">{key + 1}</th>
           <td>{item.name}</td>
           <td>{item.stock}</td>
-          <td>{item.id}</td>
+          <td>{item.unit}</td>
           <td>
             Rp. {item.unit_price}/{item.unit}
           </td>
