@@ -1,6 +1,7 @@
 import createStore from "unistore";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { stat } from "fs";
 
 // import Swal from "sweetalert2";
 // Firebase App (the core Firebase SDK) is always required and
@@ -674,14 +675,34 @@ export const actions = store => ({
   },
   addRecipe: state => {
     const ingridient = JSON.parse(localStorage.getItem("recipe"));
+    if (state.quantity == '' || state.nameInventory == '' || state.unit == ''){
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Tidak boleh ada kolom yang dikosongkan",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    }
+    else if (state.quantity <= 0){
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Unit harus bernilai positif",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    }
+    else {
     ingridient.push({
-      name: state.nameInventory,
-      quantity: state.quantity,
-      unit: state.unit
-    });
-    localStorage.setItem("recipe", JSON.stringify(ingridient));
+        name: state.nameInventory,
+        quantity: state.quantity,
+        unit: state.unit
+      });
+    
+      localStorage.setItem("recipe", JSON.stringify(ingridient));
     store.setState({ listRecipe: JSON.parse(localStorage.getItem("recipe")) });
-  },
+  }},
   deleteRecipe: (state, id) => {
     const ingridient = JSON.parse(localStorage.getItem("recipe"));
     ingridient.splice(id, 1);
@@ -727,6 +748,25 @@ export const actions = store => ({
     }
   },
   addInventory: async state => {
+    if (state.nameInventoryInput == '' || state.stock == '' || state.unit == '' || state.unit_price == '' || state.reminder == ''){
+        Swal.fire({
+          title: "Mohon Maaf",
+          text: "Tidak boleh ada kolom yang dikosongkan",
+          icon: "error",
+          timer: 2000,
+          confirmButtonText: "Mengerti"
+        });
+    }
+    else if (state.stock <= 0 || state.reminder <= 0 || state.unit_price <=0){
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Unit, harga dan stok harus bernilai positif",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    }
+    else {
     const req = {
       method: "post",
       url: `${state.baseUrl}/inventory/${state.outlet}`,
@@ -742,7 +782,6 @@ export const actions = store => ({
         reminder: state.reminder
       }
     };
-    console.log("cek input", req.data);
     await axios(req)
       .then(response => {
         getInventory(
@@ -753,8 +792,27 @@ export const actions = store => ({
         );
       })
       .catch(error => {});
-  },
+  }},
   editInventory: async state => {
+    if (state.nameInventoryInput == '' || state.stock == '' || state.unit == '' || state.unit_price == '' || state.reminder == ''){
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Tidak boleh ada kolom yang dikosongkan",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+  }
+  else if (state.stock <= 0 || state.reminder <= 0 || state.unit_price <=0){
+    Swal.fire({
+      title: "Mohon Maaf",
+      text: "Unit, harga dan stok harus bernilai positif",
+      icon: "error",
+      timer: 2000,
+      confirmButtonText: "Mengerti"
+    });
+  }
+  else{
     const req = {
       method: "put",
       url: `${state.baseUrl}/inventory/detail/${state.idInventory}`,
@@ -780,7 +838,7 @@ export const actions = store => ({
         );
       })
       .catch(error => {});
-  },
+  }},
   getInventoryById: async (state, id) => {
     const req = {
       method: "get",
@@ -823,6 +881,24 @@ export const actions = store => ({
       .catch(error => {});
   },
   addStock: async state => {
+    if (state.stock == '' || state.unit_price == ''){
+        Swal.fire({
+          title: "Mohon Maaf",
+          text: "Tidak boleh ada kolom yang dikosongkan",
+          icon: "error",
+          timer: 2000,
+          confirmButtonText: "Mengerti"
+        });
+    }
+    else if (state.stock <= 0 || state.unit_price <= 0){
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Stok dan harga harus bernilai positif",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    }
     const req = {
       method: "put",
       url: `${state.baseUrl}/inventory/add-stock/${state.idInventory}`,
@@ -1319,6 +1395,25 @@ export const actions = store => ({
     }
   },
   editPassword: state => {
+    if (state.old_password == '' || state.new_password == '' || state.confirm_new_password == ''){
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Tidak boleh ada kolom yang dikosongkan",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+  }
+  else if (state.new_password !== state.confirm_new_password){
+    Swal.fire({
+      title: "Mohon Maaf",
+      text: "Tolong periksa kembali password Anda",
+      icon: "error",
+      timer: 2000,
+      confirmButtonText: "Mengerti"
+    });
+  }
+  else{
     const req = {
       method: "put",
       url: `${state.baseUrl}/user/change-password`,
@@ -1335,7 +1430,7 @@ export const actions = store => ({
     axios(req)
       .then(response => {})
       .catch(error => {});
-  },
+  }},
 
   /**
    * Handling API to post, put, get, and delete action through AXIOS.
@@ -1401,7 +1496,7 @@ export const actions = store => ({
       text: "Kamu sudah berhasil keluar!",
       icon: "success",
       timer: 2000,
-      confirmButtonText: "understood"
+      confirmButtonText: "Mengerti"
     });
   },
 
