@@ -1364,7 +1364,7 @@ export const actions = store => ({
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       },
-      url: state.baseUrl + "login/apps"
+      url: state.baseUrl + "/login/dashboard"
     };
     await axios(input)
       .then(async response => {
@@ -1373,9 +1373,6 @@ export const actions = store => ({
             await store.setState({ claims: response.data.claims });
             if (response.data.claims.email) {
               await store.setState({ isOwner: true });
-            }
-            if (response.data.claims.id_outlet) {
-              await store.setState({ outlet: response.data.claims.id_outlet });
             }
             await store.setState({ isLogin: true });
             console.log(store.getState().claims);
