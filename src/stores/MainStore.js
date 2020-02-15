@@ -1,5 +1,6 @@
 import createStore from "unistore";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 // import Swal from "sweetalert2";
 // Firebase App (the core Firebase SDK) is always required and
@@ -9,7 +10,6 @@ var firebase = require("firebase/app");
 // Add the Firebase products that you want to use
 require("firebase/auth");
 require("firebase/storage")
-import Swal from "sweetalert2";
 
 
 const initialState = {
