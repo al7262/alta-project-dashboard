@@ -19,7 +19,13 @@ function formatDateDisplay(date, defaultText) {
   return format(date, "DD/MM/YYYY");
 }
 class Dashboard extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
     this.props.getDashboard();
     store.setState({ outlet: "" });
@@ -75,7 +81,12 @@ class Dashboard extends React.Component {
       );
     });
 
-    if(this.props.isLogin){
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
       return <Redirect to="/login"/>
     }
     return (
@@ -228,16 +239,24 @@ class Dashboard extends React.Component {
                 {isLoadingDashboard ? (
                   <Loader height={"100%"} loading={"hidden"} />
                 ) : (
-                  <React.Fragment>
-                    <div className="col-6">
-                      <h2>Pelanggan Baru {this.props.customerNew}</h2>
+                  <div className="row h-75">
+                    <div className="col-6 d-flex justify-content-center align-items-center flex-column">
+                      <div className="d-flex justify-content-center align-items-center">
+                        <i className="material-icons mr-2" style={{fontSize:"72px"}}>person_add</i>
+                        <h1 style={{fontSize: "52px", color:"black"}}>{this.props.customerNew}</h1>
+                      </div>
+                      <h1 style={{fontSize: "20px", color:"black"}}>Pelanggan Baru</h1>
                       {/* <h2>{this.props.customerNew}</h2> */}
                     </div>
-                    <div className="col-6">
-                      <h2>Total Pelanggan {this.props.customerTotal}</h2>
+                    <div className="col-6 d-flex justify-content-center align-items-center flex-column">
+                      <div className="d-flex justify-content-center align-items-center">
+                        <i className="material-icons mr-2" style={{fontSize:"72px"}}>people_alt</i>
+                        <h1 style={{fontSize: "52px", color:"black"}}>{this.props.customerTotal}</h1>
+                      </div>
+                      <h1 style={{fontSize: "20px", color:"black"}}>Total Pelanggan</h1>
                       {/* <h2>{this.props.customerTotal}</h2> */}
                     </div>
-                  </React.Fragment>
+                  </div>
                 )}
               </div>
             </div>

@@ -141,7 +141,7 @@ class AddOutlet extends React.Component {
             </div>
 
             <div className="col-12 text-center">
-              <Link to="/outlet" className="btn btn-register">
+              <Link to="/outlet" className="btn btn-register mr-2">
                 Batal
               </Link>
               <Link
