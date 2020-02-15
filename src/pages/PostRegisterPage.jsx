@@ -1,12 +1,19 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import logo from "../images/logo-dark.svg";
 import "../styles/postregister.css";
+import Loader from '../components/Loader'
 
 class PostRegister extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getProvince();
   };
 
@@ -43,6 +50,14 @@ class PostRegister extends React.Component {
       return <option value={item.nama}>{item.nama}</option>;
     });
 
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <div className="container">
@@ -211,6 +226,6 @@ class PostRegister extends React.Component {
   }
 }
 export default connect(
-  "nameFile, listProvince, listCity, listDistrict,fullName, personalPhone , nameBusiness, nameOutletInput, inputProvince, inputCity, district, address, tax, phoneNumber, urlFirebase",
+  "isLogin, isOwner, nameFile, listProvince, listCity, listDistrict,fullName, personalPhone , nameBusiness, nameOutletInput, inputProvince, inputCity, district, address, tax, phoneNumber, urlFirebase",
   actions
 )(withRouter(PostRegister));
