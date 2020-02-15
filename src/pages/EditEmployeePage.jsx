@@ -1,29 +1,56 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/addoutlet.css";
 import Header from "../components/Header";
+import Loader from '../components/Loader';
+import Swal from 'sweetalert2';
+
 
 class EditEmployee extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
+  };
+  handleForm = async e => {
+    e.preventDefault();
+    await this.props.editEmployee();
+    this.props.history.push("/employee");
   };
   render() {
     const { listOutlet } = this.props;
     const listAllOutlet = listOutlet.map(item => {
       return <option value={item.id}>{item.name}</option>;
     });
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
+    if(!this.props.isOwner){
+      Swal.fire('Tidak Punya Akses!', 'Halaman ini hanya untuk pemilik', 'error')
+      return <Redirect to="/"/>
+    }
     return (
       <React.Fragment>
-        <Header pageLocation="Outlet" />
+        <Header pageLocation="Karyawan" />
         <div className="container ">
           <form
             action=""
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => this.handleForm(e)}
             className="form-row box-form mx-auto mt-5 mb-5"
           >
             <div className="col-12 ">
@@ -67,7 +94,6 @@ class EditEmployee extends React.Component {
                     name="password"
                     placeholder="*******"
                     onChange={e => this.handleInputFilter(e)}
-                    required
                   />
                 </div>
 
@@ -79,6 +105,7 @@ class EditEmployee extends React.Component {
                     name="positionInput"
                     value={this.props.positionInput}
                     onChange={e => this.handleInputFilter(e)}
+                    required
                   >
                     <option value="" disabled selected>
                       Pilih Tipe
@@ -106,17 +133,12 @@ class EditEmployee extends React.Component {
             </div>
 
             <div className="col-12 text-center">
-              <Link to="/employee" className="btn btn-register">
+              <Link to="/employee" className="btn btn-register mr-2">
                 Batal
               </Link>
-              <Link
-                to="/employee"
-                className="btn btn-register"
-                type="submit"
-                onClick={this.props.editEmployee}
-              >
+              <button className="btn btn-register" type="submit">
                 Simpan
-              </Link>
+              </button>
             </div>
           </form>
         </div>
@@ -125,6 +147,6 @@ class EditEmployee extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, nameEmployeeInput, username, password, confirmPassword, idOutlet, outletName, positionInput",
+  "isLogin, isOwner, listOutlet, nameEmployeeInput, username, password, confirmPassword, idOutlet, outletName, positionInput",
   actions
 )(withRouter(EditEmployee));

@@ -1,12 +1,20 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/addoutlet.css";
 import Header from "../components/Header";
+import Loader from '../components/Loader';
+import Swal from 'sweetalert2';
 
 class EditOutlet extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getProvince();
   };
   handleInputFilter = e => {
@@ -20,6 +28,11 @@ class EditOutlet extends React.Component {
     store.setState({ [e.target.name]: e.target.value });
     this.props.getDistrict();
   };
+  handleForm = async e => {
+    e.preventDefault();
+    await this.props.editOutlet();
+    this.props.history.push("/outlet");
+  };
   render() {
     const { listProvince, listCity, listDistrict } = this.props;
     const listAllProvince = listProvince.map(item => {
@@ -31,13 +44,26 @@ class EditOutlet extends React.Component {
     const listAllDistrict = listDistrict.map(item => {
       return <option value={item.nama}>{item.nama}</option>;
     });
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
+    if(!this.props.isOwner){
+      Swal.fire('Tidak Punya Akses!', 'Halaman ini hanya untuk pemilik', 'error')
+      return <Redirect to="/"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Outlet" />
         <div className="container ">
           <form
             action=""
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => this.handleForm(e)}
             className="form-row box-form mx-auto mt-5 mb-5"
           >
             <div className="col-12 ">
@@ -145,17 +171,12 @@ class EditOutlet extends React.Component {
             </div>
 
             <div className="col-12 text-center">
-              <Link to="/outlet" className="btn btn-register">
+              <Link to="/outlet" className="btn btn-register mr-2">
                 Batal
               </Link>
-              <Link
-                to="/outlet"
-                className="btn btn-register"
-                type="submit"
-                onClick={this.props.editOutlet}
-              >
+              <button className="btn btn-register" type="submit">
                 Simpan
-              </Link>
+              </button>
             </div>
           </form>
         </div>
@@ -164,6 +185,6 @@ class EditOutlet extends React.Component {
   }
 }
 export default connect(
-  "listProvince, listCity, listDistrict, nameOutletInput,inputProvince, province,idProvince,inputCity, city,idCity, district, tax, phoneNumber, address",
+  "isLogin, isOwner, listProvince, listCity, listDistrict, nameOutletInput,inputProvince, province,idProvince,inputCity, city,idCity, district, tax, phoneNumber, address",
   actions
 )(withRouter(EditOutlet));

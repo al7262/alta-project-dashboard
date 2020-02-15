@@ -1,4 +1,19 @@
 /* Color Theme Swatches in Hex */
+.gap-25 {
+  height: 25px;
+}
+.gap-50 {
+  height: 50px;
+}
+.gap-100 {
+  height: 100px;
+}
+.gap-150 {
+  height: 150px;
+}
+.gap-200 {
+  height: 200px;
+}
 .btn-tambah {
   border-radius: 10px;
   padding: 5px 30px;
@@ -18,4 +33,47 @@
 .btn-tambah.disabled {
   background-color: #002943;
   color: #e9f2f6;
+}
+.btn-download {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 800;
+  margin-top: 12px;
+  margin-bottom: 40px;
+  color: #fcdfcc;
+  border: 3px solid #F26101;
+  border-radius: 10px !important;
+  background-color: #da5701;
+}
+.btn-download:hover {
+  background-color: #fcdfcc;
+  color: #F26101;
+}
+.btn-download:active {
+  background-color: #f3711a !important;
+}
+.btn-download.disabled {
+  background-color: #da5701;
+  color: #fcdfcc;
+}
+.btn-active {
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-weight: 900;
+  margin-bottom: 10px;
+  color: #e9f2f6 !important;
+  border: 3px solid #002943 !important;
+  border-radius: 10px !important;
+  background-color: #002943 !important;
+}
+.btn-active:hover {
+  background-color: #002943;
+  color: #e9f2f6;
+}
+.btn-active:active {
+  background-color: #f3711a !important;
+}
+.btn-active.disabled {
+  background-color: #da5701;
+  color: #fcdfcc;
 }
