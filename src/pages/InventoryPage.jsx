@@ -14,11 +14,11 @@ import Loader from "../components/Loader";
 class InventoryPage extends React.Component {
   state = {
     finishChecking: false
-  }
+  };
 
   componentDidMount = async () => {
-    await this.props.checkLoginStatus()
-    this.setState({finishChecking:true})
+    await this.props.checkLoginStatus();
+    this.setState({ finishChecking: true });
     this.props.getOutlet();
     this.props.getInventory();
     store.setState({ outlet: "", statusInventory: "", nameInventory: "" });
@@ -84,9 +84,9 @@ class InventoryPage extends React.Component {
                     Hapus
                   </Link>
                 </div>
-                <ModalEditInventory />
-                <ModalAddStock id={item.id} />
               </div>
+              <ModalEditInventory />
+              <ModalAddStock id={item.id} />
             </td>
           ) : (
             <td></td>
@@ -95,13 +95,11 @@ class InventoryPage extends React.Component {
       );
     });
 
-    if(!this.state.finishChecking){
-      return <Loader
-        height='100vh'
-        scale='3'/>
+    if (!this.state.finishChecking) {
+      return <Loader height="100vh" scale="3" />;
     }
-    if(!this.props.isLogin){
-      return <Redirect to="/login"/>
+    if (!this.props.isLogin) {
+      return <Redirect to="/login" />;
     }
     return (
       <React.Fragment>

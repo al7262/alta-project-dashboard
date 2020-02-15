@@ -21,14 +21,14 @@ function formatDateDisplay(date, defaultText) {
 class Dashboard extends React.Component {
   state = {
     finishChecking: false
-  }
+  };
 
   componentDidMount = async () => {
-    await this.props.checkLoginStatus()
-    this.setState({finishChecking:true})
+    await this.props.checkLoginStatus();
+    this.setState({ finishChecking: true });
     this.props.getOutlet();
     this.props.getDashboard();
-    store.setState({ outlet: "", start_time: "", end_time: "" });
+    await store.setState({ outlet: "", start_time: "", end_time: "" });
   };
 
   handleInputFilter = e => {
@@ -81,14 +81,11 @@ class Dashboard extends React.Component {
       );
     });
 
-    if(!this.state.finishChecking){
-      return <Loader
-        height='100vh'
-        scale='3'/>
+    if (!this.state.finishChecking) {
+      return <Loader height="100vh" scale="3" />;
     }
-    if(!this.props.isLogin){
-      return <Redirect to="/login"/>
-
+    if (!this.props.isLogin) {
+      return <Redirect to="/login" />;
     }
     return (
       <React.Fragment>
@@ -100,8 +97,8 @@ class Dashboard extends React.Component {
                 <h1>Outlet</h1>
                 <select
                   className="custom-select col-12 "
-                  id="outlet"
-                  name="outlet"
+                  id="outletDashboard"
+                  name="outletDashboard"
                   onChange={e => this.handleInputFilter(e)}
                 >
                   <option value="">Semua Outlet</option>
@@ -243,18 +240,36 @@ class Dashboard extends React.Component {
                   <div className="row h-75">
                     <div className="col-6 d-flex justify-content-center align-items-center flex-column">
                       <div className="d-flex justify-content-center align-items-center">
-                        <i className="material-icons mr-2" style={{fontSize:"72px"}}>person_add</i>
-                        <h1 style={{fontSize: "52px", color:"black"}}>{this.props.customerNew}</h1>
+                        <i
+                          className="material-icons mr-2"
+                          style={{ fontSize: "72px" }}
+                        >
+                          person_add
+                        </i>
+                        <h1 style={{ fontSize: "52px", color: "black" }}>
+                          {this.props.customerNew}
+                        </h1>
                       </div>
-                      <h1 style={{fontSize: "20px", color:"black"}}>Pelanggan Baru</h1>
+                      <h1 style={{ fontSize: "20px", color: "black" }}>
+                        Pelanggan Baru
+                      </h1>
                       {/* <h2>{this.props.customerNew}</h2> */}
                     </div>
                     <div className="col-6 d-flex justify-content-center align-items-center flex-column">
                       <div className="d-flex justify-content-center align-items-center">
-                        <i className="material-icons mr-2" style={{fontSize:"72px"}}>people_alt</i>
-                        <h1 style={{fontSize: "52px", color:"black"}}>{this.props.customerTotal}</h1>
+                        <i
+                          className="material-icons mr-2"
+                          style={{ fontSize: "72px" }}
+                        >
+                          people_alt
+                        </i>
+                        <h1 style={{ fontSize: "52px", color: "black" }}>
+                          {this.props.customerTotal}
+                        </h1>
                       </div>
-                      <h1 style={{fontSize: "20px", color:"black"}}>Total Pelanggan</h1>
+                      <h1 style={{ fontSize: "20px", color: "black" }}>
+                        Total Pelanggan
+                      </h1>
                       {/* <h2>{this.props.customerTotal}</h2> */}
                     </div>
                   </div>
@@ -291,6 +306,6 @@ class Dashboard extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, outlet, start_time, end_time, salesAmount, numberTransaction, belowReminder, listChart,listTopProduct,listTopCategory,listReminder, isLoadingDashboard, customerNew, customerTotal, isLogin, isOwner",
+  "listOutlet, outletDashboard, start_time, end_time, salesAmount, numberTransaction, belowReminder, listChart,listTopProduct,listTopCategory,listReminder, isLoadingDashboard, customerNew, customerTotal, isLogin, isOwner",
   actions
 )(withRouter(Dashboard));
