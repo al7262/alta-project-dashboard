@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/addproduct.css";
@@ -7,9 +7,16 @@ import "../styles/addproduct.css";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import ModalAddInventory from "../components/ModalAddRecipe";
+import Loader from '../components/Loader'
 
 class AddProduct extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getCategory();
   };
   handleInputImages = e => {
@@ -44,6 +51,15 @@ class AddProduct extends React.Component {
         </tr>
       );
     });
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Produk" />
@@ -182,6 +198,6 @@ class AddProduct extends React.Component {
   }
 }
 export default connect(
-  "listRecipe, listCategory, nameProductInput, categoryInput showProductInput, price, imageProduct, fileName",
+  "isLogin, isOwner, listRecipe, listCategory, nameProductInput, categoryInput showProductInput, price, imageProduct, fileName",
   actions
 )(withRouter(AddProduct));

@@ -1542,7 +1542,6 @@ export const actions = store => ({
               await store.setState({ isOwner: true });
             }
             await store.setState({ isLogin: true });
-            console.log(store.getState().claims);
           } else {
             await store.setState({ isLogin: false });
           }

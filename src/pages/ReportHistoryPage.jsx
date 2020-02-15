@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { DateRangePicker } from "react-date-range";
@@ -19,7 +19,13 @@ function formatDateDisplay(date, defaultText) {
   return format(date, "DD/MM/YYYY");
 }
 class ReportHistoryPage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
     this.props.getCategory();
     this.props.getReportHistory();
@@ -129,6 +135,14 @@ class ReportHistoryPage extends React.Component {
       ]);
     }
 
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Laporan" />
@@ -319,6 +333,6 @@ class ReportHistoryPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listReportHistory, totalSalesHistory, totalSoldHistory, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time, totalTaxHistory",
+  "isLogin, isOwner, listOutlet, listCategory, listReportHistory, totalSalesHistory, totalSoldHistory, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time, totalTaxHistory",
   actions
 )(withRouter(ReportHistoryPage));

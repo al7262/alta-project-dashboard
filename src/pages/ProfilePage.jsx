@@ -1,13 +1,20 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/addoutlet.css";
 import Header from "../components/Header";
 import ModalEditPassword from "../components/ModalEditPassword";
+import Loader from '../components/Loader'
 
 class Profile extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getProfile();
   };
   handleInputFilter = e => {
@@ -21,6 +28,14 @@ class Profile extends React.Component {
     this.props.history.push("/");
   };
   render() {
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Profile" />
@@ -128,6 +143,6 @@ class Profile extends React.Component {
   }
 }
 export default connect(
-  "edited, fullName, email, personalPhone, nameBusiness",
+  "isLogin, isOwner, edited, fullName, email, personalPhone, nameBusiness",
   actions
 )(withRouter(Profile));
