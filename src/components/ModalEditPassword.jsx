@@ -4,7 +4,7 @@ import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/modal.css";
 
-class ModalAddInventory extends React.Component {
+class ModalEditPassword extends React.Component {
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
@@ -13,7 +13,7 @@ class ModalAddInventory extends React.Component {
       <React.Fragment>
         <div
           class="modal fade"
-          id="addInventory"
+          id="editPassword"
           data-backdrop="static"
           tabindex="-1"
           role="dialog"
@@ -24,7 +24,7 @@ class ModalAddInventory extends React.Component {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">
-                  TAMBAH BAHAN
+                  UBAH PASSWORD
                 </h5>
                 <button
                   type="button"
@@ -38,80 +38,47 @@ class ModalAddInventory extends React.Component {
               <div class="modal-body">
                 <form action="" onSubmit={e => e.preventDefault()}>
                   <div className="form-group row text-left">
-                    <label className="col-sm-4" for="nameInventoryInput">
-                      Bahan
+                    <label className="col-sm-4" for="password">
+                      Password Lama
                     </label>
                     <div className="col-sm-8">
                       <input
-                        type="text"
+                        type="password"
                         className="form-control"
-                        id="nameInventoryInput"
-                        name="nameInventoryInput"
+                        id="password"
+                        name="password"
                         onChange={e => this.handleInput(e)}
                         required
                       />
                     </div>
                   </div>
+
                   <div className="form-group row text-left">
-                    <label className="col-sm-4" for="stock">
-                      Stok
+                    <label className="col-sm-4" for="newPassword">
+                      Password Baru
                     </label>
                     <div className="col-sm-8">
                       <input
-                        type="text"
+                        type="password"
                         className="form-control"
-                        id="stock"
-                        name="stock"
+                        id="newPassword"
+                        name="newPassword"
                         onChange={e => this.handleInput(e)}
                         required
                       />
                     </div>
                   </div>
+
                   <div className="form-group row text-left">
-                    <label className="col-sm-4 col-form-label" for="unit">
-                      Unit
+                    <label className="col-sm-4" for="confirmNewPassword">
+                      Konfirmasi Password Baru
                     </label>
                     <div className="col-sm-8">
                       <input
-                        list="unit"
-                        name="unit"
-                        className="custom-select custom-select-md"
-                        onChange={e => this.handleInput(e)}
-                        required
-                      />
-                      <datalist id="unit">
-                        <option value="gram" />
-                        <option value="ml" />
-                        <option value="pcs" />
-                        <option value="potong" />
-                      </datalist>
-                    </div>
-                  </div>
-                  <div className="form-group row text-left">
-                    <label className="col-sm-4" for="unit_price">
-                      Harga
-                    </label>
-                    <div className="col-sm-8">
-                      <input
-                        type="text"
+                        type="password"
                         className="form-control"
-                        id="unit_price"
-                        name="unit_price"
-                        onChange={e => this.handleInput(e)}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group row text-left">
-                    <label className="col-sm-4" for="reminder">
-                      Pengingat Stok
-                    </label>
-                    <div className="col-sm-8">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="reminder"
-                        name="reminder"
+                        id="confirmNewPassword"
+                        name="confirmNewPassword"
                         onChange={e => this.handleInput(e)}
                         required
                       />
@@ -122,9 +89,9 @@ class ModalAddInventory extends React.Component {
                       type="submit"
                       data-dismiss="modal"
                       className="btn btn-simpan"
-                      onClick={this.props.addInventory}
+                      onClick={this.props.editPassword}
                     >
-                      Tambah{" "}
+                      Simpan{" "}
                     </button>
                   </div>
                 </form>
@@ -137,6 +104,6 @@ class ModalAddInventory extends React.Component {
   }
 }
 export default connect(
-  "nameInventoryInput, stock, unit, unit_price, reminder",
+  "password, newPassword, confirmNewPassword",
   actions
-)(withRouter(ModalAddInventory));
+)(withRouter(ModalEditPassword));
