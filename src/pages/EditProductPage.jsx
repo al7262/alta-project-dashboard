@@ -145,7 +145,7 @@ class EditProduct extends React.Component {
             <div className="col-md-6">
               <div className="col-12 box-content-add ">
                 <div className="box-inside-add">
-                  <h1 className="mb-1 mt-3">>RESEP</h1>
+                  <h1 className="mb-1 mt-3">RESEP</h1>
                   <div className="col-12 box-table">
                     <table class="table table-sm">
                       <thead>
