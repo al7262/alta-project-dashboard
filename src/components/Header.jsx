@@ -109,20 +109,11 @@ const Header = props => {
                 Karyawan
               </Link>
             </li>
-            <li
-              className={
-                "nav-item " + (props.pageLocation === "Promo" ? "active" : "")
-              }
-            >
-              <Link className="nav-link" to="/">
-                Promo
-              </Link>
-            </li>
           </ul>
           <ul class="navbar-nav ml-lg-5">
             <li className="nav-item row">
               <h5 className="col-6">Hi, User</h5>
-              <Link className="nav-link icon-profile col-6" to="/">
+              <Link className="nav-link icon-profile col-6" to="/profile">
                 <img src={iconProfile} alt="logo-profile" />
               </Link>
             </li>

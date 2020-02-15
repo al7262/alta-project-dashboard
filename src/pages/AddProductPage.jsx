@@ -12,6 +12,9 @@ class AddProduct extends React.Component {
   componentDidMount = () => {
     this.props.getCategory();
   };
+  handleInputImages = e => {
+    store.setState({ nameFile: e.target.files[0] });
+  };
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
@@ -28,6 +31,16 @@ class AddProduct extends React.Component {
           <td>{item.name}</td>
           <td>{item.unit}</td>
           <td>{item.quantity}</td>
+          <td>
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              onClick={() => this.props.deleteRecipe(key)}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </td>
         </tr>
       );
     });
@@ -77,15 +90,13 @@ class AddProduct extends React.Component {
                       required
                     />
                   </div>
-                  <div className="form-group">
-                    <label for="imageProduct">Foto</label>
+                  <div class="form-group">
+                    <label for="exampleFormControlFile1">Foto</label>
                     <input
-                      type="text"
-                      className="form-control"
-                      id="imageProduct"
-                      name="imageProduct"
-                      onChange={e => this.handleInput(e)}
-                      required
+                      type="file"
+                      class="form-control-file"
+                      name="fileName"
+                      onChange={this.handleInputImages}
                     />
                   </div>
                   <div className="form-group">
@@ -135,6 +146,7 @@ class AddProduct extends React.Component {
                           <th scope="col">Bahan</th>
                           <th scope="col">Kuantitas</th>
                           <th scope="col">Unit</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>{listAllRecipe}</tbody>
@@ -170,6 +182,6 @@ class AddProduct extends React.Component {
   }
 }
 export default connect(
-  "listRecipe, listCategory, nameProductInput, categoryInput showProductInput, price, imageProduct",
+  "listRecipe, listCategory, nameProductInput, categoryInput showProductInput, price, imageProduct, fileName",
   actions
 )(withRouter(AddProduct));

@@ -12,6 +12,9 @@ class EditProduct extends React.Component {
   componentDidMount = () => {
     this.props.getCategory();
   };
+  handleInputImages = e => {
+    store.setState({ nameFile: e.target.files[0] });
+  };
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
@@ -30,6 +33,16 @@ class EditProduct extends React.Component {
           <td>{item.name}</td>
           <td>{item.quantity}</td>
           <td>{item.unit}</td>
+          <td>
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              onClick={() => this.props.deleteRecipe(key)}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </td>
         </tr>
       );
     });
@@ -82,16 +95,13 @@ class EditProduct extends React.Component {
                       required
                     />
                   </div>
-                  <div className="form-group">
-                    <label for="imageProduct">Foto</label>
+                  <div class="form-group">
+                    <label for="exampleFormControlFile1">Foto</label>
                     <input
-                      type="text"
-                      className="form-control"
-                      id="imageProduct"
-                      name="imageProduct"
-                      onChange={e => this.handleInput(e)}
-                      value={this.props.imageProduct}
-                      required
+                      type="file"
+                      class="form-control-file"
+                      name="fileName"
+                      onChange={this.handleInputImages}
                     />
                   </div>
                   <div className="form-group">
@@ -144,6 +154,7 @@ class EditProduct extends React.Component {
                           <th scope="col">Bahan</th>
                           <th scope="col">Kuantitas</th>
                           <th scope="col">Unit</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>{listAllRecipe}</tbody>

@@ -4,22 +4,17 @@ import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import logo from "../images/logo-dark.svg";
 import "../styles/postregister.css";
-import ImagePicker from "react-file-picker";
+
 class PostRegister extends React.Component {
   componentDidMount = () => {
     this.props.getProvince();
   };
 
-  // sendImage = async event => {
-  //   // await store.setState({ fileName: event });
-  //   console.log("cek image", event);
-  // };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
-  handleInputImages = async e => {
-    await store.setState({ nameFile: e.target.files[0] });
-    console.log("cek inpit", this.props.nameFile);
+  handleInputImages = e => {
+    store.setState({ nameFile: e.target.files[0] });
   };
   handleProvince = e => {
     store.setState({ [e.target.name]: e.target.value });
@@ -101,25 +96,6 @@ class PostRegister extends React.Component {
                     onChange={this.handleInputImages}
                   />
                 </div>
-                {/* <div>
-                  <React.Fragment>
-                    <ImagePicker
-                      extensions={["jpg", "jpeg", "png"]}
-                      dims={{
-                        minWidth: 10,
-                        maxWidth: 5000,
-                        minHeight: 10,
-                        maxHeight: 5000
-                      }}
-                      onChange={base64EncodedString =>
-                        this.sendImage(base64EncodedString)
-                      }
-                      onError={errMsg => console.log(errMsg)}
-                    >
-                      <button>Click to upload image</button>
-                    </ImagePicker>
-                  </React.Fragment>
-                </div> */}
               </div>
 
               <div className="logo mt-5">
