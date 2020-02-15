@@ -9,7 +9,6 @@ import { format } from "date-fns";
 import "../styles/product.css";
 import { formatMoney } from "accounting";
 import { CSVLink, CSVDownload } from "react-csv";
-import {downloadIcon} from "../images/download-icon.png"
 
 import Header from "../components/Header";
 import Loader from "../components/Loader";
