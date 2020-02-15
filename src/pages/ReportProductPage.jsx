@@ -13,6 +13,7 @@ import { CSVLink, CSVDownload } from "react-csv";
 import Header from "../components/Header";
 import Loader from "../components/Loader";
 import Button from "../components/Button";
+import ActiveButton from "../components/ActiveButton";
 
 function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
@@ -232,14 +233,14 @@ class ReportProductPage extends React.Component {
               <CSVLink
                 data={csvData}
                 filename={"Laporan_Produk.csv"}
-                className="btn btn-success btn-block mb-5"
+                className="btn btn-download btn-block mb-5"
               >
                 Download
               </CSVLink>
-              <Button buttoncontent={"Produk"} direction={"/report/product"} />
+              <ActiveButton buttoncontent={"Produk"} direction={"/report/product"} />
               <Button buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button
-                buttoncontent={"Data Transaksi"}
+                buttoncontent={"Transaksi"}
                 direction={"/report/transaction"}
               />
               <Button buttoncontent={"Outlet"} direction={"/report/outlet"} />
@@ -248,7 +249,7 @@ class ReportProductPage extends React.Component {
                 direction={"/report/category"}
               />
               <Button
-                buttoncontent={"Log Inventaris"}
+                buttoncontent={"Log Bahan"}
                 direction={"/report/inventory-log"}
               />
             </div>

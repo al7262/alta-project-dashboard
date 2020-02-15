@@ -7,10 +7,12 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import "../styles/product.css";
+import { CSVLink } from "react-csv";
 
 import Header from "../components/Header";
 import Loader from "../components/Loader";
 import Button from "../components/Button";
+import ActiveButton from "../components/ActiveButton";
 
 function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
@@ -87,6 +89,13 @@ class ReportInventoryPage extends React.Component {
         </tr>
       );
     });
+
+    let startDate = this.state.dateRangePicker.selection.startDate
+    let endDate = this.state.dateRangePicker.selection.endDate
+    let csvData = [[], ['', 'Laporan Inventaris'], ['', 'Tanggal: ' + startDate.getUTCDate() + '/' + (startDate.getUTCMonth() + 1) + '/' + (startDate.getUTCFullYear()) + ' - ' + endDate.getUTCDate() + '/' + (endDate.getUTCMonth() + 1) + '/' + (endDate.getUTCFullYear())], [], ['', 'No', 'Waktu', 'Outlet', 'Bahan', 'Tipe', 'Unit', 'Jumlah', 'Stok Akhir']]
+    for (let index = 1; index <= listReportInventory.length; index++){
+      csvData.push(['', index, listReportInventory[index - 1].datetime, listReportInventory[index - 1].outlet, listReportInventory[index - 1].name, listReportInventory[index - 1].type, listReportInventory[index - 1].unit, listReportInventory[index - 1].amount, listReportInventory[index - 1].last_stock])
+    }
 
     if(!this.state.finishChecking){
       return <Loader
@@ -189,10 +198,11 @@ class ReportInventoryPage extends React.Component {
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
+            <CSVLink data={csvData} filename={"Laporan_Inventaris.csv"} className="btn btn-download btn-block">Download</CSVLink>
               <Button buttoncontent={"Produk"} direction={"/report/product"} />
               <Button buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button
-                buttoncontent={"Data Transaksi"}
+                buttoncontent={"Transaksi"}
                 direction={"/report/transaction"}
               />
               <Button buttoncontent={"Outlet"} direction={"/report/outlet"} />
@@ -200,8 +210,8 @@ class ReportInventoryPage extends React.Component {
                 buttoncontent={"Kategori"}
                 direction={"/report/category"}
               />
-              <Button
-                buttoncontent={"Log Inventaris"}
+              <ActiveButton
+                buttoncontent={"Log Bahan"}
                 direction={"/report/inventory-log"}
               />
             </div>
