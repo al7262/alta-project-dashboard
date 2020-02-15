@@ -24,6 +24,11 @@ class EditProduct extends React.Component {
   handleInput = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
+  handleForm = async e => {
+    e.preventDefault();
+    await this.props.editProduct();
+    this.props.history.push("/product");
+  };
   render() {
     const { listCategory } = this.props;
     const listRecipe = JSON.parse(localStorage.getItem("recipe"));
@@ -67,7 +72,7 @@ class EditProduct extends React.Component {
         <div className="container">
           <form
             action=""
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => this.handleForm(e)}
             className="form-row box-addproduct mx-auto"
           >
             <div className="col-md-6">
@@ -129,6 +134,7 @@ class EditProduct extends React.Component {
                         id="showProductInput1"
                         value="Ya"
                         onChange={e => this.handleInput(e)}
+                        required
                       />
                       <label
                         className="form-check-label"
@@ -145,6 +151,7 @@ class EditProduct extends React.Component {
                         id="showProductInput2"
                         onChange={e => this.handleInput(e)}
                         value="Tidak"
+                        required
                       />
                       <label
                         className="form-check-label"
@@ -191,13 +198,9 @@ class EditProduct extends React.Component {
                     >
                       Batal
                     </Link>
-                    <Link
-                      to="/product"
-                      className="btn btn-simpan"
-                      onClick={this.props.editProduct}
-                    >
+                    <button className="btn btn-simpan" type="submit">
                       Simpan
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

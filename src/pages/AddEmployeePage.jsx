@@ -20,6 +20,11 @@ class AddEmployee extends React.Component {
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
+  handleForm = async e => {
+    e.preventDefault();
+    await this.props.addEmployee();
+    this.props.history.push("/employee");
+  };
   render() {
     const { listOutlet } = this.props;
     const listAllOutlet = listOutlet.map(item => {
@@ -39,11 +44,11 @@ class AddEmployee extends React.Component {
     }
     return (
       <React.Fragment>
-        <Header pageLocation="Outlet" />
+        <Header pageLocation="Karyawan" />
         <div className="container ">
           <form
             action=""
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => this.handleForm(e)}
             className="form-row box-form mx-auto mt-5 mb-5"
           >
             <div className="col-12 ">
@@ -95,6 +100,7 @@ class AddEmployee extends React.Component {
                     id="positionInput"
                     name="positionInput"
                     onChange={e => this.handleInputFilter(e)}
+                    required
                   >
                     <option value="" disabled selected>
                       Pilih Tipe
@@ -111,6 +117,7 @@ class AddEmployee extends React.Component {
                     id="idOutlet"
                     name="idOutlet"
                     onChange={e => this.handleInputFilter(e)}
+                    required
                   >
                     <option value="" disabled selected>
                       Pilih Outlet
@@ -125,14 +132,9 @@ class AddEmployee extends React.Component {
               <Link to="/employee" className="btn btn-register mr-2">
                 Batal
               </Link>
-              <Link
-                to="/employee"
-                className="btn btn-register"
-                type="submit"
-                onClick={this.props.addEmployee}
-              >
+              <button className="btn btn-register" type="submit">
                 Simpan
-              </Link>
+              </button>
             </div>
           </form>
         </div>

@@ -33,8 +33,8 @@ class PostRegister extends React.Component {
   };
   handleForm = async e => {
     e.preventDefault();
-    this.props.postRegister();
-    this.props.addOutlet();
+    await this.props.postRegister();
+    await this.props.addOutlet();
     this.props.history.push("/");
   };
 
