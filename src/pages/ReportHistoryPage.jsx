@@ -8,6 +8,7 @@ import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import "../styles/product.css";
 import { formatMoney } from "accounting";
+import { CSVLink } from "react-csv";
 
 import Header from "../components/Header";
 import Loader from "../components/Loader";
@@ -77,6 +78,14 @@ class ReportHistoryPage extends React.Component {
         </tr>
       );
     });
+
+    let startDate = this.state.dateRangePicker.selection.startDate
+    let endDate = this.state.dateRangePicker.selection.endDate
+    let csvData = [[], ['', 'Laporan Riwayat Transaksi'], ['', 'Tanggal: ' + startDate.getUTCDate() + '/' + (startDate.getUTCMonth() + 1) + '/' + (startDate.getUTCFullYear()) + ' - ' + endDate.getUTCDate() + '/' + (endDate.getUTCMonth() + 1) + '/' + (endDate.getUTCFullYear())], [], ['', 'No', 'Waktu', 'Outlet', 'Kasir', 'Produk', 'Total Item', 'Total Harga']]
+    for (let index = 1; index <= listReportHistory.length; index++){
+      csvData.push(['', index, listReportHistory[index - 1].date_time, listReportHistory[index - 1].outlet, listReportHistory[index - 1].cashier_name, listReportHistory[index -1].product_name, listReportHistory[index -1].total_items, listReportHistory[index -1].total_sales])
+    }
+
     return (
       <React.Fragment>
         <Header pageLocation="Laporan" />
@@ -158,6 +167,7 @@ class ReportHistoryPage extends React.Component {
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
+            <CSVLink data={csvData} filename={"Laporan_Riwayat_Transaksi.csv"} className="btn btn-success btn-block mb-5">Download</CSVLink>
               <Button buttoncontent={"Produk"} direction={"/report/product"} />
               <Button buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button

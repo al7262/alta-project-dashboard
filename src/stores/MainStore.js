@@ -1567,4 +1567,4 @@ const getCustomer = (baseUrl, nameCustomer) => {
       });
     })
     .catch(error => {});
-};
+  };
