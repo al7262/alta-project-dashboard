@@ -268,7 +268,14 @@ export const actions = store => ({
     };
     axios(req)
       .then(response => {
+
         getOutlet(state.baseUrl);
+        Swal.fire({
+          title: "Berhasil Menambahkan Outlet!",
+          icon: "success",
+          timer: 2000,
+        });
+
       })
       .catch(error => {});
   },
@@ -294,24 +301,47 @@ export const actions = store => ({
     axios(req)
       .then(response => {
         getOutlet(state.baseUrl, state.nameOutlet);
+        Swal.fire({
+          title: "Data Berhasil Diperbarui!",
+          icon: "success",
+          timer: 2000,
+        });
       })
       .catch(error => {});
   },
   deleteOutletById: (state, id) => {
-    const req = {
-      method: "delete",
-      url: `${state.baseUrl}/outlet/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
+    Swal.fire({
+      title: 'Yakin ?',
+      text: "Kamu tidak dapat mengembalikan data ini!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.value) {
+        const req = {
+          method: "delete",
+          url: `${state.baseUrl}/outlet/${id}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        };
+    
+        axios(req)
+          .then(response => {
+            getOutlet(state.baseUrl, state.nameOutlet);
+            Swal.fire(
+              'Terhapus!',
+              'File Anda telah dihapus.',
+              'success'
+            )
+          })
+          .catch(error => {});
       }
-    };
-
-    axios(req)
-      .then(response => {
-        getOutlet(state.baseUrl, state.nameOutlet);
-      })
-      .catch(error => {});
+    })
   },
   getOutletById: (state, id) => {
     const req = {
@@ -435,6 +465,11 @@ export const actions = store => ({
                 state.showProduct
               );
               getCategory(state.baseUrl);
+              Swal.fire({
+                title: "Berhasil Menambahkan Produk!",
+                icon: "success",
+                timer: 2000,
+              });
             })
             .catch(error => {
               store.setState({
@@ -573,6 +608,11 @@ export const actions = store => ({
                   state.showProduct
                 );
                 getCategory(state.baseUrl);
+                Swal.fire({
+                  title: "Data Berhasil Diperbarui!",
+                  icon: "success",
+                  timer: 2000,
+                });
               })
               .catch(error => {
                 store.setState({
@@ -608,45 +648,81 @@ export const actions = store => ({
   },
 
   deleteProduct: state => {
-    const req = {
-      method: "delete",
-      url: `${state.baseUrl}/product/delete/${state.idProduct}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    };
-    axios(req)
-      .then(response => {
-        getProduct(
-          state.baseUrl,
-          state.category,
-          state.nameProduct,
-          state.showProduct
-        );
-        getCategory(state.baseUrl);
+    Swal.fire({
+      title: 'Yakin ?',
+      text: "Kamu tidak dapat mengembalikan data ini!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.value) {
+        const req = {
+          method: "delete",
+          url: `${state.baseUrl}/product/delete/${state.idProduct}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        };
+        axios(req)
+          .then(response => {
+            getProduct(
+              state.baseUrl,
+              state.category,
+              state.nameProduct,
+              state.showProduct
+            );
+            getCategory(state.baseUrl);
+            Swal.fire(
+              'Terhapus!',
+              'File Anda telah dihapus.',
+              'success'
+            )
+          })
+          .catch(error => {});
+        }
       })
-      .catch(error => {});
   },
   deleteProductById: (state, id) => {
-    const req = {
-      method: "delete",
-      url: `${state.baseUrl}/product/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    };
-    axios(req)
-      .then(response => {
-        getProduct(
-          state.baseUrl,
-          state.category,
-          state.nameProduct,
-          state.showProduct
-        );
+    Swal.fire({
+      title: 'Yakin ?',
+      text: "Kamu tidak dapat mengembalikan data ini!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.value) {
+        const req = {
+          method: "delete",
+          url: `${state.baseUrl}/product/${id}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        };
+        axios(req)
+          .then(response => {
+            getProduct(
+              state.baseUrl,
+              state.category,
+              state.nameProduct,
+              state.showProduct
+            );
+            Swal.fire(
+              'Terhapus!',
+              'File Anda telah dihapus.',
+              'success'
+            )
+          })
+          .catch(error => {});
+        }
       })
-      .catch(error => {});
   },
   getProductById: async (state, id) => {
     await localStorage.setItem("idProduct", id);
@@ -758,6 +834,11 @@ export const actions = store => ({
           state.nameInventory,
           state.statusInventory
         );
+        Swal.fire({
+          title: "Berhasil Menambahkan Bahan Baku!",
+          icon: "success",
+          timer: 2000,
+        });
       })
       .catch(error => {});
   },
@@ -785,6 +866,11 @@ export const actions = store => ({
           state.nameInventory,
           state.statusInventory
         );
+        Swal.fire({
+          title: "Data Berhasil Diperbarui!",
+          icon: "success",
+          timer: 2000,
+        });        
       })
       .catch(error => {});
   },
@@ -810,24 +896,42 @@ export const actions = store => ({
       .catch(error => {});
   },
   deleteInventoryById: async (state, id) => {
-    const req = {
-      method: "delete",
-      url: `${state.baseUrl}/inventory/detail/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    };
-    await axios(req)
-      .then(response => {
-        getInventory(
-          state.baseUrl,
-          state.outlet,
-          state.nameInventory,
-          state.statusInventory
-        );
+    Swal.fire({
+      title: 'Yakin ?',
+      text: "Kamu tidak dapat mengembalikan data ini!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then( async (result) => {
+      if (result.value) {
+        const req = {
+          method: "delete",
+          url: `${state.baseUrl}/inventory/detail/${id}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        };
+        await axios(req)
+          .then(response => {
+            getInventory(
+              state.baseUrl,
+              state.outlet,
+              state.nameInventory,
+              state.statusInventory
+            );
+            Swal.fire(
+              'Terhapus!',
+              'File Anda telah dihapus.',
+              'success'
+            )
+          })
+          .catch(error => {});
+        }
       })
-      .catch(error => {});
   },
   addStock: async state => {
     const req = {
@@ -850,6 +954,11 @@ export const actions = store => ({
           state.nameInventory,
           state.statusInventory
         );
+        Swal.fire({
+          title: "Berhasil Menambahkan Produk!",
+          icon: "success",
+          timer: 2000,
+        });
       })
       .catch(error => {});
   },
@@ -893,21 +1002,38 @@ export const actions = store => ({
       .catch(error => {});
   },
   deleteCustomerById: (state, id) => {
-    store.setState({ isLoadingCustomer: true });
+    Swal.fire({
+      title: 'Yakin ?',
+      text: "Kamu tidak dapat mengembalikan data ini!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.value) {
+        store.setState({ isLoadingCustomer: true });
 
-    const req = {
-      method: "delete",
-      url: `${state.baseUrl}/customer/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    };
-    axios(req)
-      .then(response => {
-        getCustomer(state.baseUrl, state.nameCustomer);
+        const req = {
+          method: "delete",
+          url: `${state.baseUrl}/customer/${id}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        };
+        axios(req)
+          .then(response => {
+            Swal.fire(
+              'Terhapus!',
+              'File Anda telah dihapus.',
+              'success'
+            )
+          })
+          .catch(error => {});
+        }
       })
-      .catch(error => {});
   },
   getProvince: state => {
     const req = {
@@ -994,6 +1120,11 @@ export const actions = store => ({
           state.outlet,
           state.position
         );
+        Swal.fire({
+          text: "Berhasil Menambahkan Karyawan!",
+          icon: "success",
+          timer: 2000,
+        });
       })
       .catch(error => {});
   },
@@ -1020,24 +1151,42 @@ export const actions = store => ({
       .catch(error => {});
   },
   deleteEmployeeById: (state, id) => {
-    const req = {
-      method: "delete",
-      url: `${state.baseUrl}/employee/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    };
-    axios(req)
-      .then(response => {
-        getEmployee(
-          state.baseUrl,
-          state.nameEmployee,
-          state.outlet,
-          state.position
-        );
+    Swal.fire({
+      title: 'Yakin ?',
+      text: "Kamu tidak dapat mengembalikan data ini!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.value) {
+        const req = {
+          method: "delete",
+          url: `${state.baseUrl}/employee/${id}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        };
+        axios(req)
+          .then(response => {
+            getEmployee(
+              state.baseUrl,
+              state.nameEmployee,
+              state.outlet,
+              state.position
+            );
+            Swal.fire(
+              'Terhapus!',
+              'File Anda telah dihapus.',
+              'success'
+            )
+          })
+          .catch(error => {});
+        }
       })
-      .catch(error => {});
   },
   editEmployee: state => {
     const req = {
@@ -1063,6 +1212,11 @@ export const actions = store => ({
           state.outlet,
           state.position
         );
+        Swal.fire({
+          text: "Data Berhasil Diperbarui!",
+          icon: "success",
+          timer: 2000,
+        });
       })
       .catch(error => {});
   },
@@ -1377,7 +1531,7 @@ export const actions = store => ({
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       },
-      url: state.baseUrl + "login/apps"
+      url: state.baseUrl + "/login/dashboard"
     };
     await axios(input)
       .then(async response => {
@@ -1386,9 +1540,6 @@ export const actions = store => ({
             await store.setState({ claims: response.data.claims });
             if (response.data.claims.email) {
               await store.setState({ isOwner: true });
-            }
-            if (response.data.claims.id_outlet) {
-              await store.setState({ outlet: response.data.claims.id_outlet });
             }
             await store.setState({ isLogin: true });
             console.log(store.getState().claims);
