@@ -23,7 +23,12 @@ class ReportHistoryPage extends React.Component {
     this.props.getOutlet();
     this.props.getCategory();
     this.props.getReportHistory();
-    store.setState({ idOutlet: "", category: "", nameProduct: "" });
+    store.setState({
+      idOutlet: "",
+      nameProduct: "",
+      start_time: "",
+      end_time: ""
+    });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
@@ -79,11 +84,49 @@ class ReportHistoryPage extends React.Component {
       );
     });
 
-    let startDate = this.state.dateRangePicker.selection.startDate
-    let endDate = this.state.dateRangePicker.selection.endDate
-    let csvData = [[], ['', 'Laporan Riwayat Transaksi'], ['', 'Tanggal: ' + startDate.getUTCDate() + '/' + (startDate.getUTCMonth() + 1) + '/' + (startDate.getUTCFullYear()) + ' - ' + endDate.getUTCDate() + '/' + (endDate.getUTCMonth() + 1) + '/' + (endDate.getUTCFullYear())], [], ['', 'No', 'Waktu', 'Outlet', 'Kasir', 'Produk', 'Total Item', 'Total Harga']]
-    for (let index = 1; index <= listReportHistory.length; index++){
-      csvData.push(['', index, listReportHistory[index - 1].date_time, listReportHistory[index - 1].outlet, listReportHistory[index - 1].cashier_name, listReportHistory[index -1].product_name, listReportHistory[index -1].total_items, listReportHistory[index -1].total_sales])
+    let startDate = this.state.dateRangePicker.selection.startDate;
+    let endDate = this.state.dateRangePicker.selection.endDate;
+    let csvData = [
+      [],
+      ["", "Laporan Riwayat Transaksi"],
+      [
+        "",
+        "Tanggal: " +
+          startDate.getUTCDate() +
+          "/" +
+          (startDate.getUTCMonth() + 1) +
+          "/" +
+          startDate.getUTCFullYear() +
+          " - " +
+          endDate.getUTCDate() +
+          "/" +
+          (endDate.getUTCMonth() + 1) +
+          "/" +
+          endDate.getUTCFullYear()
+      ],
+      [],
+      [
+        "",
+        "No",
+        "Waktu",
+        "Outlet",
+        "Kasir",
+        "Produk",
+        "Total Item",
+        "Total Harga"
+      ]
+    ];
+    for (let index = 1; index <= listReportHistory.length; index++) {
+      csvData.push([
+        "",
+        index,
+        listReportHistory[index - 1].date_time,
+        listReportHistory[index - 1].outlet,
+        listReportHistory[index - 1].cashier_name,
+        listReportHistory[index - 1].product_name,
+        listReportHistory[index - 1].total_items,
+        listReportHistory[index - 1].total_sales
+      ]);
     }
 
     return (
@@ -167,7 +210,13 @@ class ReportHistoryPage extends React.Component {
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
-            <CSVLink data={csvData} filename={"Laporan_Riwayat_Transaksi.csv"} className="btn btn-success btn-block mb-5">Download</CSVLink>
+              <CSVLink
+                data={csvData}
+                filename={"Laporan_Riwayat_Transaksi.csv"}
+                className="btn btn-success btn-block mb-5"
+              >
+                Download
+              </CSVLink>
               <Button buttoncontent={"Produk"} direction={"/report/product"} />
               <Button buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button

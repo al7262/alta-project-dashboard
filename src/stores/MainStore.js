@@ -268,12 +268,14 @@ export const actions = store => ({
     };
     axios(req)
       .then(response => {
-        getOutlet(state.baseUrl, state.nameOutlet);
+
+        getOutlet(state.baseUrl);
         Swal.fire({
           title: "Berhasil Menambahkan Outlet!",
           icon: "success",
           timer: 2000,
         });
+
       })
       .catch(error => {});
   },
@@ -739,7 +741,11 @@ export const actions = store => ({
           categoryInput: response.data.category,
           price: response.data.price,
           showProductInput: response.data.show,
-          imageProduct: response.data.image
+          imageProduct: response.data.image,
+          category: "",
+          showProduct: "",
+          nameProduct: "",
+          nameOutlet: ""
         });
         localStorage.setItem("recipe", JSON.stringify(response.data.recipe));
         getCategory(state.baseUrl);
@@ -754,7 +760,10 @@ export const actions = store => ({
       unit: state.unit
     });
     localStorage.setItem("recipe", JSON.stringify(ingridient));
-    store.setState({ listRecipe: JSON.parse(localStorage.getItem("recipe")) });
+    store.setState({
+      listRecipe: JSON.parse(localStorage.getItem("recipe")),
+      nameInventory: ""
+    });
   },
   deleteRecipe: (state, id) => {
     const ingridient = JSON.parse(localStorage.getItem("recipe"));
@@ -960,7 +969,13 @@ export const actions = store => ({
       nameProductInput: "",
       showProductInput: "",
       price: 0,
-      imageProduct: ""
+      imageProduct: "",
+      category: "",
+      showProduct: "",
+      nameProduct: "",
+      outlet: "",
+      position: "",
+      nameEmployee: ""
     });
   },
   getCustomer: state => {
@@ -1037,7 +1052,7 @@ export const actions = store => ({
     [state.idProvince, state.province] = state.inputProvince.split(",");
     const req = {
       method: "get",
-      url: `http://dev.farizdotid.com/api/daerahindonesia/provinsi/${state.idProvince}/kabupaten`
+      url: `https://dev.farizdotid.com/api/daerahindonesia/provinsi/${state.idProvince}/kabupaten`
     };
     axios(req)
       .then(response => {
@@ -1051,7 +1066,7 @@ export const actions = store => ({
     [state.idCity, state.city] = state.inputCity.split(",");
     const req = {
       method: "get",
-      url: ` http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/${state.idCity}/kecamatan`
+      url: ` https://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/${state.idCity}/kecamatan`
     };
     axios(req)
       .then(response => {
@@ -1617,7 +1632,7 @@ const getCategory = baseUrl => {
     })
     .catch(error => {});
 };
-const getInventory = (baseUrl, outlet, statusInventory, nameInventory) => {
+const getInventory = (baseUrl, outlet, nameInventory, statusInventory) => {
   store.setState({ isLoadingInventory: true });
   if (outlet === "") {
     const req = {
@@ -1655,11 +1670,11 @@ const getInventory = (baseUrl, outlet, statusInventory, nameInventory) => {
       .catch(error => {});
   }
 };
-const getOutlet = (baseUrl, nameOutlet) => {
+const getOutlet = baseUrl => {
   store.setState({ isLoadingOutlet: true });
   const req = {
     method: "get",
-    url: `${baseUrl}/outlet?keyword=${nameOutlet}`,
+    url: `${baseUrl}/outlet?keyword=`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -1716,4 +1731,4 @@ const getCustomer = (baseUrl, nameCustomer) => {
       });
     })
     .catch(error => {});
-  };
+};

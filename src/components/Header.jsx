@@ -4,7 +4,6 @@ import "../styles/header.css";
 import { connect } from "unistore/react";
 import { actions } from "../stores/MainStore";
 import logo from "../images/logo-light.svg";
-import iconProfile from "../images/icon-profile.png";
 
 const Header = props => {
   return (
@@ -111,11 +110,38 @@ const Header = props => {
             </li>
           </ul>
           <ul class="navbar-nav ml-lg-5">
-            <li className="nav-item row">
-              <h5 className="col-6">Hi, User</h5>
-              <Link className="nav-link icon-profile col-6" to="/profile">
-                <img src={iconProfile} alt="logo-profile" />
+            <li
+              className={
+                "nav-item dropdown mr-5 " +
+                (props.pageLocation === "Profile" ? "active" : "")
+              }
+            >
+              <Link
+                className="nav-link"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i className="material-icons" style={{ fontSize: "35px" }}>
+                  person_outline
+                </i>
               </Link>
+              <div
+                class="dropdown-menu dropdown-menu-right"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <Link class="dropdown-item" to="/profile">
+                  Profil
+                </Link>
+                <Link
+                  class="dropdown-item"
+                  onClick={props.handleLogout}
+                  to="/login"
+                >
+                  Keluar
+                </Link>
+              </div>
             </li>
           </ul>
         </div>

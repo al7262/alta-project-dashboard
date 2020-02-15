@@ -22,7 +22,10 @@ class ReportCategoryPage extends React.Component {
     this.props.getOutlet();
     this.props.getCategory();
     this.props.getReportCategory();
-    store.setState({ idOutlet: "", category: "", nameProduct: "" });
+    store.setState({
+      start_time: "",
+      end_time: ""
+    });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
@@ -77,7 +80,9 @@ class ReportCategoryPage extends React.Component {
         <Header pageLocation="Laporan" />
         <div className="container">
           <form className="col-12 box-filter form-row mt-5 mb-3">
-            <div className="col-12 form-group">
+            <div className="col-6 form-group"></div>
+
+            <div className="col-6 form-group">
               <h1>Tanggal</h1>
               <div
                 id="dropdownMenuButton"
