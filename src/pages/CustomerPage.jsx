@@ -10,11 +10,11 @@ import Loader from "../components/Loader";
 class CustomerPage extends React.Component {
   state = {
     finishChecking: false
-  }
+  };
 
   componentDidMount = async () => {
-    await this.props.checkLoginStatus()
-    this.setState({finishChecking:true})
+    await this.props.checkLoginStatus();
+    this.setState({ finishChecking: true });
     this.props.getCustomer();
     store.setState({ nameCustomer: "" });
   };
@@ -29,8 +29,8 @@ class CustomerPage extends React.Component {
         <tr>
           <th scope="row">{key + 1}</th>
           <td>{item.fullname}</td>
-          <td>{item.phone_number}</td>
           <td>{item.email}</td>
+          <td>{item.phone_number}</td>
           <td>
             <button
               type="button"
@@ -45,13 +45,11 @@ class CustomerPage extends React.Component {
       );
     });
 
-    if(!this.state.finishChecking){
-      return <Loader
-        height='100vh'
-        scale='3'/>
+    if (!this.state.finishChecking) {
+      return <Loader height="100vh" scale="3" />;
     }
-    if(!this.props.isLogin){
-      return <Redirect to="/login"/>
+    if (!this.props.isLogin) {
+      return <Redirect to="/login" />;
     }
     return (
       <React.Fragment>
