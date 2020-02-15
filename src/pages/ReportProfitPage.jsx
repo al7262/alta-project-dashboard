@@ -8,11 +8,12 @@ import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import "../styles/product.css";
 import { formatMoney } from "accounting";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 import Header from "../components/Header";
 import Loader from "../components/Loader";
 import Button from "../components/Button";
+import ActiveButton from "../components/ActiveButton";
 
 function formatDateDisplay(date, defaultText) {
   if (!date) return defaultText;
@@ -139,11 +140,11 @@ class ReportProfitPage extends React.Component {
           </form>
           <div className="col-12 row ml-0 p-0">
             <div className="col-2 box-button">
-              <CSVLink data={csvData} filename={"Laporan_Produk.csv"} className="btn btn-success btn-block mb-5">Download</CSVLink>
+              <CSVLink data={csvData} filename={"Laporan_Produk.csv"} className="btn btn-download btn-block">Download</CSVLink>
               <Button buttoncontent={"Produk"} direction={"/report/product"} />
-              <Button buttoncontent={"Laba"} direction={"/report/profit"} />
+              <ActiveButton buttoncontent={"Laba"} direction={"/report/profit"} />
               <Button
-                buttoncontent={"Data Transaksi"}
+                buttoncontent={"Transaksi"}
                 direction={"/report/transaction"}
               />
               <Button buttoncontent={"Outlet"} direction={"/report/outlet"} />
@@ -152,7 +153,7 @@ class ReportProfitPage extends React.Component {
                 direction={"/report/category"}
               />
               <Button
-                buttoncontent={"Log Inventaris"}
+                buttoncontent={"Log Bahan"}
                 direction={"/report/inventory-log"}
               />
             </div>
