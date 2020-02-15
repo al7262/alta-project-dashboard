@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/product.css";
@@ -8,7 +8,13 @@ import Header from "../components/Header";
 import Loader from "../components/Loader";
 
 class CustomerPage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getCustomer();
     store.setState({ nameCustomer: "" });
   };
@@ -38,6 +44,15 @@ class CustomerPage extends React.Component {
         </tr>
       );
     });
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Pelanggan" />
@@ -93,6 +108,6 @@ class CustomerPage extends React.Component {
   }
 }
 export default connect(
-  "listCustomer, customerTotal, customerLoyal, customerNew, isLoadingCustomer",
+  "isLogin, isOwner, listCustomer, customerTotal, customerLoyal, customerNew, isLoadingCustomer",
   actions
 )(withRouter(CustomerPage));

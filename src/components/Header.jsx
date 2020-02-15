@@ -82,7 +82,8 @@ const Header = props => {
             </li>
             <li
               className={
-                "nav-item " + (props.pageLocation === "Outlet" ? "active" : "")
+                "nav-item " + (props.pageLocation === "Outlet" ? "active" : "") +
+                (props.isOwner?'':' d-none')
               }
             >
               <Link className="nav-link" to="/outlet">
@@ -102,7 +103,8 @@ const Header = props => {
             <li
               className={
                 "nav-item " +
-                (props.pageLocation === "Karyawan" ? "active" : "")
+                (props.pageLocation === "Karyawan" ? "active" : "") + 
+                (props.isOwner?'':' d-none')
               }
             >
               <Link className="nav-link" to="/employee">
@@ -124,4 +126,4 @@ const Header = props => {
   );
 };
 
-export default connect("", actions)(withRouter(Header));
+export default connect("isOwner", actions)(withRouter(Header));

@@ -1,12 +1,21 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/addoutlet.css";
 import Header from "../components/Header";
+import Loader from '../components/Loader';
+import Swal from 'sweetalert2';
+
 
 class EditEmployee extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
   };
   handleInputFilter = e => {
@@ -17,6 +26,19 @@ class EditEmployee extends React.Component {
     const listAllOutlet = listOutlet.map(item => {
       return <option value={item.id}>{item.name}</option>;
     });
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
+    if(!this.props.isOwner){
+      Swal.fire('Tidak Punya Akses!', 'Halaman ini hanya untuk pemilik', 'error')
+      return <Redirect to="/"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Outlet" />
@@ -125,6 +147,6 @@ class EditEmployee extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, nameEmployeeInput, username, password, confirmPassword, idOutlet, outletName, positionInput",
+  "isLogin, isOwner, listOutlet, nameEmployeeInput, username, password, confirmPassword, idOutlet, outletName, positionInput",
   actions
 )(withRouter(EditEmployee));

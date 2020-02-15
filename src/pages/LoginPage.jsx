@@ -1,16 +1,23 @@
 import React from "react";
 import swal from "sweetalert2";
 
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions } from "../stores/MainStore";
 import logo from "../images/logo-dark.svg";
 import "../styles/login.css";
+import Loader from '../components/Loader'
 
 class LoginPage extends React.Component {
   state = {
     username: undefined,
     password: undefined,
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
   }
 
   handleOnChange = async (event)=>{
@@ -71,6 +78,14 @@ class LoginPage extends React.Component {
   }
   
   render() {
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(this.props.isLogin){
+      return <Redirect to="/"/>
+    }
     return (
       <React.Fragment>
         <div className="container-login">
@@ -118,6 +133,6 @@ class LoginPage extends React.Component {
   }
 }
 export default connect(
-  "username, password, baseUrl, data",
+  "isLogin, username, password, baseUrl, data",
   actions
 )(withRouter(LoginPage));

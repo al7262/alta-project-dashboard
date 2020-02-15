@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { DateRangePicker } from "react-date-range";
@@ -17,7 +17,13 @@ function formatDateDisplay(date, defaultText) {
   return format(date, "DD/MM/YYYY");
 }
 class ReportInventoryPage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
     this.props.getReportInventory();
     store.setState({ idOutlet: "", category: "", nameInventory: "" });
@@ -75,6 +81,15 @@ class ReportInventoryPage extends React.Component {
         </tr>
       );
     });
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Laporan" />
@@ -214,6 +229,6 @@ class ReportInventoryPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet,  listReportInventory,  isLoadingReport, idOutlet,  nameInventory, start_time, end_time, type",
+  "isLogin, isOwner, listOutlet,  listReportInventory,  isLoadingReport, idOutlet,  nameInventory, start_time, end_time, type",
   actions
 )(withRouter(ReportInventoryPage));

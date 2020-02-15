@@ -290,6 +290,6 @@ class Dashboard extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, outlet, start_time, end_time, salesAmount, numberTransaction, belowReminder, listChart,listTopProduct,listTopCategory,listReminder, isLoadingDashboard, customerNew, customerTotal, isLogin",
+  "listOutlet, outlet, start_time, end_time, salesAmount, numberTransaction, belowReminder, listChart,listTopProduct,listTopCategory,listReminder, isLoadingDashboard, customerNew, customerTotal, isLogin, isOwner",
   actions
 )(withRouter(Dashboard));

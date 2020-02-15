@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import "../styles/product.css";
@@ -7,8 +7,15 @@ import icon from "../images/icon-edit.png";
 
 import Header from "../components/Header";
 import Loader from "../components/Loader";
+import Swal from 'sweetalert2';
 class EmployeePage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getEmployee();
     this.props.getOutlet();
     store.setState({
@@ -68,6 +75,19 @@ class EmployeePage extends React.Component {
         </tr>
       );
     });
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
+    if(!this.props.isOwner){
+      Swal.fire('Tidak Punya Akses!', 'Halaman ini hanya untuk pemilik', 'error')
+      return <Redirect to="/"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Karyawan" />
@@ -139,6 +159,6 @@ class EmployeePage extends React.Component {
   }
 }
 export default connect(
-  "listEmployee, listOutlet, isLoadingEmployee",
+  "isLogin, isOwner, listEmployee, listOutlet, isLoadingEmployee",
   actions
 )(withRouter(EmployeePage));

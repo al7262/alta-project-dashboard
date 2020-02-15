@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { DateRangePicker } from "react-date-range";
@@ -19,7 +19,13 @@ function formatDateDisplay(date, defaultText) {
   return format(date, "DD/MM/YYYY");
 }
 class ReportProductPage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getOutlet();
     this.props.getCategory();
     this.props.getReportProduct();
@@ -90,6 +96,14 @@ class ReportProductPage extends React.Component {
       csvData.push(['', index, listReportProduct[index - 1].name, listReportProduct[index - 1].category, listReportProduct[index - 1].total_sold, listReportProduct[index - 1].total_sales])
     }
 
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Laporan" />
@@ -268,6 +282,6 @@ class ReportProductPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listReportProduct, totalSalesProduct, totalSoldProduct, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time",
+  "isLogin, isOwner, listOutlet, listCategory, listReportProduct, totalSalesProduct, totalSoldProduct, isLoadingReport, idOutlet, category, nameProduct, start_time, end_time",
   actions
 )(withRouter(ReportProductPage));

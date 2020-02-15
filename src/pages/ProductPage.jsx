@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import { connect } from "unistore/react";
 import { actions, store } from "../stores/MainStore";
 import { formatMoney } from "accounting";
@@ -10,7 +10,13 @@ import Header from "../components/Header";
 import Loader from "../components/Loader";
 
 class ProductPage extends React.Component {
-  componentDidMount = () => {
+  state = {
+    finishChecking: false
+  }
+
+  componentDidMount = async () => {
+    await this.props.checkLoginStatus()
+    this.setState({finishChecking:true})
     this.props.getCategory();
     this.props.getProduct();
     store.setState({
@@ -71,6 +77,15 @@ class ProductPage extends React.Component {
         </tr>
       );
     });
+
+    if(!this.state.finishChecking){
+      return <Loader
+        height='100vh'
+        scale='3'/>
+    }
+    if(!this.props.isLogin){
+      return <Redirect to="/login"/>
+    }
     return (
       <React.Fragment>
         <Header pageLocation="Produk" />
@@ -143,6 +158,6 @@ class ProductPage extends React.Component {
   }
 }
 export default connect(
-  "listOutlet, listCategory, listProduct, category, showProduct, nameProduct, isLoadingProduct",
+  "isLogin, isOwner, listOutlet, listCategory, listProduct, category, showProduct, nameProduct, isLoadingProduct",
   actions
 )(withRouter(ProductPage));
