@@ -118,7 +118,8 @@ const initialState = {
   totalProfit: 0,
   type: "",
   sort: "desc",
-  edited: false
+  edited: false,
+  outletDashboard: ""
 };
 
 export const store = createStore(initialState);
@@ -589,7 +590,7 @@ export const actions = store => ({
                 price: state.price * 1,
                 show: state.showProductInput,
                 image: url,
-                recipe: JSON.parse(localStorage.getItem("recipe"))
+                recipe: state.listRecipe
               }
             };
             axios(req)
@@ -746,7 +747,7 @@ export const actions = store => ({
   },
   addRecipe: state => {
     const ingridient = JSON.parse(localStorage.getItem("recipe"));
-    if (state.quantity == '' || state.nameInventory == '' || state.unit == ''){
+    if (state.quantity == "" || state.nameInventory == "" || state.unit == "") {
       Swal.fire({
         title: "Mohon Maaf",
         text: "Tidak boleh ada kolom yang dikosongkan",
@@ -754,8 +755,7 @@ export const actions = store => ({
         timer: 2000,
         confirmButtonText: "Mengerti"
       });
-    }
-    else if (state.quantity <= 0){
+    } else if (state.quantity <= 0) {
       Swal.fire({
         title: "Mohon Maaf",
         text: "Unit harus bernilai positif",
@@ -763,19 +763,19 @@ export const actions = store => ({
         timer: 2000,
         confirmButtonText: "Mengerti"
       });
+    } else {
+      ingridient.push({
+        name: state.nameInventory,
+        quantity: state.quantity,
+        unit: state.unit
+      });
+      localStorage.setItem("recipe", JSON.stringify(ingridient));
+      store.setState({
+        listRecipe: JSON.parse(localStorage.getItem("recipe")),
+        nameInventory: ""
+      });
     }
-    else {
-    ingridient.push({
-      name: state.nameInventory,
-      quantity: state.quantity,
-      unit: state.unit
-    });
-    localStorage.setItem("recipe", JSON.stringify(ingridient));
-    store.setState({
-      listRecipe: JSON.parse(localStorage.getItem("recipe")),
-      nameInventory: ""
-    });
-  }},
+  },
   deleteRecipe: (state, id) => {
     const ingridient = JSON.parse(localStorage.getItem("recipe"));
     ingridient.splice(id, 1);
@@ -821,58 +821,13 @@ export const actions = store => ({
     }
   },
   addInventory: async state => {
-    if (state.nameInventoryInput == '' || state.stock == '' || state.unit == '' || state.unit_price == '' || state.reminder == ''){
-        Swal.fire({
-          title: "Mohon Maaf",
-          text: "Tidak boleh ada kolom yang dikosongkan",
-          icon: "error",
-          timer: 2000,
-          confirmButtonText: "Mengerti"
-        });
-    }
-    else if (state.stock <= 0 || state.reminder <= 0 || state.unit_price <=0){
-      Swal.fire({
-        title: "Mohon Maaf",
-        text: "Unit, harga dan stok harus bernilai positif",
-        icon: "error",
-        timer: 2000,
-        confirmButtonText: "Mengerti"
-      });
-    }
-    else {
-    const req = {
-      method: "post",
-      url: `${state.baseUrl}/inventory/${state.outlet}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-      data: {
-        name: state.nameInventoryInput,
-        stock: state.stock,
-        unit: state.unit,
-        unit_price: state.unit_price,
-        reminder: state.reminder
-      }
-    };
-    await axios(req)
-      .then(response => {
-        getInventory(
-          state.baseUrl,
-          state.outlet,
-          state.nameInventory,
-          state.statusInventory
-        );
-        Swal.fire({
-          title: "Berhasil Menambahkan Bahan Baku!",
-          icon: "success",
-          timer: 2000
-        });
-      })
-      .catch(error => {});
-  }},
-  editInventory: async state => {
-    if (state.nameInventoryInput == '' || state.stock == '' || state.unit == '' || state.unit_price == '' || state.reminder == ''){
+    if (
+      state.nameInventoryInput == "" ||
+      state.stock == "" ||
+      state.unit == "" ||
+      state.unit_price == "" ||
+      state.reminder == ""
+    ) {
       Swal.fire({
         title: "Mohon Maaf",
         text: "Tidak boleh ada kolom yang dikosongkan",
@@ -880,48 +835,106 @@ export const actions = store => ({
         timer: 2000,
         confirmButtonText: "Mengerti"
       });
-  }
-  else if (state.stock <= 0 || state.reminder <= 0 || state.unit_price <=0){
-    Swal.fire({
-      title: "Mohon Maaf",
-      text: "Unit, harga dan stok harus bernilai positif",
-      icon: "error",
-      timer: 2000,
-      confirmButtonText: "Mengerti"
-    });
-  }
-  else{
-    const req = {
-      method: "put",
-      url: `${state.baseUrl}/inventory/detail/${state.idInventory}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-      data: {
-        name: state.nameInventoryInput,
-        stock: state.stock,
-        unit: state.unit,
-        unit_price: state.unit_price,
-        reminder: state.reminder
-      }
-    };
-    await axios(req)
-      .then(response => {
-        getInventory(
-          state.baseUrl,
-          state.outlet,
-          state.nameInventory,
-          state.statusInventory
-        );
-        Swal.fire({
-          title: "Data Berhasil Diperbarui!",
-          icon: "success",
-          timer: 2000
-        });
-      })
-      .catch(error => {});
-  }},
+    } else if (
+      state.stock <= 0 ||
+      state.reminder <= 0 ||
+      state.unit_price <= 0
+    ) {
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Unit, harga dan stok harus bernilai positif",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    } else {
+      const req = {
+        method: "post",
+        url: `${state.baseUrl}/inventory/${state.outlet}`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        data: {
+          name: state.nameInventoryInput,
+          stock: state.stock,
+          unit: state.unit,
+          unit_price: state.unit_price,
+          reminder: state.reminder
+        }
+      };
+      await axios(req)
+        .then(response => {
+          getInventory(
+            state.baseUrl,
+            state.outlet,
+            state.nameInventory,
+            state.statusInventory
+          );
+          Swal.fire({
+            title: "Berhasil Menambahkan Bahan Baku!",
+            icon: "success",
+            timer: 2000
+          });
+        })
+        .catch(error => {});
+    }
+  },
+  editInventory: async state => {
+    if (
+      state.nameInventoryInput == "" ||
+      state.stock == "" ||
+      state.unit == "" ||
+      state.reminder == ""
+    ) {
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Tidak boleh ada kolom yang dikosongkan",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    } else if (state.stock <= 0 || state.reminder <= 0) {
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Unit, harga dan stok harus bernilai positif",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    } else {
+      const req = {
+        method: "put",
+        url: `${state.baseUrl}/inventory/detail/${state.idInventory}`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        data: {
+          name: state.nameInventoryInput,
+          stock: state.stock,
+          unit: state.unit,
+          unit_price: state.unit_price,
+          reminder: state.reminder
+        }
+      };
+      await axios(req)
+        .then(response => {
+          getInventory(
+            state.baseUrl,
+            state.outlet,
+            state.nameInventory,
+            state.statusInventory
+          );
+          Swal.fire({
+            title: "Data Berhasil Diperbarui!",
+            icon: "success",
+            timer: 2000
+          });
+        })
+        .catch(error => {});
+    }
+  },
   getInventoryById: async (state, id) => {
     const req = {
       method: "get",
@@ -978,16 +991,15 @@ export const actions = store => ({
     });
   },
   addStock: async state => {
-    if (state.stock == '' || state.unit_price == ''){
-        Swal.fire({
-          title: "Mohon Maaf",
-          text: "Tidak boleh ada kolom yang dikosongkan",
-          icon: "error",
-          timer: 2000,
-          confirmButtonText: "Mengerti"
-        });
-    }
-    else if (state.stock <= 0 || state.unit_price <= 0){
+    if (state.stock == "" || state.unit_price == "") {
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Tidak boleh ada kolom yang dikosongkan",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    } else if (state.stock <= 0 || state.unit_price <= 0) {
       Swal.fire({
         title: "Mohon Maaf",
         text: "Stok dan harga harus bernilai positif",
@@ -1035,7 +1047,6 @@ export const actions = store => ({
       category: "",
       showProduct: "",
       nameProduct: "",
-      outlet: "",
       position: "",
       nameEmployee: ""
     });
@@ -1088,8 +1099,12 @@ export const actions = store => ({
         axios(req)
           .then(response => {
             Swal.fire("Terhapus!", "File Anda telah dihapus.", "success");
+            store.setState({ isLoadingCustomer: false });
+            getCustomer(state.baseUrl, state.nameCustomer);
           })
-          .catch(error => {});
+          .catch(error => {
+            store.setState({ isLoadingCustomer: false });
+          });
       }
     });
   },
@@ -1278,7 +1293,7 @@ export const actions = store => ({
     store.setState({ isLoadingDashboard: true });
     const req = {
       method: "get",
-      url: `${state.baseUrl}/dashboard?name_outlet=${state.outlet}&start_time=${state.start_time}&end_time=${state.end_time}`,
+      url: `${state.baseUrl}/dashboard?name_outlet=${state.outletDashboard}&start_time=${state.start_time}&end_time=${state.end_time}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -1546,7 +1561,11 @@ export const actions = store => ({
     }
   },
   editPassword: state => {
-    if (state.old_password == '' || state.new_password == '' || state.confirm_new_password == ''){
+    if (
+      state.old_password == "" ||
+      state.new_password == "" ||
+      state.confirm_new_password == ""
+    ) {
       Swal.fire({
         title: "Mohon Maaf",
         text: "Tidak boleh ada kolom yang dikosongkan",
@@ -1554,34 +1573,33 @@ export const actions = store => ({
         timer: 2000,
         confirmButtonText: "Mengerti"
       });
-  }
-  else if (state.new_password !== state.confirm_new_password){
-    Swal.fire({
-      title: "Mohon Maaf",
-      text: "Tolong periksa kembali password Anda",
-      icon: "error",
-      timer: 2000,
-      confirmButtonText: "Mengerti"
-    });
-  }
-  else{
-    const req = {
-      method: "put",
-      url: `${state.baseUrl}/user/change-password`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-      data: {
-        old_password: state.password,
-        new_password: state.newPassword,
-        confirm_new_password: state.confirmNewPassword
-      }
-    };
-    axios(req)
-      .then(response => {})
-      .catch(error => {});
-  }},
+    } else if (state.new_password !== state.confirm_new_password) {
+      Swal.fire({
+        title: "Mohon Maaf",
+        text: "Tolong periksa kembali password Anda",
+        icon: "error",
+        timer: 2000,
+        confirmButtonText: "Mengerti"
+      });
+    } else {
+      const req = {
+        method: "put",
+        url: `${state.baseUrl}/user/change-password`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        data: {
+          old_password: state.password,
+          new_password: state.newPassword,
+          confirm_new_password: state.confirmNewPassword
+        }
+      };
+      axios(req)
+        .then(response => {})
+        .catch(error => {});
+    }
+  },
 
   /**
    * Handling API to post, put, get, and delete action through AXIOS.
@@ -1789,7 +1807,6 @@ const getEmployee = (baseUrl, nameEmployee, outlet, position) => {
 };
 const getCustomer = (baseUrl, nameCustomer) => {
   store.setState({ isLoadingCustomer: true });
-
   const req = {
     method: "get",
     url: `${baseUrl}/customer?&keyword=${nameCustomer}`,
