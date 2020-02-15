@@ -20,6 +20,11 @@ class AddOutlet extends React.Component {
     store.setState({ [e.target.name]: e.target.value });
     this.props.getDistrict();
   };
+  handleForm = async e => {
+    e.preventDefault();
+    await this.props.addOutlet();
+    this.props.history.push("/outlet");
+  };
   render() {
     const { listProvince, listCity, listDistrict } = this.props;
     const listAllProvince = listProvince.map(item => {
@@ -37,7 +42,7 @@ class AddOutlet extends React.Component {
         <div className="container ">
           <form
             action=""
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => this.handleForm(e)}
             className="form-row box-form mx-auto mt-5 mb-5"
           >
             <div className="col-12 ">
@@ -65,6 +70,7 @@ class AddOutlet extends React.Component {
                     id="inputProvince"
                     name="inputProvince"
                     onChange={e => this.handleProvince(e)}
+                    required
                   >
                     <option value="" disabled selected>
                       Provinsi
@@ -79,6 +85,7 @@ class AddOutlet extends React.Component {
                     id="inputCity"
                     name="inputCity"
                     onChange={e => this.handleCity(e)}
+                    required
                   >
                     <option value="" disabled selected>
                       Kota/Kabupaten
@@ -93,6 +100,7 @@ class AddOutlet extends React.Component {
                     id="district"
                     name="district"
                     onChange={e => this.handleInputFilter(e)}
+                    required
                   >
                     <option value="" disabled selected>
                       Kecamatan
@@ -144,14 +152,9 @@ class AddOutlet extends React.Component {
               <Link to="/outlet" className="btn btn-register mr-2">
                 Batal
               </Link>
-              <Link
-                to="/outlet"
-                className="btn btn-register"
-                type="submit"
-                onClick={this.props.addOutlet}
-              >
+              <button className="btn btn-register" type="submit">
                 Simpan
-              </Link>
+              </button>
             </div>
           </form>
         </div>

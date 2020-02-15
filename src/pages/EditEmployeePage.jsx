@@ -12,6 +12,11 @@ class EditEmployee extends React.Component {
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });
   };
+  handleForm = async e => {
+    e.preventDefault();
+    await this.props.editEmployee();
+    this.props.history.push("/employee");
+  };
   render() {
     const { listOutlet } = this.props;
     const listAllOutlet = listOutlet.map(item => {
@@ -19,11 +24,11 @@ class EditEmployee extends React.Component {
     });
     return (
       <React.Fragment>
-        <Header pageLocation="Outlet" />
+        <Header pageLocation="Karyawan" />
         <div className="container ">
           <form
             action=""
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => this.handleForm(e)}
             className="form-row box-form mx-auto mt-5 mb-5"
           >
             <div className="col-12 ">
@@ -67,7 +72,6 @@ class EditEmployee extends React.Component {
                     name="password"
                     placeholder="*******"
                     onChange={e => this.handleInputFilter(e)}
-                    required
                   />
                 </div>
 
@@ -79,6 +83,7 @@ class EditEmployee extends React.Component {
                     name="positionInput"
                     value={this.props.positionInput}
                     onChange={e => this.handleInputFilter(e)}
+                    required
                   >
                     <option value="" disabled selected>
                       Pilih Tipe
@@ -109,14 +114,9 @@ class EditEmployee extends React.Component {
               <Link to="/employee" className="btn btn-register mr-2">
                 Batal
               </Link>
-              <Link
-                to="/employee"
-                className="btn btn-register"
-                type="submit"
-                onClick={this.props.editEmployee}
-              >
+              <button className="btn btn-register" type="submit">
                 Simpan
-              </Link>
+              </button>
             </div>
           </form>
         </div>

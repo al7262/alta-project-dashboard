@@ -268,14 +268,12 @@ export const actions = store => ({
     };
     axios(req)
       .then(response => {
-
         getOutlet(state.baseUrl);
         Swal.fire({
           title: "Berhasil Menambahkan Outlet!",
           icon: "success",
-          timer: 2000,
+          timer: 2000
         });
-
       })
       .catch(error => {});
   },
@@ -304,22 +302,22 @@ export const actions = store => ({
         Swal.fire({
           title: "Data Berhasil Diperbarui!",
           icon: "success",
-          timer: 2000,
+          timer: 2000
         });
       })
       .catch(error => {});
   },
   deleteOutletById: (state, id) => {
     Swal.fire({
-      title: 'Yakin ?',
+      title: "Yakin ?",
       text: "Kamu tidak dapat mengembalikan data ini!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal',
-    }).then((result) => {
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal"
+    }).then(result => {
       if (result.value) {
         const req = {
           method: "delete",
@@ -329,19 +327,15 @@ export const actions = store => ({
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }
         };
-    
+
         axios(req)
           .then(response => {
             getOutlet(state.baseUrl, state.nameOutlet);
-            Swal.fire(
-              'Terhapus!',
-              'File Anda telah dihapus.',
-              'success'
-            )
+            Swal.fire("Terhapus!", "File Anda telah dihapus.", "success");
           })
           .catch(error => {});
       }
-    })
+    });
   },
   getOutletById: (state, id) => {
     const req = {
@@ -468,7 +462,7 @@ export const actions = store => ({
               Swal.fire({
                 title: "Berhasil Menambahkan Produk!",
                 icon: "success",
-                timer: 2000,
+                timer: 2000
               });
             })
             .catch(error => {
@@ -536,6 +530,11 @@ export const actions = store => ({
             state.showProduct
           );
           getCategory(state.baseUrl);
+          Swal.fire({
+            title: "Berhasil Mengubah Produk!",
+            icon: "success",
+            timer: 2000
+          });
         })
         .catch(error => {
           store.setState({
@@ -611,7 +610,7 @@ export const actions = store => ({
                 Swal.fire({
                   title: "Data Berhasil Diperbarui!",
                   icon: "success",
-                  timer: 2000,
+                  timer: 2000
                 });
               })
               .catch(error => {
@@ -649,15 +648,15 @@ export const actions = store => ({
 
   deleteProduct: state => {
     Swal.fire({
-      title: 'Yakin ?',
+      title: "Yakin ?",
       text: "Kamu tidak dapat mengembalikan data ini!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal',
-    }).then((result) => {
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal"
+    }).then(result => {
       if (result.value) {
         const req = {
           method: "delete",
@@ -676,27 +675,23 @@ export const actions = store => ({
               state.showProduct
             );
             getCategory(state.baseUrl);
-            Swal.fire(
-              'Terhapus!',
-              'File Anda telah dihapus.',
-              'success'
-            )
+            Swal.fire("Terhapus!", "File Anda telah dihapus.", "success");
           })
           .catch(error => {});
-        }
-      })
+      }
+    });
   },
   deleteProductById: (state, id) => {
     Swal.fire({
-      title: 'Yakin ?',
+      title: "Yakin ?",
       text: "Kamu tidak dapat mengembalikan data ini!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal',
-    }).then((result) => {
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal"
+    }).then(result => {
       if (result.value) {
         const req = {
           method: "delete",
@@ -714,15 +709,11 @@ export const actions = store => ({
               state.nameProduct,
               state.showProduct
             );
-            Swal.fire(
-              'Terhapus!',
-              'File Anda telah dihapus.',
-              'success'
-            )
+            Swal.fire("Terhapus!", "File Anda telah dihapus.", "success");
           })
           .catch(error => {});
-        }
-      })
+      }
+    });
   },
   getProductById: async (state, id) => {
     await localStorage.setItem("idProduct", id);
@@ -837,7 +828,7 @@ export const actions = store => ({
         Swal.fire({
           title: "Berhasil Menambahkan Bahan Baku!",
           icon: "success",
-          timer: 2000,
+          timer: 2000
         });
       })
       .catch(error => {});
@@ -869,8 +860,8 @@ export const actions = store => ({
         Swal.fire({
           title: "Data Berhasil Diperbarui!",
           icon: "success",
-          timer: 2000,
-        });        
+          timer: 2000
+        });
       })
       .catch(error => {});
   },
@@ -897,15 +888,15 @@ export const actions = store => ({
   },
   deleteInventoryById: async (state, id) => {
     Swal.fire({
-      title: 'Yakin ?',
+      title: "Yakin ?",
       text: "Kamu tidak dapat mengembalikan data ini!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal',
-    }).then( async (result) => {
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal"
+    }).then(async result => {
       if (result.value) {
         const req = {
           method: "delete",
@@ -923,15 +914,11 @@ export const actions = store => ({
               state.nameInventory,
               state.statusInventory
             );
-            Swal.fire(
-              'Terhapus!',
-              'File Anda telah dihapus.',
-              'success'
-            )
+            Swal.fire("Terhapus!", "File Anda telah dihapus.", "success");
           })
           .catch(error => {});
-        }
-      })
+      }
+    });
   },
   addStock: async state => {
     const req = {
@@ -957,7 +944,7 @@ export const actions = store => ({
         Swal.fire({
           title: "Berhasil Menambahkan Produk!",
           icon: "success",
-          timer: 2000,
+          timer: 2000
         });
       })
       .catch(error => {});
@@ -1003,15 +990,15 @@ export const actions = store => ({
   },
   deleteCustomerById: (state, id) => {
     Swal.fire({
-      title: 'Yakin ?',
+      title: "Yakin ?",
       text: "Kamu tidak dapat mengembalikan data ini!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal',
-    }).then((result) => {
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal"
+    }).then(result => {
       if (result.value) {
         store.setState({ isLoadingCustomer: true });
 
@@ -1025,15 +1012,11 @@ export const actions = store => ({
         };
         axios(req)
           .then(response => {
-            Swal.fire(
-              'Terhapus!',
-              'File Anda telah dihapus.',
-              'success'
-            )
+            Swal.fire("Terhapus!", "File Anda telah dihapus.", "success");
           })
           .catch(error => {});
-        }
-      })
+      }
+    });
   },
   getProvince: state => {
     const req = {
@@ -1123,7 +1106,7 @@ export const actions = store => ({
         Swal.fire({
           text: "Berhasil Menambahkan Karyawan!",
           icon: "success",
-          timer: 2000,
+          timer: 2000
         });
       })
       .catch(error => {});
@@ -1152,15 +1135,15 @@ export const actions = store => ({
   },
   deleteEmployeeById: (state, id) => {
     Swal.fire({
-      title: 'Yakin ?',
+      title: "Yakin ?",
       text: "Kamu tidak dapat mengembalikan data ini!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal',
-    }).then((result) => {
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal"
+    }).then(result => {
       if (result.value) {
         const req = {
           method: "delete",
@@ -1178,15 +1161,11 @@ export const actions = store => ({
               state.outlet,
               state.position
             );
-            Swal.fire(
-              'Terhapus!',
-              'File Anda telah dihapus.',
-              'success'
-            )
+            Swal.fire("Terhapus!", "File Anda telah dihapus.", "success");
           })
           .catch(error => {});
-        }
-      })
+      }
+    });
   },
   editEmployee: state => {
     const req = {
@@ -1215,7 +1194,7 @@ export const actions = store => ({
         Swal.fire({
           text: "Data Berhasil Diperbarui!",
           icon: "success",
-          timer: 2000,
+          timer: 2000
         });
       })
       .catch(error => {});
@@ -1413,7 +1392,13 @@ export const actions = store => ({
         }
       };
       axios(req)
-        .then(response => {})
+        .then(response => {
+          Swal.fire({
+            title: "Data Berhasil Diperbarui!",
+            icon: "success",
+            timer: 2000
+          });
+        })
         .catch(error => {});
     } else {
       // Set the configuration for your app

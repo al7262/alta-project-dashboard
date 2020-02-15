@@ -18,7 +18,6 @@ class Profile extends React.Component {
   };
   handleForm = () => {
     this.props.editProfile();
-    this.props.history.push("/");
   };
   render() {
     return (

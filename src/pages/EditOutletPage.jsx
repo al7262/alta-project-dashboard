@@ -20,6 +20,11 @@ class EditOutlet extends React.Component {
     store.setState({ [e.target.name]: e.target.value });
     this.props.getDistrict();
   };
+  handleForm = async e => {
+    e.preventDefault();
+    await this.props.editOutlet();
+    this.props.history.push("/outlet");
+  };
   render() {
     const { listProvince, listCity, listDistrict } = this.props;
     const listAllProvince = listProvince.map(item => {
@@ -37,7 +42,7 @@ class EditOutlet extends React.Component {
         <div className="container ">
           <form
             action=""
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => this.handleForm(e)}
             className="form-row box-form mx-auto mt-5 mb-5"
           >
             <div className="col-12 ">
@@ -148,14 +153,9 @@ class EditOutlet extends React.Component {
               <Link to="/outlet" className="btn btn-register mr-2">
                 Batal
               </Link>
-              <Link
-                to="/outlet"
-                className="btn btn-register"
-                type="submit"
-                onClick={this.props.editOutlet}
-              >
+              <button className="btn btn-register" type="submit">
                 Simpan
-              </Link>
+              </button>
             </div>
           </form>
         </div>
