@@ -28,7 +28,7 @@ class ReportOutletPage extends React.Component {
     this.props.getOutlet();
     this.props.getCategory();
     this.props.getReportOutlet();
-    store.setState({ outlet: "" });
+    store.setState({ outlet: "", start_time: "", end_time: "" });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });

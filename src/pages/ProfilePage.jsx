@@ -38,7 +38,7 @@ class Profile extends React.Component {
     }
     return (
       <React.Fragment>
-        <Header />
+        <Header pageLocation="Profile" />
         <div className="container ">
           <form
             action=""
@@ -109,9 +109,13 @@ class Profile extends React.Component {
                   />
                 </div>
                 <div class="form-group">
-                  <a href="#" data-toggle="modal" data-target="#editPassword">
+                  <Link
+                    href="#"
+                    data-toggle="modal"
+                    data-target="#editPassword"
+                  >
                     Ubah Password
-                  </a>
+                  </Link>
                 </div>
                 <ModalEditPassword />
               </div>

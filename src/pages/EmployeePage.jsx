@@ -93,7 +93,11 @@ class EmployeePage extends React.Component {
         <Header pageLocation="Karyawan" />
         <div className="container">
           <div className="col-12 text-right pt-4 pr-0">
-            <Link to="/employee/add" className="btn btn-tambah">
+            <Link
+              to="/employee/add"
+              className="btn btn-tambah"
+              onClick={this.props.handleBack}
+            >
               Tambah
             </Link>
           </div>

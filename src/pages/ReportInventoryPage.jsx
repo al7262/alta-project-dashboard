@@ -26,7 +26,13 @@ class ReportInventoryPage extends React.Component {
     this.setState({finishChecking:true})
     this.props.getOutlet();
     this.props.getReportInventory();
-    store.setState({ idOutlet: "", category: "", nameInventory: "" });
+    store.setState({
+      idOutlet: "",
+      type: "",
+      nameInventory: "",
+      start_time: "",
+      end_time: ""
+    });
   };
   handleInputFilter = e => {
     store.setState({ [e.target.name]: e.target.value });

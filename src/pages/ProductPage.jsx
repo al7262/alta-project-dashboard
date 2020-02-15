@@ -19,7 +19,7 @@ class ProductPage extends React.Component {
     this.setState({finishChecking:true})
     this.props.getCategory();
     this.props.getProduct();
-    store.setState({
+    await store.setState({
       category: "",
       showProduct: "",
       nameProduct: ""
@@ -91,7 +91,11 @@ class ProductPage extends React.Component {
         <Header pageLocation="Produk" />
         <div className="container">
           <div className="col-12 text-right pt-4 pr-0">
-            <Link to="/product/add" className="btn btn-tambah">
+            <Link
+              to="/product/add"
+              className="btn btn-tambah"
+              onClick={this.props.handleBack}
+            >
               Tambah
             </Link>
           </div>

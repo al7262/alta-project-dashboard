@@ -65,6 +65,7 @@ class InventoryPage extends React.Component {
                     class="dropdown-item"
                     data-toggle="modal"
                     data-target="#addStock"
+                    onClick={this.props.handleBack}
                   >
                     Tambah Stok
                   </Link>

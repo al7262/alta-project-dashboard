@@ -88,7 +88,11 @@ class OutletPage extends React.Component {
         <Header pageLocation="Outlet" />
         <div className="container">
           <div className="col-12 text-right pt-4 pr-0">
-            <Link className="btn btn-tambah" to="/outlet/add">
+            <Link
+              className="btn btn-tambah"
+              to="/outlet/add"
+              onClick={this.props.handleBack}
+            >
               Tambah
             </Link>
           </div>
