@@ -33,6 +33,16 @@ class EditProduct extends React.Component {
           <td>{item.name}</td>
           <td>{item.quantity}</td>
           <td>{item.unit}</td>
+          <td>
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              onClick={() => this.props.deleteRecipe(key)}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </td>
         </tr>
       );
     });
@@ -144,6 +154,7 @@ class EditProduct extends React.Component {
                           <th scope="col">Bahan</th>
                           <th scope="col">Kuantitas</th>
                           <th scope="col">Unit</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>{listAllRecipe}</tbody>
